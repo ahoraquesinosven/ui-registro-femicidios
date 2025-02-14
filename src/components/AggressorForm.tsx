@@ -1,19 +1,21 @@
-import { useState } from 'react';
-import { TextField, Checkbox, FormControlLabel, Button, Grid, Container, Typography } from '@mui/material';
+import { TextField, Checkbox, FormControlLabel, Grid, Container, Typography } from '@mui/material';
 
-const AggressorForm = ( { formValues, handleInputChange } ) => {
-//  const [formValues, setFormValues] = useState({
-//    aggresor_gender: '',
-//   aggresor_name_lastname: '',
-//    aggresor_age: '',
-//    aggresor_legal_complaint_history: false,
-//    aggresor_cases_history: false,
-//    aggresor_captive_history: false,
-//    aggresor_behaviour_post_case: false,
-//    aggresor_creation: '',
-//    aggresor_last_update: '',
-//  });
+type AggressorFormProps = {
+  formValues: {
+    aggresor_gender?: string,
+    aggresor_name_lastname?: string,
+    aggresor_age?: string,
+    aggresor_legal_complaint_history?: boolean,
+    aggresor_cases_history?: boolean,
+    aggresor_captive_history?: boolean,
+    aggresor_behaviour_post_case?: boolean,
+    aggresor_creation?: string,
+    aggresor_last_update?: string,
+  },
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+};
 
+const AggressorForm = ( { formValues, handleInputChange }: AggressorFormProps ) => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>

@@ -5,8 +5,6 @@ import VictimForm from "./VictimForm";
 import AggressorForm from "./AggressorForm";
 import CaseForm from "./CaseForm";
 import { Button } from '@mui/material';
-import {httpRequest} from "@/utils/http";
-import {AccessToken} from "@/types/auth";
 import {useAccessToken} from '@/hooks/auth';
 
 const FormContainer = () => {
@@ -14,7 +12,7 @@ const FormContainer = () => {
     const [aggressorFormValues, setAggressorFormValues] = useState({});
     const [caseFormValues, setCaseFormValues] = useState({});
   
-    const handleVictimForm = (e: any) => {
+    const handleVictimForm = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
           setVictimFormValues({
             ...victimFormValues,
@@ -22,7 +20,7 @@ const FormContainer = () => {
           });
     };
 
-    const handleAggressorForm = (e: any) => {
+    const handleAggressorForm = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value} = e.target;
           setAggressorFormValues({
               ...aggressorFormValues,
@@ -30,7 +28,7 @@ const FormContainer = () => {
           });
     }
 
-    const handleCaseForm = (e: any) => {
+    const handleCaseForm = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value} = e.target;
           setCaseFormValues({
               ...caseFormValues,
@@ -41,7 +39,7 @@ const FormContainer = () => {
     const accessToken = useAccessToken();
     console.log("Si, el token acces es: ", accessToken);
 
-    const handleSubmit = async (e: any) => {
+    const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
 
       e.preventDefault();
 
@@ -56,7 +54,7 @@ const FormContainer = () => {
                     "Content-Type": "application/json",
                 }
             });
-            console.log('Success:', response.data);
+            console.log('Success:', response);
           } catch (error) {
             console.error('Error:', error);
           }

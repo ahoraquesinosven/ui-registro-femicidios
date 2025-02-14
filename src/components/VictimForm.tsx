@@ -1,30 +1,31 @@
-import { useState } from "react";
 import {
   TextField,
   Checkbox,
   FormControlLabel,
-  Button,
   Grid,
   Container,
   Typography,
 } from "@mui/material";
 
-const VictimForm = ({ formValues, handleInputChange }) => {
-  //const [formValues, setFormValues] = useState({
-    //victim_name_lastname: "",
-    //victim_age: "",
-    //victim_nationality: "",
-    //victim_prostitution: false,
-    //victim_missing: false,
-    //victim_native_people: false,
-    //victim_pregnant: false,
-    //victim_disabillity: false,
-    //victim_ocupation: "",
-    //victim_children: false,
-    //victim_creation: "",
-    //victim_last_update: "",
-  //});
+type VictimFormProps = {
+  formValues: {
+    victim_name_lastname?: string,
+    victim_age?: string,
+    victim_nationality?: string,
+    victim_prostitution?: boolean,
+    victim_missing?: boolean,
+    victim_native_people?: boolean,
+    victim_pregnant?: boolean,
+    victim_disabillity?: boolean,
+    victim_ocupation?: string,
+    victim_children?: boolean,
+    victim_creation?: string,
+    victim_last_update?: string,
+  },
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+};
 
+const VictimForm = ({ formValues, handleInputChange } : VictimFormProps) => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>

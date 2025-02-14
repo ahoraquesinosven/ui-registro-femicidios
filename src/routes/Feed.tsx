@@ -76,7 +76,7 @@ function useMarkIrrelevantFeedItemMutation() {
   });
 }
 
-function useunMarkIrrelevantFeedItemMutation() {
+function useUnmarkIrrelevantFeedItemMutation() {
   const accessToken = useAccessToken();
   const queryClient = useQueryClient();
   return useMutation({
@@ -164,7 +164,7 @@ export function DoneFeedItemButtons({item}: FeedItemButtonsProps) {
 }
 
 export function IrrelevantDoneFeedItemButtons({item}: FeedItemButtonsProps) {
-  const unmarkIrrelevantMutation = useunMarkIrrelevantFeedItemMutation();
+  const unmarkIrrelevantMutation = useUnmarkIrrelevantFeedItemMutation();
 
   return (
     <MutatingButton

@@ -1,32 +1,32 @@
-import { useState } from 'react';
-import { TextField, Checkbox, FormControlLabel, Button, Grid, Container, Typography } from '@mui/material';
+import { TextField, Checkbox, FormControlLabel, Grid, Container, Typography } from '@mui/material';
 
-const CaseForm  = ( { formValues, handleInputChange } ) => {
+type CaseFormProps = {
+  formValues: {
+    victim_id?: string,
+    aggresor_id?: string,
+    case_creation?: string,
+    last_update?: string,
+    incident_date?: string,
+    case_day_moment?: string,
+    case_type?: string,
+    case_gender?: string,
+    case_province?: string,
+    case_location?: string,
+    case_geographic_ubication?: string,
+    case_place?: string,
+    case_form?: string,
+    case_justice?: boolean,
+    case_legal_complaints?: string,
+    case_rape?: boolean,
+    case_organized_crime?: boolean,
+    case_organized_crime_notes?: string,
+    case_notes?: string,
+    case_news_links?: string,
+  },
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+};
 
-  //const [formValues, setFormValues] = useState({
-  //  victim_id: '',
-  //  aggresor_id: '',
-  //  case_creation: '',
-  //  last_update: '',
-  //  incident_date: '',
-  //  case_day_moment: '',
-  //  case_type: '',
-  //  case_gender: '',
-  //  case_province: '',
-  //  case_location: '',
-  //  case_geographic_ubication: '',
-  //  case_place: '',
-  //  case_form: '',
-  //  case_justice: false,
-  //  case_legal_complaints: '',
-  //  case_rape: false,
-  //  case_organized_crime: false,
-  //  case_organized_crime_notes: '',
-  //  case_notes: '',
-  //  case_news_links: '',
-  //});
-
-
+const CaseForm  = ( { formValues, handleInputChange }: CaseFormProps ) => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
