@@ -9,23 +9,27 @@ import {
 
 type VictimFormProps = {
   formValues: {
-    victim_name_lastname?: string,
-    victim_age?: string,
-    victim_nationality?: string,
-    victim_prostitution?: boolean,
-    victim_missing?: boolean,
-    victim_native_people?: boolean,
-    victim_pregnant?: boolean,
-    victim_disabillity?: boolean,
-    victim_ocupation?: string,
-    victim_children?: boolean,
-    victim_creation?: string,
-    victim_last_update?: string,
-  },
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+    fullName?: string;
+    age?: string;
+    gender?: string;
+    nationality?: string;
+    isSexualWorker?: boolean;
+    isMissingPerson?: boolean;
+    isNativePeople?: boolean;
+    isPregnant?: boolean;
+    hasDisabillity?: boolean;
+    occupation?: string;
+    hasChildren?: boolean;
+  };
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleCheck: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const VictimForm = ({ formValues, handleInputChange } : VictimFormProps) => {
+const VictimForm = ({
+  formValues,
+  handleInputChange,
+  handleCheck,
+}: VictimFormProps) => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
@@ -37,8 +41,8 @@ const VictimForm = ({ formValues, handleInputChange } : VictimFormProps) => {
             <TextField
               fullWidth
               label="Nombre y Apellido"
-              name="victim_name_lastname"
-              value={formValues.victim_name_lastname}
+              name="fullName"
+              value={formValues.fullName}
               onChange={handleInputChange}
               variant="outlined"
             />
@@ -48,9 +52,21 @@ const VictimForm = ({ formValues, handleInputChange } : VictimFormProps) => {
             <TextField
               fullWidth
               label="Edad"
-              name="victim_age"
+              name="age"
               type="number"
-              value={formValues.victim_age}
+              value={formValues.age}
+              onChange={handleInputChange}
+              variant="outlined"
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Genero"
+              name="gender"
+              type="string"
+              value={formValues.gender}
               onChange={handleInputChange}
               variant="outlined"
             />
@@ -60,8 +76,8 @@ const VictimForm = ({ formValues, handleInputChange } : VictimFormProps) => {
             <TextField
               fullWidth
               label="Nacionalidad (3 Letras)"
-              name="victim_nationality"
-              value={formValues.victim_nationality}
+              name="nationality"
+              value={formValues.nationality}
               onChange={handleInputChange}
               variant="outlined"
             />
@@ -71,8 +87,8 @@ const VictimForm = ({ formValues, handleInputChange } : VictimFormProps) => {
             <TextField
               fullWidth
               label="Ocupacion"
-              name="victim_ocupation"
-              value={formValues.victim_ocupation}
+              name="occupation"
+              value={formValues.occupation}
               onChange={handleInputChange}
               variant="outlined"
             />
@@ -82,9 +98,9 @@ const VictimForm = ({ formValues, handleInputChange } : VictimFormProps) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  name="Prostitucion"
-                  checked={formValues.victim_prostitution}
-                  onChange={handleInputChange}
+                  name="isSexualWorker"
+                  checked={formValues.isSexualWorker}
+                  onChange={handleCheck}
                 />
               }
               label="Prostitution"
@@ -92,9 +108,9 @@ const VictimForm = ({ formValues, handleInputChange } : VictimFormProps) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  name="Desaparecida"
-                  checked={formValues.victim_missing}
-                  onChange={handleInputChange}
+                  name="isMissingPerson"
+                  checked={formValues.isMissingPerson}
+                  onChange={handleCheck}
                 />
               }
               label="Desaparecida"
@@ -102,9 +118,9 @@ const VictimForm = ({ formValues, handleInputChange } : VictimFormProps) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  name="Pueblo Originario"
-                  checked={formValues.victim_native_people}
-                  onChange={handleInputChange}
+                  name="isNativePeople"
+                  checked={formValues.isNativePeople}
+                  onChange={handleCheck}
                 />
               }
               label="Pueblo Originario"
@@ -112,9 +128,9 @@ const VictimForm = ({ formValues, handleInputChange } : VictimFormProps) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  name="Embarazada"
-                  checked={formValues.victim_pregnant}
-                  onChange={handleInputChange}
+                  name="isPregnant"
+                  checked={formValues.isPregnant}
+                  onChange={handleCheck}
                 />
               }
               label="Embarazada"
@@ -122,9 +138,9 @@ const VictimForm = ({ formValues, handleInputChange } : VictimFormProps) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  name="Discapacidad"
-                  checked={formValues.victim_disabillity}
-                  onChange={handleInputChange}
+                  name="hasDisabillity"
+                  checked={formValues.hasDisabillity}
+                  onChange={handleCheck}
                 />
               }
               label="Discapacidad"
@@ -132,45 +148,14 @@ const VictimForm = ({ formValues, handleInputChange } : VictimFormProps) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  name="Hijos"
-                  checked={formValues.victim_children}
-                  onChange={handleInputChange}
+                  name="hasChildren"
+                  checked={formValues.hasChildren}
+                  onChange={handleCheck}
                 />
               }
               label="Hijos"
             />
           </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="victim_creation"
-              name="victim_creation"
-              type="date"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              value={formValues.victim_creation}
-              onChange={handleInputChange}
-              variant="outlined"
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="victim_last_update"
-              name="victim_last_update"
-              type="date"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              value={formValues.victim_last_update}
-              onChange={handleInputChange}
-              variant="outlined"
-            />
-          </Grid>
-
         </Grid>
       </form>
     </Container>

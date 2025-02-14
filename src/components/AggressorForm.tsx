@@ -2,20 +2,19 @@ import { TextField, Checkbox, FormControlLabel, Grid, Container, Typography } fr
 
 type AggressorFormProps = {
   formValues: {
-    aggresor_gender?: string,
-    aggresor_name_lastname?: string,
-    aggresor_age?: string,
-    aggresor_legal_complaint_history?: boolean,
-    aggresor_cases_history?: boolean,
-    aggresor_captive_history?: boolean,
-    aggresor_behaviour_post_case?: boolean,
-    aggresor_creation?: string,
-    aggresor_last_update?: string,
+    fullName?: string,
+    age?: string,
+    gender?: string,
+    hasLegalComplaintHistory?: boolean,
+    hasPreviousCases?: boolean,
+    wasInPrison?: boolean,
+    behaviourPostCase?: boolean,
   },
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+  handleCheck: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const AggressorForm = ( { formValues, handleInputChange }: AggressorFormProps ) => {
+const AggressorForm = ( { formValues, handleInputChange, handleCheck }: AggressorFormProps ) => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
@@ -26,20 +25,9 @@ const AggressorForm = ( { formValues, handleInputChange }: AggressorFormProps ) 
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Genero"
-              name="aggresor_gender"
-              value={formValues.aggresor_gender}
-              onChange={handleInputChange}
-              variant="outlined"
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
               label="Nombre y Apellido"
-              name="aggresor_name_lastname"
-              value={formValues.aggresor_name_lastname}
+              name="fullName"
+              value={formValues.fullName}
               onChange={handleInputChange}
               variant="outlined"
             />
@@ -49,67 +37,20 @@ const AggressorForm = ( { formValues, handleInputChange }: AggressorFormProps ) 
             <TextField
               fullWidth
               label="Edad"
-              name="aggresor_age"
+              name="age"
               type="number"
-              value={formValues.aggresor_age}
+              value={formValues.age}
               onChange={handleInputChange}
               variant="outlined"
             />
           </Grid>
 
           <Grid item xs={12}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="aggresor_legal_complaint_history"
-                  checked={formValues.aggresor_legal_complaint_history}
-                  onChange={handleInputChange}
-                />
-              }
-              label="aggresor_legal_complaint_history"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="aggresor_cases_history"
-                  checked={formValues.aggresor_cases_history}
-                  onChange={handleInputChange}
-                />
-              }
-              label="aggresor_cases_history"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="aggresor_captive_history"
-                  checked={formValues.aggresor_captive_history}
-                  onChange={handleInputChange}
-                />
-              }
-              label="aggresor_captive_history"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="aggresor_behaviour_post_case"
-                  checked={formValues.aggresor_behaviour_post_case}
-                  onChange={handleInputChange}
-                />
-              }
-              label="aggresor_behaviour_post_case"
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label="aggresor_creation"
-              name="aggresor_creation"
-              type="date"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              value={formValues.aggresor_creation}
+              label="Genero"
+              name="gender"
+              value={formValues.gender}
               onChange={handleInputChange}
               variant="outlined"
             />
@@ -118,15 +59,44 @@ const AggressorForm = ( { formValues, handleInputChange }: AggressorFormProps ) 
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label="aggresor_last_update"
-              name="aggresor_last_update"
-              type="date"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              value={formValues.aggresor_last_update}
+              label="Coportamiento post caso"
+              name="behaviourPostCase"
+              type="text"
+              value={formValues.behaviourPostCase}
               onChange={handleInputChange}
               variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="hasLegalComplaintHistory"
+                  checked={formValues.hasLegalComplaintHistory}
+                  onChange={handleCheck}
+                />
+              }
+              label="Historial legal"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="hasPreviousCases"
+                  checked={formValues.hasPreviousCases}
+                  onChange={handleCheck}
+                />
+              }
+              label="Tiene casos previos"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="wasInPrison"
+                  checked={formValues.wasInPrison}
+                  onChange={handleCheck}
+                />
+              }
+              label="Estuvo preso"
             />
           </Grid>
 

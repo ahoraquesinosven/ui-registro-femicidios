@@ -4,40 +4,37 @@ type CaseFormProps = {
   formValues: {
     victim_id?: string,
     aggresor_id?: string,
-    case_creation?: string,
-    last_update?: string,
-    incident_date?: string,
-    case_day_moment?: string,
-    case_type?: string,
-    case_gender?: string,
-    case_province?: string,
-    case_location?: string,
-    case_geographic_ubication?: string,
-    case_place?: string,
-    case_form?: string,
-    case_justice?: boolean,
-    case_legal_complaints?: string,
-    case_rape?: boolean,
-    case_organized_crime?: boolean,
-    case_organized_crime_notes?: string,
-    case_notes?: string,
-    case_news_links?: string,
+    occurredAt?: string,
+    momentOfDay?: string,
+    province?: string,
+    location?: string,
+    geographicLocation?: string,
+    place?: string,
+    murderWeapon?: string,
+    wasJudicialized?: boolean,
+    hadLegalComplaints?: boolean,
+    isRape?: boolean,
+    isRelatedToOrganizedCrime?: boolean,
+    organizedCrimeNotes?: string,
+    generalNotes?: string,
+    newsLinks?: string,
   },
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+  handleCheck: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const CaseForm  = ( { formValues, handleInputChange }: CaseFormProps ) => {
+const CaseForm  = ( { formValues, handleInputChange, handleCheck }: CaseFormProps ) => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
-        Case Information Form
+        Informacion de caso
       </Typography>
       <form >
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Victim ID"
+              label="ID Victima"
               name="victim_id"
               value={formValues.victim_id}
               onChange={handleInputChange}
@@ -48,7 +45,7 @@ const CaseForm  = ( { formValues, handleInputChange }: CaseFormProps ) => {
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Aggressor ID"
+              label="ID Agresor"
               name="aggresor_id"
               value={formValues.aggresor_id}
               onChange={handleInputChange}
@@ -59,13 +56,13 @@ const CaseForm  = ( { formValues, handleInputChange }: CaseFormProps ) => {
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label="Case Creation Date"
-              name="case_creation"
+              label="Fecha Caso"
+              name="occurredAt"
               type="date"
               InputLabelProps={{
                 shrink: true,
               }}
-              value={formValues.case_creation}
+              value={formValues.occurredAt}
               onChange={handleInputChange}
               variant="outlined"
             />
@@ -74,39 +71,9 @@ const CaseForm  = ( { formValues, handleInputChange }: CaseFormProps ) => {
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
-              label="Last Update Date"
-              name="last_update"
-              type="date"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              value={formValues.last_update}
-              onChange={handleInputChange}
-              variant="outlined"
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Incident Date"
-              name="incident_date"
-              type="date"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              value={formValues.incident_date}
-              onChange={handleInputChange}
-              variant="outlined"
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Day Moment"
-              name="case_day_moment"
-              value={formValues.case_day_moment}
+              label="Momento del dia"
+              name="momentOfDay"
+              value={formValues.momentOfDay}
               onChange={handleInputChange}
               variant="outlined"
             />
@@ -115,9 +82,9 @@ const CaseForm  = ( { formValues, handleInputChange }: CaseFormProps ) => {
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Case Type"
-              name="case_type"
-              value={formValues.case_type}
+              label="Provincia"
+              name="province"
+              value={formValues.province}
               onChange={handleInputChange}
               variant="outlined"
             />
@@ -126,9 +93,9 @@ const CaseForm  = ( { formValues, handleInputChange }: CaseFormProps ) => {
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Case Province"
-              name="case_province"
-              value={formValues.case_province}
+              label="Localidad"
+              name="location"
+              value={formValues.location}
               onChange={handleInputChange}
               variant="outlined"
             />
@@ -137,9 +104,9 @@ const CaseForm  = ( { formValues, handleInputChange }: CaseFormProps ) => {
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Case Location"
-              name="case_location"
-              value={formValues.case_location}
+              label="Ubicacion Geografica"
+              name="geographicLocation"
+              value={formValues.geographicLocation}
               onChange={handleInputChange}
               variant="outlined"
             />
@@ -148,9 +115,9 @@ const CaseForm  = ( { formValues, handleInputChange }: CaseFormProps ) => {
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Geographic Ubication"
-              name="case_geographic_ubication"
-              value={formValues.case_geographic_ubication}
+              label="Lugar"
+              name="place"
+              value={formValues.place}
               onChange={handleInputChange}
               variant="outlined"
             />
@@ -159,20 +126,9 @@ const CaseForm  = ( { formValues, handleInputChange }: CaseFormProps ) => {
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Case Place"
-              name="case_place"
-              value={formValues.case_place}
-              onChange={handleInputChange}
-              variant="outlined"
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Case Form"
-              name="case_form"
-              value={formValues.case_form}
+              label="Arma"
+              name="murderWeapon"
+              value={formValues.murderWeapon}
               onChange={handleInputChange}
               variant="outlined"
             />
@@ -182,23 +138,12 @@ const CaseForm  = ( { formValues, handleInputChange }: CaseFormProps ) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  name="case_justice"
-                  checked={formValues.case_justice}
-                  onChange={handleInputChange}
+                  name="wasJudicialized"
+                  checked={formValues.wasJudicialized}
+                  onChange={handleCheck}
                 />
               }
-              label="Justice Achieved"
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Legal Complaints"
-              name="case_legal_complaints"
-              value={formValues.case_legal_complaints}
-              onChange={handleInputChange}
-              variant="outlined"
+              label="Judicializado"
             />
           </Grid>
 
@@ -206,31 +151,41 @@ const CaseForm  = ( { formValues, handleInputChange }: CaseFormProps ) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  name="case_rape"
-                  checked={formValues.case_rape}
-                  onChange={handleInputChange}
+                  name="hadLegalComplaints"
+                  checked={formValues.hadLegalComplaints}
+                  onChange={handleCheck}
                 />
               }
-              label="Rape"
+              label="Esta Denunciado"
             />
             <FormControlLabel
               control={
                 <Checkbox
-                  name="case_organized_crime"
-                  checked={formValues.case_organized_crime}
-                  onChange={handleInputChange}
+                  name="isRape"
+                  checked={formValues.isRape}
+                  onChange={handleCheck}
                 />
               }
-              label="Organized Crime"
+              label="Violacion"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="isRelatedToOrganizedCrime"
+                  checked={formValues.isRelatedToOrganizedCrime}
+                  onChange={handleCheck}
+                />
+              }
+              label="Crimen Organizado"
             />
           </Grid>
 
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Organized Crime Notes"
-              name="case_organized_crime_notes"
-              value={formValues.case_organized_crime_notes}
+              label="Notas Crimen Organizado"
+              name="organizedCrimeNotes"
+              value={formValues.organizedCrimeNotes}
               onChange={handleInputChange}
               multiline
               rows={4}
@@ -241,9 +196,9 @@ const CaseForm  = ( { formValues, handleInputChange }: CaseFormProps ) => {
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Case Notes"
-              name="case_notes"
-              value={formValues.case_notes}
+              label="Notas del caso"
+              name="generalNotes"
+              value={formValues.generalNotes}
               onChange={handleInputChange}
               multiline
               rows={4}
@@ -254,11 +209,12 @@ const CaseForm  = ( { formValues, handleInputChange }: CaseFormProps ) => {
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Case News Links"
-              name="case_news_links"
-              value={formValues.case_news_links}
+              label="Links relacionados"
+              name="newsLinks"
+              value={formValues.newsLinks}
               onChange={handleInputChange}
               variant="outlined"
+              multiline
             />
           </Grid>
 
