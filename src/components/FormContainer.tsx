@@ -66,13 +66,12 @@ const FormContainer = () => {
   };
 
   const accessToken = useAccessToken();
-  console.log("Si, el token acces es: ", accessToken);
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    let links = caseFormValues.newsLinks.split("\n")
-    caseFormValues.newsLinks = links;
+    //let links = caseFormValues.newsLinks.split("\n")
+    //caseFormValues.newsLinks = links;
 
     const payload = {
       ...caseFormValues,
@@ -85,7 +84,7 @@ const FormContainer = () => {
         method: "post",
         body: JSON.stringify(payload),
         headers: {
-          Authorization: accessToken.asAuthorizationHeader(),
+          'Authorization': accessToken.asAuthorizationHeader(),
           "Content-Type": "application/json",
         },
       });

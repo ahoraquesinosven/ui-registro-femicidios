@@ -2,8 +2,8 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import {Layout} from '@/components/Layout';
 import {Feed} from './Feed';
 import FormContainer from '@/components/FormContainer';
-import CaseList from '@/components/CaseList';
 import {AuthorizationCallback} from '@/hooks/auth';
+import CaseList from '@/components/CaseList';
 
 export function Router() {
   return (

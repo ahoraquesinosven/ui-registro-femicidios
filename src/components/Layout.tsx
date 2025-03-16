@@ -49,6 +49,14 @@ const Nav = () => {
                 Consultar casos
               </a>
             </li>
+            <li className="nav-item">
+              <Link
+                className='btn btn-light ms-2'
+                //href="https://docs.google.com/forms/d/e/1FAIpQLSekOpLfYzPmzFMoPWwpfQw7VlMHBrraXwvAZyxNswl6ls2VJg/viewform"
+                to="/list">
+                Listar Casos
+              </Link>
+            </li>
           </ul>
           <UserPic />
         </div>
