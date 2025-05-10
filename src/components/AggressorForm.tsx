@@ -1,4 +1,4 @@
-import { TextField, Checkbox, FormControlLabel, Grid, Container, Typography, Divider, Box } from '@mui/material';
+import { TextField, Checkbox, FormControlLabel, Grid, Container, Typography, Divider } from '@mui/material';
 
 type AggressorFormProps = {
     formValues: {

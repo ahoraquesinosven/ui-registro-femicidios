@@ -28,7 +28,7 @@ const FormContainer = () => {
         });
     };
 
-    const handleAggressorForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleAggressorForm = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setAggressorFormValues({
             ...aggressorFormValues,
