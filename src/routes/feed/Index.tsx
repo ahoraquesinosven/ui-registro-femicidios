@@ -275,7 +275,7 @@ export function FeedList({name, status}: FeedListProps) {
   )
 }
 
-export function Feed() {
+export default function FeedIndex() {
   return (
     <>
       <div className="container mt-3">

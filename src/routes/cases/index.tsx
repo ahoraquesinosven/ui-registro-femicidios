@@ -21,13 +21,12 @@ interface Case {
   updatedAt: string;
 }
 
-const CaseList = () => {
+const CasesIndex = () => {
   const [cases, setCases] = useState<Case[]>([]);
   const [sortedCases, setSortedCases] = useState<Case[]>([]);
   const [loading, setLoading] = useState(true);
   const [orderBy, setOrderBy] = useState<keyof Case>("victimName");
   const [order, setOrder] = useState<"asc" | "desc">("asc");
-  const token = useAccessToken();
 
   const accessToken = useAccessToken();
 
@@ -52,7 +51,7 @@ const CaseList = () => {
     };
 
     fetchCases();
-  }, [token]);
+  }, [accessToken]);
 
   useEffect(() => {
     const sorted = [...cases].sort((a, b) => {
@@ -120,4 +119,5 @@ const CaseList = () => {
   );
 };
 
-export default CaseList;
+export default CasesIndex;
+

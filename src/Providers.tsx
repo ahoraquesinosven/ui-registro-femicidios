@@ -9,7 +9,7 @@ type ProvidersProps = {
 
 const queryClient = new QueryClient();
 
-export function Providers({children}: ProvidersProps) {
+export default function Providers({children}: ProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <AccessTokenProvider value={new AccessToken()}>

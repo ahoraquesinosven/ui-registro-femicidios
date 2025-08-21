@@ -65,12 +65,12 @@ const Nav = () => {
   );
 }
 
-export const Layout = () => {
+export default function Layout() {
   return (
     <RequiresAuthorization>
       <Nav />
       <Outlet />
     </RequiresAuthorization>
   );
-};
+}
 
