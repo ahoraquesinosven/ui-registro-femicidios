@@ -8,7 +8,7 @@ type MutatingButtonProps = {
   children: ReactNode,
 };
 
-export function MutatingButton(props : MutatingButtonProps) {
+export default function MutatingButton(props : MutatingButtonProps) {
   return (
     <button
       className={props.className}

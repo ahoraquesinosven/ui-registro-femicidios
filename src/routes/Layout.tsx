@@ -1,11 +1,11 @@
 import {Outlet} from 'react-router-dom';
 import {useQuery} from 'react-query';
-import {UserAvatar} from '@/components/UserAvatar';
+import UserAvatar from '@/components/UserAvatar';
 import {useAccessToken, RequiresAuthorization} from '@/hooks/auth';
 import {fetchCurrentUser} from '@/api/aqsnv/profiles';
 import { Link } from 'react-router-dom';
 
-const UserPic = () => {
+function UserPic() {
   const token = useAccessToken();
   const {data} = useQuery({
     queryKey: ["me"],
@@ -24,11 +24,11 @@ const UserPic = () => {
       <></>
     );
   }
-};
+}
 
-const Nav = () => {
+function Nav() {
   return (
-    <div className="container mt-3">
+    <div className="container my-3">
       <nav className="navbar bg-warning navbar-expand-lg rounded-4 py-3">
         <div className="container-fluid">
           <Link className="navbar-brand" /*href="#"*/ to="/">Registro de Femicidios</Link>
@@ -65,6 +65,7 @@ const Nav = () => {
   );
 }
 
+
 export default function Layout() {
   return (
     <RequiresAuthorization>
@@ -73,4 +74,3 @@ export default function Layout() {
     </RequiresAuthorization>
   );
 }
-

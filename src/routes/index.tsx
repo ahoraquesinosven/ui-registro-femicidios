@@ -1,5 +1,5 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import Layout from '@/components/Layout';
+import Layout from './Layout';
 import FeedIndex from './feed/Index';
 import CasesIndex from './cases';
 import CasesNew from './cases/new';
