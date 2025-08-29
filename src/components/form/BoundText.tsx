@@ -1,7 +1,7 @@
 import { useFieldContext } from "@/hooks/form";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 
-export default function BoundTextField(props : TextFieldProps) {
+export default function BoundText(props : TextFieldProps) {
   const field = useFieldContext<string>();
 
   return (

@@ -17,25 +17,25 @@ const AggressorFields = withForm({
                     <Grid item xs={12}>
                         <form.AppField
                             name="aggressor.fullName"
-                            children={(field) => <field.TextField label="Nombre y Apellido" />}
+                            children={(field) => <field.Text label="Nombre y Apellido" />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="aggressor.age"
-                            children={(field) => <field.TextField label="Edad" type="number" />}
+                            children={(field) => <field.Text label="Edad" type="number" />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="aggressor.gender"
-                            children={(field) => <field.TextField label="Género" />}
+                            children={(field) => <field.Text label="Género" />}
                         />
                     </Grid>
                     <Grid item xs={12}>
                         <form.AppField
                             name="aggressor.behaviourPostCase"
-                            children={(field) => <field.TextField label="Comportamiento después del caso" />}
+                            children={(field) => <field.Text label="Comportamiento después del caso" />}
                         />
                     </Grid>
 

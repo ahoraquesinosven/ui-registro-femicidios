@@ -1,15 +1,17 @@
 import BoundRadioGroup from "@/components/form/BoundRadioGroup";
-import BoundTextField from "@/components/form/BoundTextField";
+import BoundText from "@/components/form/BoundText";
 import BoundYesNoUnknown from "@/components/form/BoundYesNoUnknown";
+import BoundDatePicker from "@/components/form/BoundDatePicker";
 import {createFormHook, createFormHookContexts} from "@tanstack/react-form";
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } = createFormHookContexts();
 
 export const { useAppForm, withForm, withFieldGroup } = createFormHook({
   fieldComponents: {
-    TextField: BoundTextField,
+    Text: BoundText,
     RadioGroup: BoundRadioGroup,
     YesNoUnknown: BoundYesNoUnknown,
+    DatePicker: BoundDatePicker,
   },
   formComponents: {},
   fieldContext,

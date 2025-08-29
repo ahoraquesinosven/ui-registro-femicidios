@@ -16,31 +16,31 @@ const VictimFields = withForm({
                     <Grid item xs={12}>
                         <form.AppField
                             name="victim.fullName"
-                            children={(field) => <field.TextField label="Nombre y Apellido" />}
+                            children={(field) => <field.Text label="Nombre y Apellido" />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="victim.age"
-                            children={(field) => <field.TextField label="Edad" type="number" />}
+                            children={(field) => <field.Text label="Edad" type="number" />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="victim.gender"
-                            children={(field) => <field.TextField label="Género" />}
+                            children={(field) => <field.Text label="Género" />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="victim.nationality"
-                            children={(field) => <field.TextField label="Nacionalidad" />}
+                            children={(field) => <field.Text label="Nacionalidad" />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="victim.occupation"
-                            children={(field) => <field.TextField label="Ocupación" />}
+                            children={(field) => <field.Text label="Ocupación" />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>

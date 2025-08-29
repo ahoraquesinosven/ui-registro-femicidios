@@ -1,6 +1,5 @@
 import {withForm} from "@/hooks/form";
 import Grid from "@mui/material/Grid";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import formDefaultValues from "../formValues";
 
 const CaseFields = withForm({
@@ -10,61 +9,51 @@ const CaseFields = withForm({
       <>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <form.Field
+            <form.AppField 
               name="occurredAt"
-              children={(field) => (
-                <DatePicker
-                  label="Fecha del caso"
-                  value={field.state.value}
-                  onChange={(value) => {
-                    if (value !== null) {
-                      field.handleChange(value);
-                    }
-                  }} 
-                />
-              )}
+              children={(field) => <field.DatePicker label="Fecha del caso" />}
             />
           </Grid>
 
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="momentOfDay"
-              children={(field) => <field.TextField label="Momento del día" />}
+              children={(field) => <field.Text label="Momento del día" />}
             />
           </Grid>
 
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="province"
-              children={(field) => <field.TextField label="Provincia" />}
+              children={(field) => <field.Text label="Provincia" />}
             />
           </Grid>
 
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="location"
-              children={(field) => <field.TextField label="Localidad" />}
+              children={(field) => <field.Text label="Localidad" />}
             />
           </Grid>
 
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="geographicLocation"
-              children={(field) => <field.TextField label="Ubicación geográfica" />}
+              children={(field) => <field.Text label="Ubicación geográfica" />}
             />
           </Grid>
 
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="place"
-              children={(field) => <field.TextField label="Lugar" />}
+              children={(field) => <field.Text label="Lugar" />}
             />
           </Grid>
 
           <Grid item xs={12}>
             <form.AppField
               name="murderWeapon"
-              children={(field) => <field.TextField label="Arma" />}
+              children={(field) => <field.Text label="Arma" />}
             />
           </Grid>
 
@@ -96,24 +85,29 @@ const CaseFields = withForm({
             />
           </Grid>
 
-          <Grid item xs={12}>
-            <form.AppField
-              name="organizedCrimeNotes"
-              children={(field) => <field.TextField label="Notas de Crimen Organizado" multiline rows={3} />}
-            />
-          </Grid>
+          <form.Subscribe
+            selector={(state) => state.values.isRelatedToOrganizedCrime}
+            children={(isRelatedToOrganizedCrime) => (isRelatedToOrganizedCrime === "yes") && (
+              <Grid item xs={12}>
+                <form.AppField
+                  name="organizedCrimeNotes"
+                  children={(field) => <field.Text label="Notas de Crimen Organizado" multiline rows={3} />}
+                />
+              </Grid>
+            )}
+          />
 
           <Grid item xs={12}>
             <form.AppField
               name="generalNotes"
-              children={(field) => <field.TextField label="Notas del Caso" multiline rows={3} />}
+              children={(field) => <field.Text label="Notas del Caso" multiline rows={3} />}
             />
           </Grid>
 
           <Grid item xs={12}>
             <form.AppField
               name="newsLinks"
-              children={(field) => <field.TextField label="Links relacionados" multiline />}
+              children={(field) => <field.Text label="Links relacionados" multiline />}
             />
           </Grid>
         </Grid>
