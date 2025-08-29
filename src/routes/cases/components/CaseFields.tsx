@@ -1,225 +1,114 @@
-import { TextField, Checkbox, FormControlLabel, Grid, Container, Typography } from '@mui/material';
+import {withForm} from "@/hooks/form";
+import Grid from "@mui/material/Grid";
+import formDefaultValues from "../formValues";
 
-type CaseFormProps = {
-  formValues: {
-    victim_id?: string,
-    aggresor_id?: string,
-    occurredAt?: string,
-    momentOfDay?: string,
-    province?: string,
-    location?: string,
-    geographicLocation?: string,
-    place?: string,
-    murderWeapon?: string,
-    wasJudicialized?: boolean,
-    hadLegalComplaints?: boolean,
-    isRape?: boolean,
-    isRelatedToOrganizedCrime?: boolean,
-    organizedCrimeNotes?: string,
-    generalNotes?: string,
-    newsLinks?: string,
-  },
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
-  handleCheck: (e: React.ChangeEvent<HTMLInputElement>) => void;
-};
+const CaseFields = withForm({
+  defaultValues: formDefaultValues,
+  render: function Render({form}) {
+    return (
+      <>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <form.AppField
+              name="occurredAt"
+              children={(field) => <field.TextField label="Fecha del caso" />}
+            />
+          </Grid>
 
-const CaseForm  = ( { formValues, handleInputChange, handleCheck }: CaseFormProps ) => {
-  return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
-        Informacion de caso
-      </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="ID Victima"
-            name="victim_id"
-            value={formValues.victim_id}
-            onChange={handleInputChange}
-            variant="outlined"
-          />
+          <Grid item xs={12} sm={6}>
+            <form.AppField
+              name="momentOfDay"
+              children={(field) => <field.TextField label="Momento del día" />}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <form.AppField
+              name="province"
+              children={(field) => <field.TextField label="Provincia" />}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <form.AppField
+              name="location"
+              children={(field) => <field.TextField label="Localidad" />}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <form.AppField
+              name="geographicLocation"
+              children={(field) => <field.TextField label="Ubicación geográfica" />}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <form.AppField
+              name="place"
+              children={(field) => <field.TextField label="Lugar" />}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <form.AppField
+              name="murderWeapon"
+              children={(field) => <field.TextField label="Arma" />}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <form.AppField
+              name="wasJudicialized"
+              children={(field) => <field.YesNoUnknown label="¿Está judicializado?" />}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <form.AppField
+              name="hadLegalComplaints"
+              children={(field) => <field.YesNoUnknown label="¿Tenía denuncias?" />}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <form.AppField
+              name="isRape"
+              children={(field) => <field.YesNoUnknown label="¿Con violación?" />}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <form.AppField
+              name="isRelatedToOrganizedCrime"
+              children={(field) => <field.YesNoUnknown label="¿Relacionado con crimen organizado?" />}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <form.AppField
+              name="organizedCrimeNotes"
+              children={(field) => <field.TextField label="Notas de Crimen Organizado" multiline rows={3} />}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <form.AppField
+              name="generalNotes"
+              children={(field) => <field.TextField label="Notas del Caso" multiline rows={3} />}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <form.AppField
+              name="newsLinks"
+              children={(field) => <field.TextField label="Links relacionados" multiline />}
+            />
+          </Grid>
         </Grid>
+      </>
+    );
+  }
+});
 
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="ID Agresor"
-            name="aggresor_id"
-            value={formValues.aggresor_id}
-            onChange={handleInputChange}
-            variant="outlined"
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label="Fecha Caso"
-            name="occurredAt"
-            type="date"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            value={formValues.occurredAt}
-            onChange={handleInputChange}
-            variant="outlined"
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label="Momento del dia"
-            name="momentOfDay"
-            value={formValues.momentOfDay}
-            onChange={handleInputChange}
-            variant="outlined"
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Provincia"
-            name="province"
-            value={formValues.province}
-            onChange={handleInputChange}
-            variant="outlined"
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Localidad"
-            name="location"
-            value={formValues.location}
-            onChange={handleInputChange}
-            variant="outlined"
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Ubicacion Geografica"
-            name="geographicLocation"
-            value={formValues.geographicLocation}
-            onChange={handleInputChange}
-            variant="outlined"
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Lugar"
-            name="place"
-            value={formValues.place}
-            onChange={handleInputChange}
-            variant="outlined"
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Arma"
-            name="murderWeapon"
-            value={formValues.murderWeapon}
-            onChange={handleInputChange}
-            variant="outlined"
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="wasJudicialized"
-                checked={formValues.wasJudicialized}
-                onChange={handleCheck}
-              />
-            }
-            label="Judicializado"
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="hadLegalComplaints"
-                checked={formValues.hadLegalComplaints}
-                onChange={handleCheck}
-              />
-            }
-            label="Esta Denunciado"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="isRape"
-                checked={formValues.isRape}
-                onChange={handleCheck}
-              />
-            }
-            label="Violacion"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="isRelatedToOrganizedCrime"
-                checked={formValues.isRelatedToOrganizedCrime}
-                onChange={handleCheck}
-              />
-            }
-            label="Crimen Organizado"
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Notas Crimen Organizado"
-            name="organizedCrimeNotes"
-            value={formValues.organizedCrimeNotes}
-            onChange={handleInputChange}
-            multiline
-            rows={4}
-            variant="outlined"
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Notas del caso"
-            name="generalNotes"
-            value={formValues.generalNotes}
-            onChange={handleInputChange}
-            multiline
-            rows={4}
-            variant="outlined"
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Links relacionados"
-            name="newsLinks"
-            value={formValues.newsLinks}
-            onChange={handleInputChange}
-            variant="outlined"
-            multiline
-          />
-        </Grid>
-
-      </Grid>
-    </Container>
-  );
-};
-
-export default CaseForm;
+export default CaseFields;

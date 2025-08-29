@@ -7,6 +7,8 @@ import Box from "@mui/material/Box";
 import { useAppForm } from "@/hooks/form";
 import formDefaultValues from "./formValues";
 import VictimFields from "./components/VictimFields";
+import AggressorFields from "./components/AggressorFields";
+import CaseFields from "./components/CaseFields";
 
 function tabStyles(index: number, currentTab: number) {
     return { 
@@ -49,11 +51,11 @@ export default function CasesNew() {
                 </Box>
 
                 <Box sx={tabStyles(1, currentTab)}>
-
+                    <AggressorFields form={form} />
                 </Box>
 
                 <Box sx={tabStyles(2, currentTab)}>
-
+                    <CaseFields form={form} />
                 </Box>
 
                 <Button type="submit" variant="contained" color="primary">

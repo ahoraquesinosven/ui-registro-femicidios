@@ -1,8 +1,6 @@
+import {withForm} from "@/hooks/form";
 import Grid from "@mui/material/Grid";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import TextField from "@mui/material/TextField";
-import Checkbox from "@mui/material/Checkbox";
-import { withForm } from "@/hooks/form";
+import Typography from "@mui/material/Typography";
 import formDefaultValues from "../formValues";
 
 const VictimFields = withForm({
@@ -12,133 +10,74 @@ const VictimFields = withForm({
             <>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <form.Field name="victim.fullName" children={(field) => (
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                label="Nombre y Apellido"
-                                value={field.state.value}
-                                onChange={(e) => field.handleChange(e.target.value)} />
-                        )} />
+                        <Typography variant="h6" gutterBottom>Datos Personales</Typography>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <form.Field name="victim.age" children={(field) => (
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                label="Edad"
-                                type="number"
-                                value={field.state.value}
-                                onChange={(e) => field.handleChange(e.target.value)} />
-                        )} />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <form.Field name="victim.gender" children={(field) => (
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                label="Género"
-                                value={field.state.value}
-                                onChange={(e) => field.handleChange(e.target.value)} />
-                        )} />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <form.Field name="victim.nationality" children={(field) => (
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                label="Nacionalidad"
-                                value={field.state.value}
-                                onChange={(e) => field.handleChange(e.target.value)} />
-                        )} />
-                    </Grid>
+
                     <Grid item xs={12}>
-                        <form.Field name="victim.occupation" children={(field) => (
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                label="Ocupación"
-                                value={field.state.value}
-                                onChange={(e) => field.handleChange(e.target.value)} />
-                        )} />
+                        <form.AppField
+                            name="victim.fullName"
+                            children={(field) => <field.TextField label="Nombre y Apellido" />}
+                        />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <form.Field name="victim.isSexualWorker" children={(field) => (
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        name={field.name}
-                                        checked={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.checked)} />
-                                }
-                                label="Es trabajadora sexual"
-                            />
-                        )} />
+                        <form.AppField
+                            name="victim.age"
+                            children={(field) => <field.TextField label="Edad" type="number" />}
+                        />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <form.Field name="victim.isMissingPerson" children={(field) => (
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        name={field.name}
-                                        checked={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.checked)} />
-                                }
-                                label="Desaparecida"
-                            />
-                        )} />
+                        <form.AppField
+                            name="victim.gender"
+                            children={(field) => <field.TextField label="Género" />}
+                        />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <form.Field name="victim.isNativePeople" children={(field) => (
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        name={field.name}
-                                        checked={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.checked)} />
-                                }
-                                label="Pueblo Originario"
-                            />
-                        )} />
+                        <form.AppField
+                            name="victim.nationality"
+                            children={(field) => <field.TextField label="Nacionalidad" />}
+                        />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <form.Field name="victim.isPregnant" children={(field) => (
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        name={field.name}
-                                        checked={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.checked)} />
-                                }
-                                label="Embarazada"
-                            />
-                        )} />
+                        <form.AppField
+                            name="victim.occupation"
+                            children={(field) => <field.TextField label="Ocupación" />}
+                        />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <form.Field name="victim.hasDisabillity" children={(field) => (
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        name={field.name}
-                                        checked={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.checked)} />
-                                }
-                                label="Discapacidad"
-                            />
-                        )} />
+                        <form.AppField
+                            name="victim.isSexualWorker"
+                            children={(field) => <field.YesNoUnknown label="¿Es trabajadora sexual?" />}
+                        />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <form.Field name="victim.hasChildren" children={(field) => (
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        name={field.name}
-                                        checked={field.state.value}
-                                        onChange={(e) => field.handleChange(e.target.checked)} />
-                                }
-                                label="Con Hijos"
-                            />
-                        )} />
+                        <form.AppField
+                            name="victim.isMissingPerson"
+                            children={(field) => <field.YesNoUnknown label="¿Estuvo desaparecida?" />}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <form.AppField
+                            name="victim.isNativePeople"
+                            children={(field) => <field.YesNoUnknown label="¿Pertenece a pueblos originarios?" />}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <form.AppField
+                            name="victim.isPregnant"
+                            children={(field) => <field.YesNoUnknown label="¿Embarazada?" />}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <form.AppField
+                            name="victim.hasDisabillity"
+                            children={(field) => <field.YesNoUnknown label="¿Discapacidad?" />}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <form.AppField
+                            name="victim.hasChildren"
+                            children={(field) => <field.YesNoUnknown label="¿Tiene hijos?" />}
+                        />
                     </Grid>
                 </Grid>
             </>
