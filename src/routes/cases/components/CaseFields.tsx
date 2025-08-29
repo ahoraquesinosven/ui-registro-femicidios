@@ -1,5 +1,6 @@
 import {withForm} from "@/hooks/form";
 import Grid from "@mui/material/Grid";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import formDefaultValues from "../formValues";
 
 const CaseFields = withForm({
@@ -9,9 +10,19 @@ const CaseFields = withForm({
       <>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <form.AppField
+            <form.Field
               name="occurredAt"
-              children={(field) => <field.TextField label="Fecha del caso" />}
+              children={(field) => (
+                <DatePicker
+                  label="Fecha del caso"
+                  value={field.state.value}
+                  onChange={(value) => {
+                    if (value !== null) {
+                      field.handleChange(value);
+                    }
+                  }} 
+                />
+              )}
             />
           </Grid>
 

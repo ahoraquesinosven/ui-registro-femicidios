@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export default {
     victim: {
         fullName: "",
@@ -22,7 +24,7 @@ export default {
         behaviourPostCase: "unknown",
     },
 
-    occurredAt: "",
+    occurredAt: dayjs(),
     momentOfDay: "",
     province: "",
     location: "",
