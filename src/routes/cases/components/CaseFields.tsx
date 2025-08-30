@@ -60,20 +60,20 @@ const CaseFields = withForm({
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="wasJudicialized"
-              children={(field) => <field.YesNoUnknown label="¿Había alguna medida judicial?" />}
+              children={(field) => <field.Checkbox label="¿Había alguna medida judicial?" />}
             />
           </Grid>
 
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="isRelatedToOrganizedCrime"
-              children={(field) => <field.YesNoUnknown label="¿Fue en contexto de criminalidad organizada?" />}
+              children={(field) => <field.Checkbox label="¿Fue en contexto de criminalidad organizada?" />}
             />
           </Grid>
 
           <form.Subscribe
             selector={(state) => state.values.isRelatedToOrganizedCrime}
-            children={(isRelatedToOrganizedCrime) => (isRelatedToOrganizedCrime === "yes") && (
+            children={(isRelatedToOrganizedCrime) => isRelatedToOrganizedCrime && (
               <Grid item xs={12}>
                 <form.AppField
                   name="organizedCrimeNotes"

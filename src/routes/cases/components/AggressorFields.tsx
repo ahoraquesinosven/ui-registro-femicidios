@@ -47,19 +47,19 @@ const AggressorFields = withForm({
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="aggressor.hasLegalComplaintHistory"
-                            children={(field) => <field.YesNoUnknown label="¿Tiene denuncias previas?" />}
+                            children={(field) => <field.Checkbox label="¿Tiene denuncias previas?" />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="aggressor.hasPreviousCases"
-                            children={(field) => <field.YesNoUnknown label="¿Tiene en su historial más víctimas?" />}
+                            children={(field) => <field.Checkbox label="¿Tiene en su historial más víctimas?" />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="aggressor.wasInPrison"
-                            children={(field) => <field.YesNoUnknown label="¿Estuvo preso por delitos relacionados con violencia?" />}
+                            children={(field) => <field.Checkbox label="¿Estuvo preso por delitos relacionados con violencia?" />}
                         />
                     </Grid>
                 </Grid>
