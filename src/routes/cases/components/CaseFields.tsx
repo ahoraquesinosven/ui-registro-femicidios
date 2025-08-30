@@ -46,42 +46,28 @@ const CaseFields = withForm({
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="place"
-              children={(field) => <field.Text label="Lugar" />}
+              children={(field) => <field.Text label="Lugar del hecho" />}
             />
           </Grid>
 
           <Grid item xs={12}>
             <form.AppField
               name="murderWeapon"
-              children={(field) => <field.Text label="Arma" />}
+              children={(field) => <field.Text label="Forma" />}
             />
           </Grid>
 
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="wasJudicialized"
-              children={(field) => <field.YesNoUnknown label="¿Está judicializado?" />}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <form.AppField
-              name="hadLegalComplaints"
-              children={(field) => <field.YesNoUnknown label="¿Tenía denuncias?" />}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <form.AppField
-              name="isRape"
-              children={(field) => <field.YesNoUnknown label="¿Con violación?" />}
+              children={(field) => <field.YesNoUnknown label="¿Había alguna medida judicial?" />}
             />
           </Grid>
 
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="isRelatedToOrganizedCrime"
-              children={(field) => <field.YesNoUnknown label="¿Relacionado con crimen organizado?" />}
+              children={(field) => <field.YesNoUnknown label="¿Fue en contexto de criminalidad organizada?" />}
             />
           </Grid>
 
@@ -91,7 +77,7 @@ const CaseFields = withForm({
               <Grid item xs={12}>
                 <form.AppField
                   name="organizedCrimeNotes"
-                  children={(field) => <field.Text label="Notas de Crimen Organizado" multiline rows={3} />}
+                  children={(field) => <field.Text label="Observaciones de Crimen Organizado" multiline rows={3} />}
                 />
               </Grid>
             )}
@@ -107,7 +93,7 @@ const CaseFields = withForm({
           <Grid item xs={12}>
             <form.AppField
               name="newsLinks"
-              children={(field) => <field.Text label="Links relacionados" multiline />}
+              children={(field) => <field.Text label="Link de la nota" multiline />}
             />
           </Grid>
         </Grid>

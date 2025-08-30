@@ -41,22 +41,23 @@ export default function CasesNew() {
         <Container maxWidth="md">
             <form onSubmit={handleSubmit}>
                 <Tabs variant="fullWidth" centered value={currentTab} onChange={handleChangeCurrentTab}>
+                    <Tab label="Información del Caso" />
                     <Tab label="Víctima" />
                     <Tab label="Agresor" />
-                    <Tab label="Información del Caso" />
                 </Tabs>
 
                 <Box sx={tabStyles(0, currentTab)}>
-                    <VictimFields form={form} />
+                    <CaseFields form={form} />
                 </Box>
 
                 <Box sx={tabStyles(1, currentTab)}>
-                    <AggressorFields form={form} />
+                    <VictimFields form={form} />
                 </Box>
 
                 <Box sx={tabStyles(2, currentTab)}>
-                    <CaseFields form={form} />
+                    <AggressorFields form={form} />
                 </Box>
+
 
                 <Button type="submit" variant="contained" color="primary">
                     Enviar Datos

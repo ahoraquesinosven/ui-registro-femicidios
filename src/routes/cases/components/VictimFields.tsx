@@ -46,7 +46,7 @@ const VictimFields = withForm({
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="victim.isSexualWorker"
-                            children={(field) => <field.YesNoUnknown label="¿Es trabajadora sexual?" />}
+                            children={(field) => <field.YesNoUnknown label="¿En situación de prostitución?" />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -64,19 +64,33 @@ const VictimFields = withForm({
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="victim.isPregnant"
-                            children={(field) => <field.YesNoUnknown label="¿Embarazada?" />}
+                            children={(field) => <field.YesNoUnknown label="¿Estaba embarazada?" />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="victim.hasDisabillity"
-                            children={(field) => <field.YesNoUnknown label="¿Discapacidad?" />}
+                            children={(field) => <field.YesNoUnknown label="¿Tenía algún tipo de discapacidad?" />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="victim.hasChildren"
                             children={(field) => <field.YesNoUnknown label="¿Tiene hijos?" />}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <form.AppField
+                            name="hadLegalComplaints"
+                            children={(field) => <field.YesNoUnknown label="¿Había realizado denuncias?" />}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <form.AppField
+                            name="isRape"
+                            children={(field) => <field.YesNoUnknown label="¿Fue violada o abusada?" />}
                         />
                     </Grid>
                 </Grid>
