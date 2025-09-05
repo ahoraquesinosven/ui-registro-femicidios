@@ -141,6 +141,6 @@ export function formValuesToCase(formValues: typeof defaultValues): Case {
         isRelatedToOrganizedCrime: formValues.isRelatedToOrganizedCrime,
         organizedCrimeNotes: formValues.organizedCrimeNotes,
         generalNotes: formValues.generalNotes,
-        // newsLinks: formValues.newsLinks,
+        newsLinks: formValues.newsLinks.split("\n").map((s) => s.trim()).filter((s) => s.length > 0),
     };
 }
