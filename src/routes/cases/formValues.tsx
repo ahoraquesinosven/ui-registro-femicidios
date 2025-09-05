@@ -29,6 +29,32 @@ export const allCaseVictimBondsAggressor = Object.values(CaseVictimBondAggressor
 
 type YesNoUnknown = "yes" | "no" | "unknown";
 
+function yesNoUnknownToBoolean(value: YesNoUnknown): boolean | undefined {
+    if (value === "yes") {
+        return true;
+    }
+
+    if (value === "no") {
+        return false;
+    }
+
+    return undefined;
+}
+
+function stringToInteger(value: string): number | undefined {
+    const result = parseInt(value);
+
+    if (isNaN(result)) {
+        return undefined;
+    }
+
+    return result;
+}
+
+function stringToEnum<T>(value: string | null | undefined): T | undefined {
+    return (value !== null && value !== undefined) ? value as T : undefined;
+}
+
 const defaultValues = {
     victim: {
         fullName: "",
@@ -76,67 +102,45 @@ const defaultValues = {
 
 export default defaultValues;
 
-function yesNoUnknownToBoolean(value: YesNoUnknown): boolean | undefined {
-    if (value === "yes") {
-        return true;
-    }
-
-    if (value === "no") {
-        return false;
-    }
-
-    return undefined;
-}
-
-function stringToInteger(value: string): number | undefined {
-    const result = parseInt(value);
-
-    if (isNaN(result)) {
-        return undefined;
-    }
-
-    return result;
-}
-
 export function formValuesToCase(formValues: typeof defaultValues): Case {
     return {
         victim: {
-            fullName: formValues.victim.fullName,
+            fullName: formValues.victim.fullName || undefined,
             age: stringToInteger(formValues.victim.age),
-            gender: formValues.victim.gender as Gender,
-            nationality: formValues.victim.nationality as Nationality,
+            gender: stringToEnum<Gender>(formValues.victim.gender),
+            nationality: stringToEnum<Nationality>(formValues.victim.nationality),
             isSexualWorker: formValues.victim.isSexualWorker,
             isMissingPerson: formValues.victim.isMissingPerson,
             isNativePeople: formValues.victim.isNativePeople,
             isPregnant: formValues.victim.isPregnant,
             hasDisabillity: formValues.victim.hasDisabillity,
-            occupation: formValues.victim.occupation,
+            occupation: formValues.victim.occupation || undefined,
             hasChildren: yesNoUnknownToBoolean(formValues.victim.hasChildren),
             numberOfChildren: stringToInteger(formValues.victim.numberOfChildren),
         },
         aggressor: {
-            fullName: formValues.aggressor.fullName,
+            fullName: formValues.aggressor.fullName || undefined,
             age: stringToInteger(formValues.aggressor.age),
-            gender: formValues.aggressor.gender as Gender,
+            gender: stringToEnum<Gender>(formValues.aggressor.gender),
             hasLegalComplaintHistory: formValues.aggressor.hasLegalComplaintHistory,
             hasPreviousCases: formValues.aggressor.hasPreviousCases,
             wasInPrison: formValues.aggressor.wasInPrison,
-            behaviourPostCase: formValues.aggressor.behaviourPostCase as AggressorBehaviorPostCase,
+            behaviourPostCase: stringToEnum<AggressorBehaviorPostCase>(formValues.aggressor.behaviourPostCase),
             belongsSecurityForce: formValues.aggressor.belongsSecurityForce,
-            securityForce: formValues.aggressor.securityForce as AggressorSecurityForce,
+            securityForce: stringToEnum<AggressorSecurityForce>(formValues.aggressor.securityForce),
         },
-        category: CaseCategory.FEMICIDIO_DIRECTO,
-        occurredAt: formValues.occurredAt.toISOString(),
-        momentOfDay: formValues.momentOfDay as CaseMomentOfDay,
+        caseCategory: CaseCategory.FEMICIDIO_DIRECTO,
+        occurredAt: formValues.occurredAt.format("YYYY-MM-DD"),
+        momentOfDay: stringToEnum<CaseMomentOfDay>(formValues.momentOfDay),
         province: formValues.province as Province,
         location: formValues.location,
-        geographicLocation: formValues.geographicLocation as CaseGeographicLocation,
+        geographicLocation: stringToEnum<CaseGeographicLocation>(formValues.geographicLocation),
         place: formValues.place as CasePlace,
-        murderWeapon: formValues.murderWeapon as CaseMurderWeapon,
+        murderWeapon: stringToEnum<CaseMurderWeapon>(formValues.murderWeapon),
         hadLegalComplaints: formValues.hadLegalComplaints,
         wasJudicialized: formValues.wasJudicialized,
         judicialMeasures: formValues.judicialMeasures as CaseJudicialMeasure[],
-        victimBondAggressor: formValues.victimBondAggressor as CaseVictimBondAggressor,
+        victimBondAggressor: stringToEnum<CaseVictimBondAggressor>(formValues.victimBondAggressor),
         isRape: formValues.isRape,
         isRelatedToOrganizedCrime: formValues.isRelatedToOrganizedCrime,
         organizedCrimeNotes: formValues.organizedCrimeNotes,

@@ -10,6 +10,9 @@ import VictimFields from "./components/VictimFields";
 import AggressorFields from "./components/AggressorFields";
 import CaseFields from "./components/CaseFields";
 import { formValuesToCase } from "./formValues";
+import { createCase } from "@/api/aqsnv/cases";
+import {useAccessToken} from '@/hooks/auth';
+
 function tabStyles(index: number, currentTab: number) {
     return { 
         display: index === currentTab ? "block" : "none",
@@ -24,12 +27,28 @@ export default function CasesNew() {
         setCurrentTab(newTab);
     }
 
+    const accessToken = useAccessToken();
+
     const form = useAppForm({
         defaultValues: formDefaultValues,
-        onSubmit: async (submission) => {
-            console.log("Form value", submission.value);
-            const payload = formValuesToCase(submission.value);
-            console.log("Payload", payload);
+        onSubmit: async ({value, formApi}) => {
+            const payload = formValuesToCase(value);
+            console.log(payload);
+            const result = await createCase(accessToken, payload);
+
+            if (result.ok) {
+                alert("Caso creado");
+                return form.reset();
+            }
+
+            result.errors.forEach((error) => {
+                const path = error.path.split("/").slice(1).join(".") as keyof typeof formDefaultValues;
+                console.log(`Setting up error on field ${path}`)
+                const fieldInfo = formApi.fieldInfo[path];
+                if (fieldInfo) {
+                    formApi.fieldInfo[path].instance?.setErrorMap({onSubmit: error.message});
+                }
+            });
         },
     });
 

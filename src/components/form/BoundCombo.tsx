@@ -12,11 +12,16 @@ export default function BoundCombo({options, label} : BoundComboProps) {
 
   return (
     <Autocomplete
-      renderInput={(params) => <TextField {...params} label={label} />}
       options={options}
       value={field.state.value}
       onChange={(_e: unknown, newValue: string | null) => field.handleChange(newValue)}
       onBlur={field.handleBlur}
+      renderInput={(params) => (
+        <TextField {...params}  
+          label={label}
+          error={!field.state.meta.isValid}
+          helperText={field.state.meta.errors.join(", ")} />
+      )}
     />
   );
 }

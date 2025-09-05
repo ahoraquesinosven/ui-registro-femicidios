@@ -338,7 +338,7 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/json": {
-                        category: components["schemas"]["CaseCategory"];
+                        caseCategory: components["schemas"]["CaseCategory"];
                         /** Format: date */
                         occurredAt: string;
                         momentOfDay?: components["schemas"]["CaseMomentOfDay"];
@@ -392,7 +392,7 @@ export interface paths {
                     };
                     content?: never;
                 };
-                422: components["responses"]["ValidationError"];
+                422: components["responses"]["ValidationErrorResponse"];
             };
         };
         delete?: never;
@@ -432,14 +432,14 @@ export interface components {
     };
     responses: {
         /** @description Bad request */
-        ValidationError: {
+        ValidationErrorResponse: {
             headers: {
                 [name: string]: unknown;
             };
             content: {
                 "application/json": {
                     /** @enum {string} */
-                    type: ComponentsResponsesValidationErrorContentApplicationJsonType;
+                    type: ComponentsResponsesValidationErrorResponseContentApplicationJsonType;
                     path: string;
                     message: string;
                 }[];
@@ -605,7 +605,7 @@ export enum CaseAggressorSecurityForce {
     PREFECTURA_NAVAL_ARGENTINA = "PREFECTURA_NAVAL_ARGENTINA",
     OTRA_FUERZA = "OTRA FUERZA"
 }
-export enum ComponentsResponsesValidationErrorContentApplicationJsonType {
+export enum ComponentsResponsesValidationErrorResponseContentApplicationJsonType {
     parameter = "parameter",
     body = "body"
 }

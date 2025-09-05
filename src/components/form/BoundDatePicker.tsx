@@ -19,7 +19,11 @@ export default function BoundDatePicker({label}: BoundDatePickerProps) {
     <DatePicker
       label={label}
       slotProps={{
-        textField: {fullWidth: true},
+        textField: {
+          fullWidth: true,
+          error: !field.state.meta.isValid,
+          helperText: field.state.meta.errors.join(", ")
+        },
       }}
       value={field.state.value}
       onChange={handleChange}
