@@ -4,6 +4,7 @@ import BoundYesNoUnknown from "@/components/form/BoundYesNoUnknown";
 import BoundDatePicker from "@/components/form/BoundDatePicker";
 import BoundCheckbox from "@/components/form/BoundCheckBox";
 import BoundCombo from "@/components/form/BoundCombo";
+import BoundMultiCombo from "@/components/form/BoundMultiCombo";
 import {createFormHook, createFormHookContexts} from "@tanstack/react-form";
 
 export const { fieldContext, useFieldContext, formContext, useFormContext } = createFormHookContexts();
@@ -16,6 +17,7 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     DatePicker: BoundDatePicker,
     Checkbox: BoundCheckbox,
     Combo: BoundCombo,
+    MultiCombo: BoundMultiCombo,
   },
   formComponents: {},
   fieldContext,

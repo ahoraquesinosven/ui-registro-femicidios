@@ -3,7 +3,8 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import formDefaultValues, {
     allGenders,
-    allNationalities
+    allNationalities,
+    allCaseJudicialMeasures,
 } from "../formValues";
 
 const VictimFields = withForm({
@@ -85,12 +86,31 @@ const VictimFields = withForm({
                         />
                     </Grid>
 
-                    <Grid item xs={12}>
+                    <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="isRape"
                             children={(field) => <field.Checkbox label="¿Fue violada o abusada?" />}
                         />
                     </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <form.AppField
+                            name="wasJudicialized"
+                            children={(field) => <field.Checkbox label="¿Tenía medidas judiciales?" />}
+                        />
+                    </Grid>
+
+                    <form.Subscribe
+                        selector={(state) => state.values.wasJudicialized}
+                        children={(wasJudicialized) => wasJudicialized && (
+                            <Grid item xs={12}>
+                                <form.AppField
+                                    name="judicialMeasures"
+                                    children={(field) => <field.MultiCombo label="Medidas judiciales" options={allCaseJudicialMeasures} />}
+                                />
+                            </Grid>
+                        )}
+                    />
 
                     <Grid item xs={12}>
                         <form.AppField

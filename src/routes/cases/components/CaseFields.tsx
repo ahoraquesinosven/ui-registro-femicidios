@@ -65,13 +65,6 @@ const CaseFields = withForm({
 
           <Grid item xs={12} sm={6}>
             <form.AppField
-              name="wasJudicialized"
-              children={(field) => <field.Checkbox label="¿Había alguna medida judicial?" />}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <form.AppField
               name="isRelatedToOrganizedCrime"
               children={(field) => <field.Checkbox label="¿Fue en contexto de criminalidad organizada?" />}
             />
