@@ -34,12 +34,13 @@ function Nav() {
           <Link className="navbar-brand" /*href="#"*/ to="/">Registro de Femicidios</Link>
           <ul className="navbar-nav me-auto">
             <li className="nav-item">
-              <Link
+              <a
                 className='btn btn-light'
-                //href="https://docs.google.com/forms/d/e/1FAIpQLSekOpLfYzPmzFMoPWwpfQw7VlMHBrraXwvAZyxNswl6ls2VJg/viewform"
-                to="/form">
+                href="https://docs.google.com/forms/d/e/1FAIpQLSekOpLfYzPmzFMoPWwpfQw7VlMHBrraXwvAZyxNswl6ls2VJg/viewform"
+                target='_blank'
+              >
                 Cargar un caso nuevo
-              </Link>
+              </a>
             </li>
             <li className="nav-item">
               <a
@@ -48,14 +49,6 @@ function Nav() {
                 target='_blank'>
                 Consultar casos
               </a>
-            </li>
-            <li className="nav-item">
-              <Link
-                className='btn btn-light ms-2'
-                //href="https://docs.google.com/forms/d/e/1FAIpQLSekOpLfYzPmzFMoPWwpfQw7VlMHBrraXwvAZyxNswl6ls2VJg/viewform"
-                to="/list">
-                Listar Casos
-              </Link>
             </li>
           </ul>
           <UserPic />
