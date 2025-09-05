@@ -1,6 +1,12 @@
 import {withForm} from "@/hooks/form";
 import Grid from "@mui/material/Grid";
-import formDefaultValues from "../formValues";
+import formDefaultValues, {
+  allMomentsOfDay,
+  allProvinces,
+  allCaseGeographicLocations,
+  allCasePlaces,
+  allCaseMurderWeapons,
+} from "../formValues";
 
 const CaseFields = withForm({
   defaultValues: formDefaultValues,
@@ -18,14 +24,14 @@ const CaseFields = withForm({
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="momentOfDay"
-              children={(field) => <field.Text label="Momento del día" />}
+              children={(field) => <field.Combo label="Momento del día" options={allMomentsOfDay} />}
             />
           </Grid>
 
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="province"
-              children={(field) => <field.Text label="Provincia" />}
+              children={(field) => <field.Combo label="Provincia" options={allProvinces} />}
             />
           </Grid>
 
@@ -39,21 +45,21 @@ const CaseFields = withForm({
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="geographicLocation"
-              children={(field) => <field.Text label="Ubicación geográfica" />}
+              children={(field) => <field.Combo label="Ubicación geográfica" options={allCaseGeographicLocations} />}
             />
           </Grid>
 
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="place"
-              children={(field) => <field.Text label="Lugar del hecho" />}
+              children={(field) => <field.Combo label="Lugar del hecho" options={allCasePlaces} />}
             />
           </Grid>
 
           <Grid item xs={12}>
             <form.AppField
               name="murderWeapon"
-              children={(field) => <field.Text label="Forma" />}
+              children={(field) => <field.Combo label="Forma" options={allCaseMurderWeapons} />}
             />
           </Grid>
 

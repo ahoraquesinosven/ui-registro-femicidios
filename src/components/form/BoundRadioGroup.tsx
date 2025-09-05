@@ -17,6 +17,7 @@ export default function BoundRadioGroup({label, options} : BoundRadioGroupProps)
     <FormControl>
       <FormLabel>{label}</FormLabel>
       <RadioGroup
+        row
         value={field.state.value}
         onChange={(e) => field.handleChange(e.target.value)}
         onBlur={field.handleBlur}>

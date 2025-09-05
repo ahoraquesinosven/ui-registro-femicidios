@@ -9,7 +9,7 @@ import formDefaultValues from "./formValues";
 import VictimFields from "./components/VictimFields";
 import AggressorFields from "./components/AggressorFields";
 import CaseFields from "./components/CaseFields";
-
+import { formValuesToCase } from "./formValues";
 function tabStyles(index: number, currentTab: number) {
     return { 
         display: index === currentTab ? "block" : "none",
@@ -26,8 +26,10 @@ export default function CasesNew() {
 
     const form = useAppForm({
         defaultValues: formDefaultValues,
-        onSubmit: async ({ value } : { value: unknown }) => {
-            console.log(value);
+        onSubmit: async (submission) => {
+            console.log("Form value", submission.value);
+            const payload = formValuesToCase(submission.value);
+            console.log("Payload", payload);
         },
     });
 

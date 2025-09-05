@@ -1,11 +1,14 @@
 import {withForm} from "@/hooks/form";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import formDefaultValues from "../formValues";
+import formDefaultValues, {
+    allGenders,
+    allNationalities
+} from "../formValues";
 
 const VictimFields = withForm({
     defaultValues: formDefaultValues,
-    render: function Render({ form }) {
+    render: function Render({form}) {
         return (
             <>
                 <Grid container spacing={2}>
@@ -28,13 +31,13 @@ const VictimFields = withForm({
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="victim.gender"
-                            children={(field) => <field.Text label="Género" />}
+                            children={(field) => <field.Combo label="Género" options={allGenders} />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="victim.nationality"
-                            children={(field) => <field.Text label="Nacionalidad" />}
+                            children={(field) => <field.Combo label="Nacionalidad" options={allNationalities} />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -42,15 +45,6 @@ const VictimFields = withForm({
                             name="victim.occupation"
                             children={(field) => <field.Text label="Ocupación" />}
                         />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <form.AppField
-                            name="victim.hasChildren"
-                            children={(field) => <field.YesNoUnknown label="¿Tiene hijos?" />}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
@@ -91,12 +85,31 @@ const VictimFields = withForm({
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12}>
                         <form.AppField
                             name="isRape"
                             children={(field) => <field.Checkbox label="¿Fue violada o abusada?" />}
                         />
                     </Grid>
+
+                    <Grid item xs={12}>
+                        <form.AppField
+                            name="victim.hasChildren"
+                            children={(field) => <field.YesNoUnknown label="¿Tiene hijos?" />}
+                        />
+                    </Grid>
+
+                    <form.Subscribe
+                        selector={(state) => state.values.victim.hasChildren === "yes"}
+                        children={(hasChildren) => hasChildren && (
+                            <Grid item xs={12}>
+                                <form.AppField
+                                    name="victim.numberOfChildren"
+                                    children={(field) => <field.Text label="Número de hijos" type="number" />}
+                                />
+                            </Grid>
+                        )}
+                    />
                 </Grid>
             </>
         );

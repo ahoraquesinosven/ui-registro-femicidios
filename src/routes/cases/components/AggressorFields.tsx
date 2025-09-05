@@ -2,7 +2,11 @@ import {withForm} from "@/hooks/form";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import formDefaultValues from "../formValues";
+import formDefaultValues, {
+    allAggressorBehaviorsPostCase,
+    allAggressorSecurityForces,
+    allGenders
+} from "../formValues";
 
 const AggressorFields = withForm({
     defaultValues: formDefaultValues,
@@ -29,18 +33,18 @@ const AggressorFields = withForm({
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="aggressor.gender"
-                            children={(field) => <field.Text label="Género" />}
+                            children={(field) => <field.Combo label="Género" options={allGenders} />}
                         />
                     </Grid>
                     <Grid item xs={12}>
                         <form.AppField
                             name="aggressor.behaviourPostCase"
-                            children={(field) => <field.Text label="Conducta del agresor luego del caso" />}
+                            children={(field) => <field.Combo label="Conducta del agresor luego del caso" options={allAggressorBehaviorsPostCase} />}
                         />
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Divider sx={{ my: 2 }} />
+                        <Divider sx={{my: 2}} />
                         <Typography variant="h6" gutterBottom>Historial</Typography>
                     </Grid>
 
@@ -56,12 +60,32 @@ const AggressorFields = withForm({
                             children={(field) => <field.Checkbox label="¿Tiene en su historial más víctimas?" />}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+
+                    <Grid item xs={12}>
                         <form.AppField
                             name="aggressor.wasInPrison"
                             children={(field) => <field.Checkbox label="¿Estuvo preso por delitos relacionados con violencia?" />}
                         />
                     </Grid>
+
+                    <Grid item xs={12}>
+                        <form.AppField
+                            name="aggressor.belongsSecurityForce"
+                            children={(field) => <field.Checkbox label="¿Pertenece a alguna fuerza?" />}
+                        />
+                    </Grid>
+
+                    <form.Subscribe
+                        selector={(state) => state.values.aggressor.belongsSecurityForce}
+                        children={(belongsSecurityForce) => belongsSecurityForce && (
+                            <Grid item xs={12}>
+                                <form.AppField
+                                    name="aggressor.securityForce"
+                                    children={(field) => <field.Combo label="Fuerza a la que pertenece" options={allAggressorSecurityForces} />}
+                                />
+                            </Grid>
+                        )}
+                    />
                 </Grid>
             </>
         );
