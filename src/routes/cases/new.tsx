@@ -33,17 +33,15 @@ export default function CasesNew() {
         defaultValues: formDefaultValues,
         onSubmit: async ({value, formApi}) => {
             const payload = formValuesToCase(value);
-            console.log(payload);
             const result = await createCase(accessToken, payload);
 
             if (result.ok) {
                 alert("Caso creado");
-                return form.reset();
+                return formApi.reset();
             }
 
             result.errors.forEach((error) => {
                 const path = error.path.split("/").slice(1).join(".") as keyof typeof formDefaultValues;
-                console.log(`Setting up error on field ${path}`)
                 const fieldInfo = formApi.fieldInfo[path];
                 if (fieldInfo) {
                     formApi.fieldInfo[path].instance?.setErrorMap({onSubmit: error.message});
