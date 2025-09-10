@@ -4,6 +4,8 @@ import Button from "@mui/material/Button";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 import { useAppForm } from "@/hooks/form";
 import formDefaultValues from "./formValues";
 import VictimFields from "./components/VictimFields";
@@ -22,13 +24,22 @@ function tabStyles(index: number, currentTab: number) {
 
 export default function CasesNew() {
     const [currentTab, setCurrentTab] = useState(0);
-
     const handleChangeCurrentTab = (_event: unknown, newTab: number) => {
         setCurrentTab(newTab);
     }
 
-    const accessToken = useAccessToken();
+    const [currentNotification, setCurrentNotification] = useState({
+        active: false,
+        message: "",
+    });
+    const handleCloseNotification = () => {
+        setCurrentNotification({
+            active: false,
+            message: "",
+        });
+    }
 
+    const accessToken = useAccessToken();
     const form = useAppForm({
         defaultValues: formDefaultValues,
         onSubmit: async ({value, formApi}) => {
@@ -36,7 +47,10 @@ export default function CasesNew() {
             const result = await createCase(accessToken, payload);
 
             if (result.ok) {
-                alert("Caso creado");
+                setCurrentNotification({
+                    active: true,
+                    message: "El caso fue guardado exitosamente",
+                });
                 return formApi.reset();
             }
 
@@ -49,7 +63,6 @@ export default function CasesNew() {
             });
         },
     });
-
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         e.stopPropagation();
@@ -82,6 +95,15 @@ export default function CasesNew() {
                     Enviar Datos
                 </Button>
             </form>
+            <Snackbar open={currentNotification.active} onClose={handleCloseNotification} autoHideDuration={5000}>
+                <Alert
+                    severity="success"
+                    variant="filled"
+                    onClose={handleCloseNotification}>
+                    {currentNotification.message}
+                </Alert>
+
+            </Snackbar>
         </Container>
     );
 }
