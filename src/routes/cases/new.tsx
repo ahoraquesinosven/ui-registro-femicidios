@@ -91,9 +91,14 @@ export default function CasesNew() {
                 </Box>
 
 
-                <Button type="submit" variant="contained" color="primary">
-                    Enviar Datos
-                </Button>
+                <form.Subscribe
+                    selector={(state) => [state.canSubmit, state.isSubmitting]}
+                    children={([canSubmit, isSubmitting]) => (
+                        <Button type="submit" variant="contained" color="primary" disabled={!canSubmit}>
+                            { isSubmitting ? "Guardando" : "Guardar" }
+                        </Button>
+                    )}
+                />
             </form>
             <Snackbar open={currentNotification.active} onClose={handleCloseNotification} autoHideDuration={5000}>
                 <Alert
