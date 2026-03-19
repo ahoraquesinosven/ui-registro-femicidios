@@ -24,6 +24,9 @@ We use a dockerized development environment, so you will need [docker](https://w
 ### How to add new fields in the Creat Form / New Case
     
 * If the new fields are linked with new ENUMS in the API, Run `docker compose up dev npx openapi-typescript ./path/to/my/schema.yaml -o ./src/api/aqsnv/v1.ts`
+  * to get the yaml, go to `http://localhost:8081/` and download the openapi.json
+  * rename extension to get `openapi.yaml` and move the file in `/repositories-aqsnv/ui-registro-femicidios/`
+  * Another alternative is to run it locally `npx openapi-typescript ./openapi.yaml o ./src/api/aqsnv/v1.ts`
 * Add new ENUM also in the export in `src/api/aqsnv/cases.ts`
 * Configure default values for the form in the Const `defaultValues` in `src/routes/cases/formValues.tsx`
 * Convert what is in the form to the types that the API is expecting in the function `formValuesToCase` in `src/routes/cases/formValues.tsx`

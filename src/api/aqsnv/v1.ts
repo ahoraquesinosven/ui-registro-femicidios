@@ -89,7 +89,7 @@ export interface paths {
             parameters: {
                 query?: {
                     /** @description Filter results to only contain feed items in the given status */
-                    status?: PathsV1FeedItemsGetParametersQueryStatus;
+                    status?: "backlog" | "inProgress" | "done";
                     /** @description Maximum amount of results to return */
                     limit?: number;
                     /** @description Cursor as returned on the `next` property of a previous request to this endpoint */
@@ -339,6 +339,8 @@ export interface paths {
                 content: {
                     "application/json": {
                         caseCategory: components["schemas"]["CaseCategory"];
+                        wasItAnAttempt?: boolean;
+                        isInsufficientDataOrUnderInvestigation?: boolean;
                         /** Format: date */
                         occurredAt: string;
                         momentOfDay?: components["schemas"]["CaseMomentOfDay"];
@@ -348,6 +350,7 @@ export interface paths {
                         place: components["schemas"]["CasePlace"];
                         murderWeapon?: components["schemas"]["CaseMurderWeapon"];
                         hadLegalComplaints?: boolean;
+                        totalLegalComplaints?: number;
                         wasJudicialized?: boolean;
                         judicialMeasures?: components["schemas"]["CaseJudicialMeasure"][];
                         victimBondAggressor?: components["schemas"]["CaseVictimBondAggressor"];
@@ -406,29 +409,29 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         /** @enum {unknown} */
-        Gender: Gender;
+        Gender: "MUJER" | "HOMBRE" | "NO_BINARIO" | "TRANS" | "TRAVESTI";
         /** @enum {unknown} */
-        Province: Province;
+        Province: "BUENOS_AIRES" | "CATAMARCA" | "CHACO" | "CHUBUT" | "CABA" | "CORDOBA" | "CORRIENTES" | "ENTRE_RIOS" | "FORMOSA" | "JUJUY" | "LA_PAMPA" | "LA_RIOJA" | "MENDOZA" | "MISIONES" | "NEUQUEN" | "RIO_NEGRO" | "SALTA" | "SAN_JUAN" | "SAN_LUIS" | "SANTA_CRUZ" | "SANTA_FE" | "SANTIAGO_DEL_ESTERO" | "TIERRA_DEL_FUEGO" | "TUCUMAN";
         /** @enum {unknown} */
-        Nationality: Nationality;
+        Nationality: "ARGENTINA" | "BOLIVIA" | "BRASIL" | "COLOMBIA" | "CHILE" | "ECUADOR" | "GUYANA" | "PARAGUAY" | "PERU" | "SURINAM" | "URUGUAY" | "VENEZUELA" | "GUYANA_FRANCESA" | "OTRA";
         /** @enum {unknown} */
-        CaseCategory: CaseCategory;
+        CaseCategory: "FEMICIDIO_DIRECTO" | "FEMICIDIO_VINCULADO" | "TRAVESTICIDIO_TRANSFEMICIDIO_LESBICIDIO" | "INSTIGACION_AL_SUICIDIO" | "CRIMEN_DE_ODIO";
         /** @enum {unknown} */
-        CaseMomentOfDay: CaseMomentOfDay;
+        CaseMomentOfDay: "DIURNO" | "NOCTURNO";
         /** @enum {unknown} */
-        CaseGeographicLocation: CaseGeographicLocation;
+        CaseGeographicLocation: "URBANA" | "RURAL";
         /** @enum {unknown} */
-        CasePlace: CasePlace;
+        CasePlace: "VIVIENDA_DE_LA_VICTIMA" | "VIVIENDA_DEL_AGRESOR" | "VIA_PUBLICA" | "VIVIENDA_DE_ALGUN_FAMILIAR" | "VIVIENDA_DE_AMBAS_PARTES_CONVIVIAN" | "OTRO_LUGAR";
         /** @enum {unknown} */
-        CaseMurderWeapon: CaseMurderWeapon;
+        CaseMurderWeapon: "A_GOLPES" | "AHOGADA" | "ARMA_BLANCA" | "ARMA_DE_FUEGO" | "ARROJADA_POR_EL_BALCON" | "ASFIXIA" | "ATROPELLADA" | "DESCUARTIZADA" | "EMPALAMIENTO" | "EMPUJO_POR_LAS_ESCALERAS" | "QUEMADA_CALCINADA" | "OTRA_FORMA";
         /** @enum {unknown} */
-        CaseJudicialMeasure: CaseJudicialMeasure;
+        CaseJudicialMeasure: "ALIMENTOS_PROVISIONALES" | "ASISTENCIA_PSICOLOGICA" | "BOTON_ANTIPANICO" | "COMPENSACION_ECONOMICA" | "CUSTODIA_PERSONAL" | "MONITOREO_ELECTRONICO_DEL_AGRESOR" | "PROHIBICION_DE_ACERCAMIENTO" | "PROHIBICION_DE_CONTACTO" | "PROHIBICION_DE_DISPONER_DE_BIENES" | "PROVISION_DE_UN_LUGAR_SEGURO" | "REINGRESO_DE_LA_VICTIMA" | "RESTITUCION_DE_PERTENENCIAS" | "SALIDA_DEL_HOGAR" | "SUSPENSION_DEL_REGIMEN_DE_VISITAS" | "OTRA";
         /** @enum {unknown} */
-        CaseVictimBondAggressor: CaseVictimBondAggressor;
+        CaseVictimBondAggressor: "PAREJA_ACTUAL" | "EX_PAREJA" | "FAMILIAR_MADRE" | "FAMILIAR_HIJA" | "FAMILIAR_HIJO" | "FAMILIAR_HERMANA" | "FAMILIAR_HERMANO" | "FAMILIAR_NIETA" | "FAMILIAR_NIETO" | "FAMILIAR_SOBRINA" | "FAMILIAR_SOBRINO" | "FAMILIAR_SUEGRA" | "FAMILIAR_SUEGRO" | "FAMILIAR_BISNIETO" | "FAMILIAR_CUÑADO" | "FAMILIAR_CUÑADA" | "FAMILIAR_PADRE" | "CONOCIDO_NO_FAMILIAR" | "DESCONOCIDO";
         /** @enum {unknown} */
-        CaseAggressorBehaviorPostCase: CaseAggressorBehaviorPostCase;
+        CaseAggressorBehaviorPostCase: "SE_SUICIDO" | "INTENTO_SUICIDARSE" | "OCULTO_SU_AUTORIA" | "SE_FUGO" | "INTENTO_ESCAPARSE" | "SE_ENTREGO_CONFESO" | "SE_DESHIZO_DEL_CUERPO" | "PIDIO_AYUDA_ASISTIO_A_LA_VICTIMA" | "SE_RESISTIO_A_LA_AUTORIDAD" | "NINGUNA_DE_LAS_ANTERIORES";
         /** @enum {unknown} */
-        CaseAggressorSecurityForce: CaseAggressorSecurityForce;
+        CaseAggressorSecurityForce: "POLICIA" | "EX_POLICIA_O_POLICIA_RETIRADO" | "EX_FUNCIONARIO_DEL_SERVICIO_PENITENCIARIO" | "FUNCIONARIO_DEL_SERVICIO_PENITENCIARIO" | "GENDARME" | "MILITAR" | "GUARDIA_URBANA_MUNICIPAL" | "SOLDADO_VOLUNTARIO" | "PREFECTURA_NAVAL_ARGENTINA" | "OTRA FUERZA";
     };
     responses: {
         /** @description Bad request */
@@ -439,7 +442,7 @@ export interface components {
             content: {
                 "application/json": {
                     /** @enum {string} */
-                    type: ComponentsResponsesValidationErrorResponseContentApplicationJsonType;
+                    type: "parameter" | "body";
                     path: string;
                     message: string;
                 }[];
@@ -452,161 +455,4 @@ export interface components {
     pathItems: never;
 }
 export type $defs = Record<string, never>;
-export enum PathsV1FeedItemsGetParametersQueryStatus {
-    backlog = "backlog",
-    inProgress = "inProgress",
-    done = "done"
-}
-export enum Gender {
-    MUJER = "MUJER",
-    HOMBRE = "HOMBRE",
-    NO_BINARIO = "NO_BINARIO",
-    TRANS = "TRANS",
-    TRAVESTI = "TRAVESTI"
-}
-export enum Province {
-    BUENOS_AIRES = "BUENOS_AIRES",
-    CATAMARCA = "CATAMARCA",
-    CHACO = "CHACO",
-    CHUBUT = "CHUBUT",
-    CABA = "CABA",
-    CORDOBA = "CORDOBA",
-    CORRIENTES = "CORRIENTES",
-    ENTRE_RIOS = "ENTRE_RIOS",
-    FORMOSA = "FORMOSA",
-    JUJUY = "JUJUY",
-    LA_PAMPA = "LA_PAMPA",
-    LA_RIOJA = "LA_RIOJA",
-    MENDOZA = "MENDOZA",
-    MISIONES = "MISIONES",
-    NEUQUEN = "NEUQUEN",
-    RIO_NEGRO = "RIO_NEGRO",
-    SALTA = "SALTA",
-    SAN_JUAN = "SAN_JUAN",
-    SAN_LUIS = "SAN_LUIS",
-    SANTA_CRUZ = "SANTA_CRUZ",
-    SANTA_FE = "SANTA_FE",
-    SANTIAGO_DEL_ESTERO = "SANTIAGO_DEL_ESTERO",
-    TIERRA_DEL_FUEGO = "TIERRA_DEL_FUEGO",
-    TUCUMAN = "TUCUMAN"
-}
-export enum Nationality {
-    ARGENTINA = "ARGENTINA",
-    BOLIVIA = "BOLIVIA",
-    BRASIL = "BRASIL",
-    COLOMBIA = "COLOMBIA",
-    CHILE = "CHILE",
-    ECUADOR = "ECUADOR",
-    GUYANA = "GUYANA",
-    PARAGUAY = "PARAGUAY",
-    PERU = "PERU",
-    SURINAM = "SURINAM",
-    URUGUAY = "URUGUAY",
-    VENEZUELA = "VENEZUELA",
-    GUYANA_FRANCESA = "GUYANA_FRANCESA",
-    OTRA = "OTRA"
-}
-export enum CaseCategory {
-    FEMICIDIO_DIRECTO = "FEMICIDIO_DIRECTO",
-    FEMICIDIO_VINCULADO = "FEMICIDIO_VINCULADO",
-    TRAVESTICIDIO_TRANSFEMICIDIO = "TRAVESTICIDIO_TRANSFEMICIDIO",
-    INSTIGACION_AL_SUICIDIO = "INSTIGACION_AL_SUICIDIO",
-    CRIMEN_DE_ODIO = "CRIMEN_DE_ODIO"
-}
-export enum CaseMomentOfDay {
-    DIURNO = "DIURNO",
-    NOCTURNO = "NOCTURNO"
-}
-export enum CaseGeographicLocation {
-    URBANA = "URBANA",
-    RURAL = "RURAL"
-}
-export enum CasePlace {
-    VIVIENDA_DE_LA_VICTIMA = "VIVIENDA_DE_LA_VICTIMA",
-    VIVIENDA_DEL_AGRESOR = "VIVIENDA_DEL_AGRESOR",
-    VIA_PUBLICA = "VIA_PUBLICA",
-    VIVIENDA_DE_ALGUN_FAMILIAR = "VIVIENDA_DE_ALGUN_FAMILIAR",
-    VIVIENDA_DE_AMBAS_PARTES_CONVIVIAN = "VIVIENDA_DE_AMBAS_PARTES_CONVIVIAN",
-    OTRO_LUGAR = "OTRO_LUGAR"
-}
-export enum CaseMurderWeapon {
-    A_GOLPES = "A_GOLPES",
-    AHOGADA = "AHOGADA",
-    ARMA_BLANCA = "ARMA_BLANCA",
-    ARMA_DE_FUEGO = "ARMA_DE_FUEGO",
-    ARROJADA_POR_EL_BALCON = "ARROJADA_POR_EL_BALCON",
-    ASFIXIA = "ASFIXIA",
-    ATROPELLADA = "ATROPELLADA",
-    DESCUARTIZADA = "DESCUARTIZADA",
-    EMPALAMIENTO = "EMPALAMIENTO",
-    EMPUJO_POR_LAS_ESCALERAS = "EMPUJO_POR_LAS_ESCALERAS",
-    QUEMADA_CALCINADA = "QUEMADA_CALCINADA",
-    OTRA_FORMA = "OTRA_FORMA"
-}
-export enum CaseJudicialMeasure {
-    ALIMENTOS_PROVISIONALES = "ALIMENTOS_PROVISIONALES",
-    ASISTENCIA_PSICOLOGICA = "ASISTENCIA_PSICOLOGICA",
-    BOTON_ANTIPANICO = "BOTON_ANTIPANICO",
-    COMPENSACION_ECONOMICA = "COMPENSACION_ECONOMICA",
-    CUSTODIA_PERSONAL = "CUSTODIA_PERSONAL",
-    MONITOREO_ELECTRONICO_DEL_AGRESOR = "MONITOREO_ELECTRONICO_DEL_AGRESOR",
-    PROHIBICION_DE_ACERCAMIENTO = "PROHIBICION_DE_ACERCAMIENTO",
-    PROHIBICION_DE_CONTACTO = "PROHIBICION_DE_CONTACTO",
-    PROHIBICION_DE_DISPONER_DE_BIENES = "PROHIBICION_DE_DISPONER_DE_BIENES",
-    PROVISION_DE_UN_LUGAR_SEGURO = "PROVISION_DE_UN_LUGAR_SEGURO",
-    REINGRESO_DE_LA_VICTIMA = "REINGRESO_DE_LA_VICTIMA",
-    RESTITUCION_DE_PERTENENCIAS = "RESTITUCION_DE_PERTENENCIAS",
-    SALIDA_DEL_HOGAR = "SALIDA_DEL_HOGAR",
-    SUSPENSION_DEL_REGIMEN_DE_VISITAS = "SUSPENSION_DEL_REGIMEN_DE_VISITAS",
-    OTRA = "OTRA"
-}
-export enum CaseVictimBondAggressor {
-    PAREJA_ACTUAL = "PAREJA_ACTUAL",
-    EX_PAREJA = "EX_PAREJA",
-    FAMILIAR_MADRE = "FAMILIAR_MADRE",
-    FAMILIAR_HIJA = "FAMILIAR_HIJA",
-    FAMILIAR_HIJO = "FAMILIAR_HIJO",
-    FAMILIAR_HERMANA = "FAMILIAR_HERMANA",
-    FAMILIAR_HERMANO = "FAMILIAR_HERMANO",
-    FAMILIAR_NIETA = "FAMILIAR_NIETA",
-    FAMILIAR_NIETO = "FAMILIAR_NIETO",
-    FAMILIAR_SOBRINA = "FAMILIAR_SOBRINA",
-    FAMILIAR_SOBRINO = "FAMILIAR_SOBRINO",
-    FAMILIAR_SUEGRA = "FAMILIAR_SUEGRA",
-    FAMILIAR_SUEGRO = "FAMILIAR_SUEGRO",
-    FAMILIAR_BISNIETO = "FAMILIAR_BISNIETO",
-    FAMILIAR_CU_ADO = "FAMILIAR_CU\u00D1ADO",
-    FAMILIAR_CU_ADA = "FAMILIAR_CU\u00D1ADA",
-    FAMILIAR_PADRE = "FAMILIAR_PADRE",
-    CONOCIDO_NO_FAMILIAR = "CONOCIDO_NO_FAMILIAR",
-    DESCONOCIDO = "DESCONOCIDO"
-}
-export enum CaseAggressorBehaviorPostCase {
-    SE_SUICIDO = "SE_SUICIDO",
-    INTENTO_SUICIDARSE = "INTENTO_SUICIDARSE",
-    OCULTO_SU_AUTORIA = "OCULTO_SU_AUTORIA",
-    SE_FUGO = "SE_FUGO",
-    INTENTO_ESCAPARSE = "INTENTO_ESCAPARSE",
-    SE_ENTREGO_CONFESO = "SE_ENTREGO_CONFESO",
-    SE_DESHIZO_DEL_CUERPO = "SE_DESHIZO_DEL_CUERPO",
-    PIDIO_AYUDA_ASISTIO_A_LA_VICTIMA = "PIDIO_AYUDA_ASISTIO_A_LA_VICTIMA",
-    SE_RESISTIO_A_LA_AUTORIDAD = "SE_RESISTIO_A_LA_AUTORIDAD",
-    NINGUNA_DE_LAS_ANTERIORES = "NINGUNA_DE_LAS_ANTERIORES"
-}
-export enum CaseAggressorSecurityForce {
-    POLICIA = "POLICIA",
-    EX_POLICIA_O_POLICIA_RETIRADO = "EX_POLICIA_O_POLICIA_RETIRADO",
-    EX_FUNCIONARIO_DEL_SERVICIO_PENITENCIARIO = "EX_FUNCIONARIO_DEL_SERVICIO_PENITENCIARIO",
-    FUNCIONARIO_DEL_SERVICIO_PENITENCIARIO = "FUNCIONARIO_DEL_SERVICIO_PENITENCIARIO",
-    GENDARME = "GENDARME",
-    MILITAR = "MILITAR",
-    GUARDIA_URBANA_MUNICIPAL = "GUARDIA_URBANA_MUNICIPAL",
-    SOLDADO_VOLUNTARIO = "SOLDADO_VOLUNTARIO",
-    PREFECTURA_NAVAL_ARGENTINA = "PREFECTURA_NAVAL_ARGENTINA",
-    OTRA_FUERZA = "OTRA FUERZA"
-}
-export enum ComponentsResponsesValidationErrorResponseContentApplicationJsonType {
-    parameter = "parameter",
-    body = "body"
-}
 export type operations = Record<string, never>;
