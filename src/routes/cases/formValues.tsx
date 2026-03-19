@@ -82,6 +82,7 @@ const defaultValues = {
         securityForce: null as string | null,
     },
 
+    caseCategory: CaseCategory.FEMICIDIO_DIRECTO,
     occurredAt: dayjs(),
     momentOfDay: null as string | null,
     province: null as string | null,
@@ -129,7 +130,7 @@ export function formValuesToCase(formValues: typeof defaultValues): Case {
             belongsSecurityForce: formValues.aggressor.belongsSecurityForce,
             securityForce: stringToEnum<AggressorSecurityForce>(formValues.aggressor.securityForce),
         },
-        caseCategory: CaseCategory.FEMICIDIO_DIRECTO,
+        caseCategory: formValues.CaseCategory,
         occurredAt: formValues.occurredAt.format("YYYY-MM-DD"),
         momentOfDay: stringToEnum<CaseMomentOfDay>(formValues.momentOfDay),
         province: formValues.province as Province,

@@ -19,6 +19,7 @@ export {
   CaseAggressorBehaviorPostCase as AggressorBehaviorPostCase,
   CaseAggressorSecurityForce as AggressorSecurityForce,
   CaseMomentOfDay,
+  CaseCategory,
 } from "./v1";
 
 const endpoints = {
