@@ -6,6 +6,7 @@ import formDefaultValues, {
   allCaseGeographicLocations,
   allCasePlaces,
   allCaseMurderWeapons,
+  allCaseCategories,
 } from "../formValues";
 
 const CaseFields = withForm({
@@ -18,6 +19,13 @@ const CaseFields = withForm({
             <form.AppField 
               name="occurredAt"
               children={(field) => <field.DatePicker label="Fecha del caso" />}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <form.AppField
+              name="caseCategory"
+              children={(field) => <field.Combo label="Categoría" options={allCaseCategories} />}
             />
           </Grid>
 
@@ -56,7 +64,7 @@ const CaseFields = withForm({
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6}>
             <form.AppField
               name="murderWeapon"
               children={(field) => <field.Combo label="Forma" options={allCaseMurderWeapons} />}

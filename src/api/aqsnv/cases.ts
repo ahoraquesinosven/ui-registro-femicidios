@@ -19,8 +19,7 @@ export {
   CaseAggressorBehaviorPostCase as AggressorBehaviorPostCase,
   CaseAggressorSecurityForce as AggressorSecurityForce,
   CaseMomentOfDay,
-  CaseCategory,
-} from "./v1";
+  } from "./v1";
 
 const endpoints = {
   cases: () => new URL("/v1/cases", config.api.aqsnv.server),

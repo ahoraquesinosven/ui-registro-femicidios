@@ -26,6 +26,7 @@ export const allCasePlaces = Object.values(CasePlace);
 export const allCaseMurderWeapons = Object.values(CaseMurderWeapon);
 export const allCaseJudicialMeasures = Object.values(CaseJudicialMeasure);
 export const allCaseVictimBondsAggressor = Object.values(CaseVictimBondAggressor);
+export const allCaseCategories = Object.values(CaseCategory);
 
 type YesNoUnknown = "yes" | "no" | "unknown";
 
@@ -130,7 +131,7 @@ export function formValuesToCase(formValues: typeof defaultValues): Case {
             belongsSecurityForce: formValues.aggressor.belongsSecurityForce,
             securityForce: stringToEnum<AggressorSecurityForce>(formValues.aggressor.securityForce),
         },
-        caseCategory: formValues.CaseCategory,
+        caseCategory: stringToEnum<CaseCategory>(formValues.caseCategory),
         occurredAt: formValues.occurredAt.format("YYYY-MM-DD"),
         momentOfDay: stringToEnum<CaseMomentOfDay>(formValues.momentOfDay),
         province: formValues.province as Province,
