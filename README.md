@@ -31,7 +31,7 @@ We use a dockerized development environment, so you will need [docker](https://w
 * Configure default values for the form in the Const `defaultValues` in `src/routes/cases/formValues.tsx`
 * Convert what is in the form to the types that the API is expecting in the function `formValuesToCase` in `src/routes/cases/formValues.tsx`
 * Check the url or path, for a new cases it is in  `src/routes/cases/new.tsx`. check on the return function
-* Navegate until the component you want to update
+* Navegate until the component you want to update (thi is the page / the UI)
 * To add a new field use form.AppField, adding in the field `name` the name of the API and in `children` the component used fo that field. There are pre-defined components in `src/hooks/form.tsx`
   * IF a new component is needed, check with Andres
 * Then, it should be ok. There shouldn't be need to change the `onSubmit` that is part of the `const form` in `src/routes/cases/new.tsx`.
