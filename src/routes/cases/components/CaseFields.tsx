@@ -35,12 +35,22 @@ const CaseFields = withForm({
             />
           </Grid>
 
-          <Grid item xs={12} sm={6}>
-            <form.AppField
-              name="isInsufficientDataOrUnderInvestigation"
-              children={(field) => <field.Checkbox label="¿Aún se investiga?" />}
-            />    
-          </Grid>
+          <form.Subscribe
+            selector={(state) => state.values.wasItAnAttempt}
+            children={(wasItAnAttempt) => (
+              <Grid item xs={12} sm={6}>
+                <form.AppField
+                  name="isInsufficientDataOrUnderInvestigation"
+                  children={(field) => <field.Checkbox label="¿Aún se investiga?" disabled={wasItAnAttempt} />}
+                />    
+              </Grid>
+            )
+          }
+          />
+          
+          
+          
+
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="momentOfDay"
