@@ -28,7 +28,18 @@ const CaseFields = withForm({
               children={(field) => <field.Combo label="Categoría" options={allCaseCategories} />}
             />
           </Grid>
-
+          <Grid item xs={12} sm={6}>
+            <form.AppField
+              name="wasItAnAttempt"
+              children={(field) => <field.Checkbox label="¿Fue un intento?" />}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <form.AppField
+              name="isInsufficientDataOrUnderInvestigation"
+              children={(field) => <field.Checkbox label="¿Aún se investiga?" />}
+            />
+          </Grid>
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="momentOfDay"
