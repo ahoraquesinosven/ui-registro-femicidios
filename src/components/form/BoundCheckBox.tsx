@@ -4,16 +4,18 @@ import  Checkbox, {CheckboxProps}  from "@mui/material/Checkbox";
 
 export type BoundCheckboxProps = {
   label: string,
-  checkbox?: CheckboxProps
+  disabled: boolean,
+  checkbox?: CheckboxProps,
 };
 
-export default function BoundCheckbox({label, checkbox} : BoundCheckboxProps) {
+export default function BoundCheckbox({label, checkbox, disabled} : BoundCheckboxProps) {
   const field = useFieldContext<boolean>();
 
 
   return (
     <FormControlLabel
       label={label}
+      disabled={disabled}
       control={
         <Checkbox
           {...checkbox}

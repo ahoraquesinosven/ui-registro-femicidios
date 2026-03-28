@@ -76,10 +76,24 @@ const AggressorFields = withForm({
 
                     <Grid item xs={12} sm={6}>
                         <form.AppField
-                            name="aggressor.hasLegalComplaintHistory"
+                            name="hasLegalComplaintHistory"
                             children={(field) => <field.Checkbox label="¿Tiene denuncias previas?" />}
                         />
                     </Grid>
+                    
+                    <form.Subscribe
+                        selector={(state) => state.values.hasLegalComplaintHistory}
+                        children={(hasLegalComplaintHistory) => hasLegalComplaintHistory && (
+                            <Grid item xs={12}>
+                                <form.AppField
+                                    name="totalLegalComplaints"
+                                    children={(field) => <field.Text label="Indicar cantidad de denuncias" />}
+                                />
+                            </Grid>
+                        )}
+                    />
+
+
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="aggressor.hasPreviousCases"

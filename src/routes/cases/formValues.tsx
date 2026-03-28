@@ -26,6 +26,7 @@ export const allCasePlaces = Object.values(CasePlace);
 export const allCaseMurderWeapons = Object.values(CaseMurderWeapon);
 export const allCaseJudicialMeasures = Object.values(CaseJudicialMeasure);
 export const allCaseVictimBondsAggressor = Object.values(CaseVictimBondAggressor);
+export const allCaseCategories = Object.values(CaseCategory);
 
 type YesNoUnknown = "yes" | "no" | "unknown";
 
@@ -82,8 +83,12 @@ const defaultValues = {
         securityForce: null as string | null,
     },
 
+    caseCategory: CaseCategory.FEMICIDIO_DIRECTO,
     occurredAt: dayjs(),
     momentOfDay: null as string | null,
+    wasItAnAttempt: false,
+    isInsufficientDataOrUnderInvestigation: false,
+    totalLegalComplaints: "",
     province: null as string | null,
     location: "",
     geographicLocation: null as string | null,
@@ -129,9 +134,11 @@ export function formValuesToCase(formValues: typeof defaultValues): Case {
             belongsSecurityForce: formValues.aggressor.belongsSecurityForce,
             securityForce: stringToEnum<AggressorSecurityForce>(formValues.aggressor.securityForce),
         },
-        caseCategory: CaseCategory.FEMICIDIO_DIRECTO,
+        caseCategory: stringToEnum<CaseCategory>(formValues.caseCategory),
         occurredAt: formValues.occurredAt.format("YYYY-MM-DD"),
         momentOfDay: stringToEnum<CaseMomentOfDay>(formValues.momentOfDay),
+        wasItAnAttempt: formValues.wasItAnAttempt,
+        isInsufficientDataOrUnderInvestigation: formValues.isInsufficientDataOrUnderInvestigation,
         province: formValues.province as Province,
         location: formValues.location,
         geographicLocation: stringToEnum<CaseGeographicLocation>(formValues.geographicLocation),
@@ -141,6 +148,7 @@ export function formValuesToCase(formValues: typeof defaultValues): Case {
         wasJudicialized: formValues.wasJudicialized,
         judicialMeasures: formValues.judicialMeasures as CaseJudicialMeasure[],
         victimBondAggressor: stringToEnum<CaseVictimBondAggressor>(formValues.victimBondAggressor),
+        totalLegalComplaints: stringToInteger(formValues.aggressor.totalLegalComplaints),
         isRape: formValues.isRape,
         isRelatedToOrganizedCrime: formValues.isRelatedToOrganizedCrime,
         organizedCrimeNotes: formValues.organizedCrimeNotes,

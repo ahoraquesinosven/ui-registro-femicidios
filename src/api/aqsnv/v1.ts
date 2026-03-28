@@ -339,6 +339,8 @@ export interface paths {
                 content: {
                     "application/json": {
                         caseCategory: components["schemas"]["CaseCategory"];
+                        wasItAnAttempt?: boolean;
+                        isInsufficientDataOrUnderInvestigation?: boolean;
                         /** Format: date */
                         occurredAt: string;
                         momentOfDay?: components["schemas"]["CaseMomentOfDay"];
@@ -348,6 +350,7 @@ export interface paths {
                         place: components["schemas"]["CasePlace"];
                         murderWeapon?: components["schemas"]["CaseMurderWeapon"];
                         hadLegalComplaints?: boolean;
+                        totalLegalComplaints?: number;
                         wasJudicialized?: boolean;
                         judicialMeasures?: components["schemas"]["CaseJudicialMeasure"][];
                         victimBondAggressor?: components["schemas"]["CaseVictimBondAggressor"];
@@ -509,7 +512,7 @@ export enum Nationality {
 export enum CaseCategory {
     FEMICIDIO_DIRECTO = "FEMICIDIO_DIRECTO",
     FEMICIDIO_VINCULADO = "FEMICIDIO_VINCULADO",
-    TRAVESTICIDIO_TRANSFEMICIDIO = "TRAVESTICIDIO_TRANSFEMICIDIO",
+    TRAVESTICIDIO_TRANSFEMICIDIO_LESBICIDIO = "TRAVESTICIDIO_TRANSFEMICIDIO_LESBICIDIO",
     INSTIGACION_AL_SUICIDIO = "INSTIGACION_AL_SUICIDIO",
     CRIMEN_DE_ODIO = "CRIMEN_DE_ODIO"
 }
