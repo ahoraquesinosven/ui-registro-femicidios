@@ -4,7 +4,7 @@ import  Checkbox, {CheckboxProps}  from "@mui/material/Checkbox";
 
 export type BoundCheckboxProps = {
   label: string,
-  disabled: boolean,
+  disabled?: boolean,
   checkbox?: CheckboxProps,
 };
 
