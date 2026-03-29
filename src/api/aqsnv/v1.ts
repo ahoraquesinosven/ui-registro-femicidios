@@ -372,6 +372,7 @@ export interface paths {
                             occupation?: string;
                             hasChildren?: boolean;
                             numberOfChildren?: number;
+                            ageOfChildren?: number[];
                         };
                         aggressor: {
                             fullName?: string;
@@ -512,7 +513,9 @@ export enum Nationality {
 export enum CaseCategory {
     FEMICIDIO_DIRECTO = "FEMICIDIO_DIRECTO",
     FEMICIDIO_VINCULADO = "FEMICIDIO_VINCULADO",
-    TRAVESTICIDIO_TRANSFEMICIDIO_LESBICIDIO = "TRAVESTICIDIO_TRANSFEMICIDIO_LESBICIDIO",
+    TRAVESTICIDIO = "TRAVESTICIDIO",
+    TRANSFEMICIDIO = "TRANSFEMICIDIO",
+    LESBICIDIO = "LESBICIDIO",
     INSTIGACION_AL_SUICIDIO = "INSTIGACION_AL_SUICIDIO",
     CRIMEN_DE_ODIO = "CRIMEN_DE_ODIO"
 }

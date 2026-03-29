@@ -39,16 +39,17 @@ const AggressorFields = withForm({
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <form.AppField
-                            name="aggressor.behaviourPostCase"
-                            children={(field) => <field.Combo label="Conducta del agresor luego del caso" options={allAggressorBehaviorsPostCase} />}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <form.AppField
                             name="victimBondAggressor"
                             children={(field) => <field.Combo label="Vínculo con la víctima" options={allCaseVictimBondsAggressor} />}
                         />
                     </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <form.AppField
+                            name="aggressor.behaviourPostCase"
+                            children={(field) => <field.Combo label="Conducta del agresor luego del caso" options={allAggressorBehaviorsPostCase} />}
+                        />
+                    </Grid>
+
 
                     <Grid item xs={12}>
                         <form.AppField

@@ -52,6 +52,16 @@ function stringToInteger(value: string): number | undefined {
     return result;
 }
 
+function stringToFloat(value: string): number | undefined {
+    const result = parseFloat(value);
+
+    if (isNaN(result)) {
+        return undefined;
+    }
+
+    return result;
+}
+
 function stringToEnum<T>(value: string | null | undefined): T | undefined {
     return (value !== null && value !== undefined) ? value as T : undefined;
 }
@@ -70,6 +80,8 @@ const defaultValues = {
         occupation: "",
         hasChildren: "unknown" as YesNoUnknown,
         numberOfChildren: "",
+        ageOfChildren:"",
+        
     },
     aggressor: {
         fullName: "",
@@ -122,6 +134,12 @@ export function formValuesToCase(formValues: typeof defaultValues): Case {
             occupation: formValues.victim.occupation || undefined,
             hasChildren: yesNoUnknownToBoolean(formValues.victim.hasChildren),
             numberOfChildren: stringToInteger(formValues.victim.numberOfChildren),
+            ageOfChildren: formValues.victim.ageOfChildren
+                .split("\n")
+                .map((s) => s.trim())
+                .filter((s) =>  s.length > 0)
+                .map((s) => stringToFloat(s))
+                .filter((s) => s !== undefined) as number[],
         },
         aggressor: {
             fullName: formValues.aggressor.fullName || undefined,

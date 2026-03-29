@@ -122,12 +122,20 @@ const VictimFields = withForm({
                     <form.Subscribe
                         selector={(state) => state.values.victim.hasChildren === "yes"}
                         children={(hasChildren) => hasChildren && (
-                            <Grid item xs={12}>
-                                <form.AppField
-                                    name="victim.numberOfChildren"
-                                    children={(field) => <field.Text label="Número de hijos" type="number" />}
-                                />
-                            </Grid>
+                            <>
+                                <Grid item xs={12} sm={6}>
+                                    <form.AppField
+                                        name="victim.numberOfChildren"
+                                        children={(field) => <field.Text label="Número de hijos" type="number" />}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <form.AppField
+                                        name="victim.ageOfChildren"
+                                        children={(field) => <field.Text label="Edad hijxs - Cargar cada edad y presionar Enter" multiline />}
+                                    />
+                                </Grid>
+                            </>
                         )}
                     />
                 </Grid>
