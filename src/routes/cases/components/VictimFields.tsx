@@ -85,6 +85,17 @@ const VictimFields = withForm({
                             children={(field) => <field.Checkbox label="¿Había realizado denuncias?" />}
                         />
                     </Grid>
+                    <form.Subscribe
+                        selector={(state) => state.values.hadLegalComplaints}
+                        children={(hadLegalComplaints) => hadLegalComplaints && (
+                            <Grid item xs={12}>
+                                <form.AppField
+                                    name="totalLegalComplaints"
+                                    children={(field) => <field.Text label="Indicar cantidad de denuncias" />}
+                                />
+                            </Grid>
+                        )}
+                    />
 
                     <Grid item xs={12} sm={6}>
                         <form.AppField

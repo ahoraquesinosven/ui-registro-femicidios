@@ -133,13 +133,13 @@ export function formValuesToCase(formValues: typeof defaultValues): Case {
             hasDisabillity: formValues.victim.hasDisabillity,
             occupation: formValues.victim.occupation || undefined,
             hasChildren: yesNoUnknownToBoolean(formValues.victim.hasChildren),
-            numberOfChildren: stringToInteger(formValues.victim.numberOfChildren),
-            ageOfChildren: formValues.victim.ageOfChildren
+            numberOfChildren: (yesNoUnknownToBoolean(formValues.victim.hasChildren))? stringToInteger(formValues.victim.numberOfChildren):undefined,
+            ageOfChildren: (yesNoUnknownToBoolean(formValues.victim.hasChildren)) ? formValues.victim.ageOfChildren
                 .split("\n")
                 .map((s) => s.trim())
                 .filter((s) =>  s.length > 0)
                 .map((s) => stringToFloat(s))
-                .filter((s) => s !== undefined) as number[],
+                .filter((s) => s !== undefined) as number[] : undefined,
         },
         aggressor: {
             fullName: formValues.aggressor.fullName || undefined,
@@ -162,14 +162,14 @@ export function formValuesToCase(formValues: typeof defaultValues): Case {
         geographicLocation: stringToOptionalEnum<CaseGeographicLocation>(formValues.geographicLocation),
         place: formValues.place as CasePlace,
         murderWeapon: stringToOptionalEnum<CaseMurderWeapon>(formValues.murderWeapon),
-        hadLegalComplaints: formValues.hadLegalComplaints,
         wasJudicialized: formValues.wasJudicialized,
-        judicialMeasures: formValues.judicialMeasures as CaseJudicialMeasure[],
+        judicialMeasures: (formValues.wasJudicialized)?formValues.judicialMeasures as CaseJudicialMeasure[]: undefined,
         victimBondAggressor: stringToOptionalEnum<CaseVictimBondAggressor>(formValues.victimBondAggressor),
-        totalLegalComplaints: stringToInteger(formValues.totalLegalComplaints),
+        hadLegalComplaints: formValues.hadLegalComplaints,
+        totalLegalComplaints: (formValues.hadLegalComplaints)? stringToInteger(formValues.totalLegalComplaints): undefined,
         isRape: formValues.isRape,
         isRelatedToOrganizedCrime: formValues.isRelatedToOrganizedCrime,
-        organizedCrimeNotes: formValues.organizedCrimeNotes,
+        organizedCrimeNotes: (formValues.isRelatedToOrganizedCrime) ?formValues.organizedCrimeNotes : undefined, // operador ternario (condicion)? if true: if false. Si no quiero que se envie, pongo undefined
         generalNotes: formValues.generalNotes,
         newsLinks: formValues.newsLinks.split("\n").map((s) => s.trim()).filter((s) => s.length > 0),
     };
