@@ -1,4 +1,4 @@
-import {withForm} from "@/hooks/form";
+import { withForm } from "@/hooks/form";
 import Grid from "@mui/material/Grid";
 import formDefaultValues, {
   allMomentsOfDay,
@@ -11,12 +11,12 @@ import formDefaultValues, {
 
 const CaseFields = withForm({
   defaultValues: formDefaultValues,
-  render: function Render({form}) {
+  render: function Render({ form }) {
     return (
       <>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <form.AppField 
+            <form.AppField
               name="occurredAt"
               children={(field) => <field.DatePicker label="Fecha del caso" />}
             />
@@ -32,6 +32,13 @@ const CaseFields = withForm({
             <form.AppField
               name="wasItAnAttempt"
               children={(field) => <field.Checkbox label="¿Fue un intento?" />}
+              listeners={{
+                onChange: ({ value }) => {
+                  console.log(`fue un intento changed to: ${value}, `)
+                  if (value)
+                    form.setFieldValue('isInsufficientDataOrUnderInvestigation', false)
+                },
+              }}
             />
           </Grid>
 
@@ -42,14 +49,14 @@ const CaseFields = withForm({
                 <form.AppField
                   name="isInsufficientDataOrUnderInvestigation"
                   children={(field) => <field.Checkbox label="¿Aún se investiga?" disabled={wasItAnAttempt} />}
-                />    
+                />
               </Grid>
-            )
-          }
+            )}
+
           />
-          
-          
-          
+
+
+
 
           <Grid item xs={12} sm={6}>
             <form.AppField
