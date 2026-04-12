@@ -1,4 +1,4 @@
-import {withForm} from "@/hooks/form";
+import { withForm } from "@/hooks/form";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import formDefaultValues, {
@@ -9,7 +9,7 @@ import formDefaultValues, {
 
 const VictimFields = withForm({
     defaultValues: formDefaultValues,
-    render: function Render({form}) {
+    render: function Render({ form }) {
         return (
             <>
                 <Grid container spacing={2}>
@@ -78,25 +78,6 @@ const VictimFields = withForm({
                             children={(field) => <field.Checkbox label="¿Tenía algún tipo de discapacidad?" />}
                         />
                     </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <form.AppField
-                            name="hadLegalComplaints"
-                            children={(field) => <field.Checkbox label="¿Había realizado denuncias?" />}
-                        />
-                    </Grid>
-                    <form.Subscribe
-                        selector={(state) => state.values.hadLegalComplaints}
-                        children={(hadLegalComplaints) => hadLegalComplaints && (
-                            <Grid item xs={12}>
-                                <form.AppField
-                                    name="totalLegalComplaints"
-                                    children={(field) => <field.Text label="Indicar cantidad de denuncias" />}
-                                />
-                            </Grid>
-                        )}
-                    />
-
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="isRape"
@@ -104,26 +85,63 @@ const VictimFields = withForm({
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
-                        <form.AppField
-                            name="wasJudicialized"
-                            children={(field) => <field.Checkbox label="¿Tenía medidas judiciales?" />}
-                        />
-                    </Grid>
-
                     <form.Subscribe
                         selector={(state) => state.values.wasJudicialized}
-                        children={(wasJudicialized) => wasJudicialized && (
-                            <Grid item xs={12}>
+                        children={(wasJudicialized) => (
+                            <Grid item xs={12} sm={6}>
                                 <form.AppField
-                                    name="judicialMeasures"
-                                    children={(field) => <field.MultiCombo label="Medidas judiciales" options={allCaseJudicialMeasures} />}
+                                    name="hadLegalComplaints"
+                                    children={(field) => <field.Checkbox label="¿Había realizado denuncias?" disabled={wasJudicialized} />}
                                 />
                             </Grid>
                         )}
                     />
 
-                    <Grid item xs={12}>
+
+                    <Grid item xs={12} sm={6}>
+                        <form.AppField
+                            name="wasJudicialized"
+                            children={(field) => <field.Checkbox label="¿Tenía medidas judiciales?" />}
+                            //agregar listener
+                            listeners={{
+                                onChange: ({ value }) => {
+                                    console.log(`tenia medidas judiciales changed to: ${value}, `)
+                                    if (value)
+                                        form.setFieldValue('hadLegalComplaints', true)
+                                },
+                            }}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <form.Subscribe
+                            selector={(state) => state.values.hadLegalComplaints}
+                            children={(hadLegalComplaints) => hadLegalComplaints && (
+
+                                <form.AppField
+                                    name="totalLegalComplaints"
+                                    children={(field) => <field.Text label="Indicar cantidad de denuncias" />}
+                                />
+
+                            )}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <form.Subscribe
+                            selector={(state) => state.values.wasJudicialized}
+                            children={(wasJudicialized) => wasJudicialized && (
+
+                                <form.AppField
+                                    name="judicialMeasures"
+                                    children={(field) => <field.MultiCombo label="Medidas judiciales" options={allCaseJudicialMeasures} />}
+                                />
+
+                            )}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="victim.hasChildren"
                             children={(field) => <field.YesNoUnknown label="¿Tiene hijos?" />}
