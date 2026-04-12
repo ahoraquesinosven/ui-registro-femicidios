@@ -10,7 +10,15 @@ type ProvidersProps = {
   children: React.ReactNode,
 };
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient(
+  {
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false, // default: true
+      },
+    },
+  }
+);
 
 export default function Providers({children}: ProvidersProps) {
   return (
