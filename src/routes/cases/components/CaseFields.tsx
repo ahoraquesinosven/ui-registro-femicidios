@@ -67,7 +67,7 @@ const CaseFields = withForm({
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="province"
-              children={(field) => <field.Combo label="Provincia" options={allProvinces} />}
+              children={(field) => <field.Combo label="Provincia" required={true} options={allProvinces} />}
             />
           </Grid>
 
@@ -88,7 +88,7 @@ const CaseFields = withForm({
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="place"
-              children={(field) => <field.Combo label="Lugar del hecho" options={allCasePlaces} />}
+              children={(field) => <field.Combo label="Lugar del hecho" required={true} options={allCasePlaces} />}
             />
           </Grid>
 

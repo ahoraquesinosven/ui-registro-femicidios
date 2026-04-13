@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 export type BoundComboProps = {
   options: string[],
   label: string,
-  required: boolean
+  required?: boolean
 }
 
 export default function BoundCombo({options, label, required} : BoundComboProps) {
