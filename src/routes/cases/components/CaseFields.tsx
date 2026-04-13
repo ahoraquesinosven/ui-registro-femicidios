@@ -25,10 +25,10 @@ const CaseFields = withForm({
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="caseCategory"
-              children={(field) => <field.Combo label="Categoría" options={allCaseCategories} />}
+              children={(field) => <field.Combo label="Categoría" required={true} options={allCaseCategories}  />}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6}> 
             <form.AppField
               name="wasItAnAttempt"
               children={(field) => <field.Checkbox label="¿Fue un intento?" />}
