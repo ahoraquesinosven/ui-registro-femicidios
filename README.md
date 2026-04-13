@@ -36,6 +36,9 @@ We use a dockerized development environment, so you will need [docker](https://w
 * Then, it should be ok. There shouldn't be need to change the `onSubmit` that is part of the `const form` in `src/routes/cases/new.tsx`.
 
 
+### How to verify if the build is OK
+- run `docker compose run website npm run build`
+
 ## Ref Links
 - TanStack Form - subscribers, all to have same l&f: https://tanstack.com/form/latest/docs/framework/react/guides/listeners
 - MUI - UI component framework : https://mui.com/material-ui/react-checkbox/

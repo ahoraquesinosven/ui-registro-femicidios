@@ -128,7 +128,7 @@ const CaseFields = withForm({
           <Grid item xs={12}>
             <form.AppField
               name="newsLinks"
-              children={(field) => <field.Text label="Link de la nota" multiline />}
+              children={(field) => <field.Text label="Link de la nota" required={true} multiline />}
             />
           </Grid>
         </Grid>
