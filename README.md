@@ -35,9 +35,13 @@ We use a dockerized development environment, so you will need [docker](https://w
   * IF a new component is needed, check with Andres
 * Then, it should be ok. There shouldn't be need to change the `onSubmit` that is part of the `const form` in `src/routes/cases/new.tsx`.
 
-Reminders:
-* Grid includes 12 columns
-* xs means extra small and sm means small/medium and there are other options 
+
+## Ref Links
+- TanStack Form - subscribers, all to have same l&f: https://tanstack.com/form/latest/docs/framework/react/guides/listeners
+- MUI - UI component framework : https://mui.com/material-ui/react-checkbox/
+- TanStack Query - Sync with Server: https://tanstack.com/query/latest/docs/framework/react/overview
+
+
 
 ## License
 See the [LICENSE](./LICENSE) file for license rights and limitations (MIT).

@@ -62,7 +62,7 @@ function stringToFloat(value: string): number | undefined {
     return result;
 }
 
-function stringToEnum<T>(value: string | null | undefined): T | undefined {
+function stringToOptionalEnum<T>(value: string | null | undefined): T | undefined {
     return (value !== null && value !== undefined) ? value as T : undefined;
 }
 
@@ -95,7 +95,7 @@ const defaultValues = {
         securityForce: null as string | null,
     },
 
-    caseCategory: CaseCategory.FEMICIDIO_DIRECTO,
+    caseCategory: null as string | null,
     occurredAt: dayjs(),
     momentOfDay: null as string | null,
     wasItAnAttempt: false,
@@ -124,8 +124,8 @@ export function formValuesToCase(formValues: typeof defaultValues): Case {
         victim: {
             fullName: formValues.victim.fullName || undefined,
             age: stringToInteger(formValues.victim.age),
-            gender: stringToEnum<Gender>(formValues.victim.gender),
-            nationality: stringToEnum<Nationality>(formValues.victim.nationality),
+            gender: stringToOptionalEnum<Gender>(formValues.victim.gender),
+            nationality: stringToOptionalEnum<Nationality>(formValues.victim.nationality),
             isSexualWorker: formValues.victim.isSexualWorker,
             isMissingPerson: formValues.victim.isMissingPerson,
             isNativePeople: formValues.victim.isNativePeople,
@@ -133,43 +133,43 @@ export function formValuesToCase(formValues: typeof defaultValues): Case {
             hasDisabillity: formValues.victim.hasDisabillity,
             occupation: formValues.victim.occupation || undefined,
             hasChildren: yesNoUnknownToBoolean(formValues.victim.hasChildren),
-            numberOfChildren: stringToInteger(formValues.victim.numberOfChildren),
-            ageOfChildren: formValues.victim.ageOfChildren
+            numberOfChildren: (yesNoUnknownToBoolean(formValues.victim.hasChildren))? stringToInteger(formValues.victim.numberOfChildren):undefined,
+            ageOfChildren: (yesNoUnknownToBoolean(formValues.victim.hasChildren)) ? formValues.victim.ageOfChildren
                 .split("\n")
                 .map((s) => s.trim())
                 .filter((s) =>  s.length > 0)
                 .map((s) => stringToFloat(s))
-                .filter((s) => s !== undefined) as number[],
+                .filter((s) => s !== undefined) as number[] : undefined,
         },
         aggressor: {
             fullName: formValues.aggressor.fullName || undefined,
             age: stringToInteger(formValues.aggressor.age),
-            gender: stringToEnum<Gender>(formValues.aggressor.gender),
+            gender: stringToOptionalEnum<Gender>(formValues.aggressor.gender),
             hasLegalComplaintHistory: formValues.aggressor.hasLegalComplaintHistory,
             hasPreviousCases: formValues.aggressor.hasPreviousCases,
             wasInPrison: formValues.aggressor.wasInPrison,
-            behaviourPostCase: stringToEnum<AggressorBehaviorPostCase>(formValues.aggressor.behaviourPostCase),
+            behaviourPostCase: stringToOptionalEnum<AggressorBehaviorPostCase>(formValues.aggressor.behaviourPostCase),
             belongsSecurityForce: formValues.aggressor.belongsSecurityForce,
-            securityForce: stringToEnum<AggressorSecurityForce>(formValues.aggressor.securityForce),
+            securityForce: stringToOptionalEnum<AggressorSecurityForce>(formValues.aggressor.securityForce),
         },
-        caseCategory: stringToEnum<CaseCategory>(formValues.caseCategory) as CaseCategory,
+        caseCategory: formValues.caseCategory as CaseCategory,
         occurredAt: formValues.occurredAt.format("YYYY-MM-DD"),
-        momentOfDay: stringToEnum<CaseMomentOfDay>(formValues.momentOfDay),
+        momentOfDay: stringToOptionalEnum<CaseMomentOfDay>(formValues.momentOfDay),
         wasItAnAttempt: formValues.wasItAnAttempt,
         isInsufficientDataOrUnderInvestigation: formValues.isInsufficientDataOrUnderInvestigation,
         province: formValues.province as Province,
         location: formValues.location,
-        geographicLocation: stringToEnum<CaseGeographicLocation>(formValues.geographicLocation),
+        geographicLocation: stringToOptionalEnum<CaseGeographicLocation>(formValues.geographicLocation),
         place: formValues.place as CasePlace,
-        murderWeapon: stringToEnum<CaseMurderWeapon>(formValues.murderWeapon),
-        hadLegalComplaints: formValues.hadLegalComplaints,
+        murderWeapon: stringToOptionalEnum<CaseMurderWeapon>(formValues.murderWeapon),
         wasJudicialized: formValues.wasJudicialized,
-        judicialMeasures: formValues.judicialMeasures as CaseJudicialMeasure[],
-        victimBondAggressor: stringToEnum<CaseVictimBondAggressor>(formValues.victimBondAggressor),
-        totalLegalComplaints: stringToInteger(formValues.totalLegalComplaints),
+        judicialMeasures: (formValues.wasJudicialized)?formValues.judicialMeasures as CaseJudicialMeasure[]: undefined,
+        victimBondAggressor: stringToOptionalEnum<CaseVictimBondAggressor>(formValues.victimBondAggressor),
+        hadLegalComplaints: formValues.hadLegalComplaints,
+        totalLegalComplaints: (formValues.hadLegalComplaints)? stringToInteger(formValues.totalLegalComplaints): undefined,
         isRape: formValues.isRape,
         isRelatedToOrganizedCrime: formValues.isRelatedToOrganizedCrime,
-        organizedCrimeNotes: formValues.organizedCrimeNotes,
+        organizedCrimeNotes: (formValues.isRelatedToOrganizedCrime) ?formValues.organizedCrimeNotes : undefined, // operador ternario (condicion)? if true: if false. Si no quiero que se envie, pongo undefined
         generalNotes: formValues.generalNotes,
         newsLinks: formValues.newsLinks.split("\n").map((s) => s.trim()).filter((s) => s.length > 0),
     };
