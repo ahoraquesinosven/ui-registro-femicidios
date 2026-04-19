@@ -105,7 +105,6 @@ const VictimFields = withForm({
                             //agregar listener
                             listeners={{
                                 onChange: ({ value }) => {
-                                    console.log(`tenia medidas judiciales changed to: ${value}, `)
                                     if (value)
                                         form.setFieldValue('hadLegalComplaints', true)
                                 },

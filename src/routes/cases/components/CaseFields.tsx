@@ -34,7 +34,6 @@ const CaseFields = withForm({
               children={(field) => <field.Checkbox label="¿Fue un intento?" />}
               listeners={{
                 onChange: ({ value }) => {
-                  console.log(`fue un intento changed to: ${value}, `)
                   if (value)
                     form.setFieldValue('isInsufficientDataOrUnderInvestigation', false)
                 },
