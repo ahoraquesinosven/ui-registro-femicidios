@@ -25,10 +25,10 @@ const CaseFields = withForm({
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="caseCategory"
-              children={(field) => <field.Combo label="Categoría" options={allCaseCategories} />}
+              children={(field) => <field.Combo label="Categoría" required={true} options={allCaseCategories}  />}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6}> 
             <form.AppField
               name="wasItAnAttempt"
               children={(field) => <field.Checkbox label="¿Fue un intento?" />}
@@ -67,7 +67,7 @@ const CaseFields = withForm({
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="province"
-              children={(field) => <field.Combo label="Provincia" options={allProvinces} />}
+              children={(field) => <field.Combo label="Provincia" required={true} options={allProvinces} />}
             />
           </Grid>
 
@@ -88,7 +88,7 @@ const CaseFields = withForm({
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="place"
-              children={(field) => <field.Combo label="Lugar del hecho" options={allCasePlaces} />}
+              children={(field) => <field.Combo label="Lugar del hecho" required={true} options={allCasePlaces} />}
             />
           </Grid>
 
@@ -128,7 +128,7 @@ const CaseFields = withForm({
           <Grid item xs={12}>
             <form.AppField
               name="newsLinks"
-              children={(field) => <field.Text label="Link de la nota" multiline />}
+              children={(field) => <field.Text label="Link de la nota" required={true} multiline />}
             />
           </Grid>
         </Grid>

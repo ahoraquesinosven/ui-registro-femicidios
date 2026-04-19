@@ -71,7 +71,7 @@ export default function CasesNew() {
 
     return (
         <Container maxWidth="md">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} noValidate>
                 <Tabs variant="fullWidth" centered value={currentTab} onChange={handleChangeCurrentTab}>
                     <Tab label="Información del Caso" />
                     <Tab label="Víctima" />
