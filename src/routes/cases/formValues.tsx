@@ -15,7 +15,7 @@ import {
 } from "@/api/aqsnv/cases";
 import dayjs from "dayjs";
 import { yesNoUnknownToBoolean } from "@/utils/cast";
-import { stringToEnum } from "@/utils/cast";
+import { stringToOptionalEnum } from "@/utils/cast";
 import { stringToFloat } from "@/utils/cast";
 import { stringToInteger } from "@/utils/cast";
 import { YesNoUnknown } from "@/utils/cast";

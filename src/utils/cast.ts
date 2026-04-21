@@ -32,7 +32,7 @@ export function stringToFloat(value: string): number | undefined {
     return result;
 }
 
-export function stringToEnum<T>(value: string | null | undefined): T | undefined {
+export function stringToOptionalEnum<T>(value: string | null | undefined): T | undefined {
     return (value !== null && value !== undefined) ? value as T : undefined;
 }
 

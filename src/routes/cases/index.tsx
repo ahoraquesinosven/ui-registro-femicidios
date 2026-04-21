@@ -1,7 +1,7 @@
 import {CaseCategory, CaseMurderWeapon, CaseVictimBondAggressor, ListCaseFilters, listCases, Province} from '@/api/aqsnv/cases';
 import {useAccessToken} from "@/hooks/auth";
 import {useAppForm} from '@/hooks/form';
-import {stringToEnum} from '@/utils/cast';
+import {stringToOptionalEnum} from '@/utils/cast';
 import {allCaseCategories, allProvinces, allCaseMurderWeapons, allCaseVictimBondsAggressor} from './formValues';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -14,8 +14,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Grid from '@mui/material/Grid';
 import dayjs, {Dayjs} from 'dayjs';
+import dayjsUtc from 'dayjs/plugin/utc';
 import {useState} from 'react';
 import {useQuery} from 'react-query';
+
+dayjs.extend(dayjsUtc);
 
 const defaultSearchOptions = {
   fromDate: dayjs().startOf("year"),
@@ -32,11 +35,11 @@ const defaultSearchOptions = {
 const searchOptionsToListCaseFilters = (searchOptions: typeof defaultSearchOptions): ListCaseFilters => ({
   fromDate: searchOptions.fromDate?.format("YYYY-MM-DD"),
   toDate: searchOptions.toDate?.format("YYYY-MM-DD"),
-  province: stringToEnum<Province>(searchOptions.province),
+  province: stringToOptionalEnum<Province>(searchOptions.province),
   location: searchOptions.location,
-  caseCategory: stringToEnum<CaseCategory>(searchOptions.caseCategory),
-  murderWeapon: stringToEnum<CaseMurderWeapon>(searchOptions.murderWeapon),
-  victimBondAggressor: stringToEnum<CaseVictimBondAggressor>(searchOptions.victimBondAggressor),
+  caseCategory: stringToOptionalEnum<CaseCategory>(searchOptions.caseCategory),
+  murderWeapon: stringToOptionalEnum<CaseMurderWeapon>(searchOptions.murderWeapon),
+  victimBondAggressor: stringToOptionalEnum<CaseVictimBondAggressor>(searchOptions.victimBondAggressor),
   victimFullName: searchOptions.victimFullName,
   aggressorFullName: searchOptions.aggressorFullName,
 });
@@ -146,7 +149,7 @@ export default function CasesIndex() {
             </TableRow>
             <TableRow>
               <TableCell>Categoría</TableCell>
-              <TableCell>Fecha</TableCell>
+              <TableCell>Fecha del caso</TableCell>
               <TableCell>Provincia</TableCell>
               <TableCell>Localidad</TableCell>
               <TableCell>Forma</TableCell>
@@ -162,7 +165,7 @@ export default function CasesIndex() {
             {data && data.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>{item.caseCategory}</TableCell>
-                <TableCell>{new Intl.DateTimeFormat('es').format(new Date(item.occurredAt))}</TableCell>
+                <TableCell>{dayjs(item.occurredAt).utc().format("DD-MM-YYYY")}</TableCell>
                 <TableCell>{item.province}</TableCell>
                 <TableCell>{item.location}</TableCell>
                 <TableCell>{item.murderWeapon}</TableCell>
