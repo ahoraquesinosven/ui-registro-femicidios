@@ -327,20 +327,19 @@ export interface paths {
                     content: {
                         "application/json": {
                             id: number;
-                            caseCategory: components["schemas"]["CaseCategory"];
-                            /** Format: date */
-                            occurredAt: string;
-                            province: components["schemas"]["Province"];
-                            location: string;
-                            murderWeapon?: components["schemas"]["CaseMurderWeapon"];
-                            victimBondAggressor?: components["schemas"]["CaseVictimBondAggressor"];
+                            caseCategory: components["schemas"]["Case"]["caseCategory"];
+                            occurredAt: components["schemas"]["Case"]["occurredAt"];
+                            province: components["schemas"]["Case"]["province"];
+                            location?: components["schemas"]["Case"]["location"];
+                            murderWeapon?: components["schemas"]["Case"]["location"];
+                            victimBondAggressor?: components["schemas"]["CaseMurderWeapon"];
                             victim: {
-                                fullName?: string;
-                                age?: number;
+                                fullName?: components["schemas"]["Case"]["victim"]["fullName"];
+                                age?: components["schemas"]["Case"]["victim"]["age"];
                             };
                             aggressor: {
-                                fullName?: string;
-                                age?: number;
+                                fullName?: components["schemas"]["Case"]["aggressor"]["fullName"];
+                                age?: components["schemas"]["Case"]["aggressor"]["age"];
                             };
                         }[];
                     };
@@ -358,55 +357,7 @@ export interface paths {
             };
             requestBody: {
                 content: {
-                    "application/json": {
-                        caseCategory: components["schemas"]["CaseCategory"];
-                        wasItAnAttempt?: boolean;
-                        isInsufficientDataOrUnderInvestigation?: boolean;
-                        /** Format: date */
-                        occurredAt: string;
-                        momentOfDay?: components["schemas"]["CaseMomentOfDay"];
-                        province: components["schemas"]["Province"];
-                        location: string;
-                        geographicLocation?: components["schemas"]["CaseGeographicLocation"];
-                        place: components["schemas"]["CasePlace"];
-                        murderWeapon?: components["schemas"]["CaseMurderWeapon"];
-                        hadLegalComplaints?: boolean;
-                        totalLegalComplaints?: number;
-                        wasJudicialized?: boolean;
-                        judicialMeasures?: components["schemas"]["CaseJudicialMeasure"][];
-                        victimBondAggressor?: components["schemas"]["CaseVictimBondAggressor"];
-                        isRape?: boolean;
-                        isRelatedToOrganizedCrime?: boolean;
-                        organizedCrimeNotes?: string;
-                        generalNotes?: string;
-                        newsLinks: string[];
-                        victim: {
-                            fullName?: string;
-                            age?: number;
-                            gender?: components["schemas"]["Gender"];
-                            nationality?: components["schemas"]["Nationality"];
-                            isSexualWorker?: boolean;
-                            isMissingPerson?: boolean;
-                            isNativePeople?: boolean;
-                            isPregnant?: boolean;
-                            hasDisabillity?: boolean;
-                            occupation?: string;
-                            hasChildren?: boolean;
-                            numberOfChildren?: number;
-                            ageOfChildren?: number[];
-                        };
-                        aggressor: {
-                            fullName?: string;
-                            age?: number;
-                            gender?: components["schemas"]["Gender"];
-                            hasLegalComplaintHistory?: boolean;
-                            hasPreviousCases?: boolean;
-                            wasInPrison?: boolean;
-                            behaviourPostCase?: components["schemas"]["CaseAggressorBehaviorPostCase"];
-                            belongsSecurityForce?: boolean;
-                            securityForce?: components["schemas"]["CaseAggressorSecurityForce"];
-                        };
-                    };
+                    "application/json": components["schemas"]["Case"];
                 };
             };
             responses: {
@@ -420,6 +371,48 @@ export interface paths {
                 422: components["responses"]["ValidationErrorResponse"];
             };
         };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/cases/{case_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Update a case */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    /** @description ID of the case */
+                    case_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["Case"];
+                };
+            };
+            responses: {
+                /** @description Case updated successfully */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                422: components["responses"]["ValidationErrorResponse"];
+            };
+        };
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -454,6 +447,55 @@ export interface components {
         CaseAggressorBehaviorPostCase: CaseAggressorBehaviorPostCase;
         /** @enum {unknown} */
         CaseAggressorSecurityForce: CaseAggressorSecurityForce;
+        Case: {
+            caseCategory: components["schemas"]["CaseCategory"];
+            wasItAnAttempt?: boolean;
+            isInsufficientDataOrUnderInvestigation?: boolean;
+            /** Format: date */
+            occurredAt: string;
+            momentOfDay?: components["schemas"]["CaseMomentOfDay"];
+            province: components["schemas"]["Province"];
+            location?: string;
+            geographicLocation?: components["schemas"]["CaseGeographicLocation"];
+            place: components["schemas"]["CasePlace"];
+            murderWeapon?: components["schemas"]["CaseMurderWeapon"];
+            hadLegalComplaints?: boolean;
+            totalLegalComplaints?: number;
+            wasJudicialized?: boolean;
+            judicialMeasures?: components["schemas"]["CaseJudicialMeasure"][];
+            victimBondAggressor?: components["schemas"]["CaseVictimBondAggressor"];
+            isRape?: boolean;
+            isRelatedToOrganizedCrime?: boolean;
+            organizedCrimeNotes?: string;
+            generalNotes?: string;
+            newsLinks: string[];
+            victim: {
+                fullName?: string;
+                age?: number;
+                gender?: components["schemas"]["Gender"];
+                nationality?: components["schemas"]["Nationality"];
+                isSexualWorker?: boolean;
+                isMissingPerson?: boolean;
+                isNativePeople?: boolean;
+                isPregnant?: boolean;
+                hasDisabillity?: boolean;
+                occupation?: string;
+                hasChildren?: boolean;
+                numberOfChildren?: number;
+                ageOfChildren?: number[];
+            };
+            aggressor: {
+                fullName?: string;
+                age?: number;
+                gender?: components["schemas"]["Gender"];
+                hasLegalComplaintHistory?: boolean;
+                hasPreviousCases?: boolean;
+                wasInPrison?: boolean;
+                behaviourPostCase?: components["schemas"]["CaseAggressorBehaviorPostCase"];
+                belongsSecurityForce?: boolean;
+                securityForce?: components["schemas"]["CaseAggressorSecurityForce"];
+            };
+        };
     };
     responses: {
         /** @description Bad request */
