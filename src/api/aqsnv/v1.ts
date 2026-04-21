@@ -302,7 +302,17 @@ export interface paths {
         /** List all cases */
         get: {
             parameters: {
-                query?: never;
+                query?: {
+                    fromDate?: string;
+                    toDate?: string;
+                    province?: components["schemas"]["Province"];
+                    location?: string;
+                    caseCategory?: components["schemas"]["CaseCategory"];
+                    victimFullName?: string;
+                    murderWeapon?: components["schemas"]["CaseMurderWeapon"];
+                    aggressorFullName?: string;
+                    victimBondAggressor?: components["schemas"]["CaseVictimBondAggressor"];
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
@@ -316,11 +326,22 @@ export interface paths {
                     };
                     content: {
                         "application/json": {
-                            id?: number;
-                            victimName?: string;
-                            province?: string;
-                            location?: string;
-                            aggressor?: string;
+                            id: number;
+                            caseCategory: components["schemas"]["CaseCategory"];
+                            /** Format: date */
+                            occurredAt: string;
+                            province: components["schemas"]["Province"];
+                            location: string;
+                            murderWeapon?: components["schemas"]["CaseMurderWeapon"];
+                            victimBondAggressor?: components["schemas"]["CaseVictimBondAggressor"];
+                            victim: {
+                                fullName?: string;
+                                age?: number;
+                            };
+                            aggressor: {
+                                fullName?: string;
+                                age?: number;
+                            };
                         }[];
                     };
                 };

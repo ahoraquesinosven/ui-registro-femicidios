@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {useQuery} from 'react-query';
 import {
   Table,
   TableBody,
@@ -6,116 +6,53 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TableSortLabel,
   Paper,
-  CircularProgress,
+  Container,
 } from "@mui/material";
-import { useAccessToken } from "@/hooks/auth";
-
-interface Case {
-  id: number;
-  victimName: string;
-  province: string;
-  location: string;
-  aggressor: string;
-  updatedAt: string;
-}
+import {useAccessToken} from "@/hooks/auth";
+import {listCases, ListCaseFilters} from '@/api/aqsnv/cases';
 
 const CasesIndex = () => {
-  const [cases, setCases] = useState<Case[]>([]);
-  const [sortedCases, setSortedCases] = useState<Case[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [orderBy, setOrderBy] = useState<keyof Case>("victimName");
-  const [order, setOrder] = useState<"asc" | "desc">("asc");
-
   const accessToken = useAccessToken();
 
-  useEffect(() => {
-    const fetchCases = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(`http://localhost:8080/v1/cases`, {
-          headers: {
-            Authorization: accessToken.asAuthorizationHeader(),
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await response.json();
-        setCases(data);
-        setSortedCases(data);
-      } catch (error) {
-        console.error("Error fetching cases:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const filters: ListCaseFilters = {};
 
-    fetchCases();
-  }, [accessToken]);
-
-  useEffect(() => {
-    const sorted = [...cases].sort((a, b) => {
-      const valueA = a[orderBy];
-      const valueB = b[orderBy];
-      if (valueA < valueB || valueB == null) {
-        return order === "asc" ? -1 : 1;
-      }
-      if (valueA > valueB || valueA == null) {
-        return order === "asc" ? 1 : -1;
-      }
-
-      return 0;
-    });
-
-    setSortedCases(sorted);
-  }, [orderBy, order, cases]);
-
-  const handleSort = (property: keyof Case) => {
-    setOrder(orderBy === property && order === "asc" ? "desc" : "asc");
-    setOrderBy(property);
-  };
+  const {data} = useQuery({
+    queryKey: ["cases", filters],
+    queryFn: () => listCases(accessToken, filters),
+  });
 
   return (
-    <TableContainer component={Paper}>
-      {loading ? (
-        <CircularProgress style={{ margin: "20px auto", display: "block" }} />
-      ) : (
+    <Container maxWidth="md">
+      <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              {[
-                "victimName",
-                "province",
-                "location",
-                "aggressor",
-                "updatedAt",
-              ].map((column) => (
-                <TableCell key={column}>
-                  <TableSortLabel
-                    active={orderBy === column}
-                    direction={orderBy === column ? order : "asc"}
-                    onClick={() => handleSort(column as keyof Case)}
-                  >
-                    {column.charAt(0).toUpperCase() + column.slice(1)}
-                  </TableSortLabel>
-                </TableCell>
-              ))}
+              <TableCell>Categoría</TableCell>
+              <TableCell>Fecha</TableCell>
+              <TableCell>Provincia</TableCell>
+              <TableCell>Localidad</TableCell>
+              <TableCell>Forma</TableCell>
+              <TableCell>Victima</TableCell>
+              <TableCell>Agresor</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortedCases.map((caseItem) => (
-              <TableRow key={caseItem.id}>
-                <TableCell>{caseItem.victimName}</TableCell>
-                <TableCell>{caseItem.province}</TableCell>
-                <TableCell>{caseItem.location}</TableCell>
-                <TableCell>{caseItem.aggressor}</TableCell>
-                <TableCell>{caseItem.updatedAt}</TableCell>
+            {data && data.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>{item.caseCategory}</TableCell>
+                <TableCell>{item.occurredAt}</TableCell>
+                <TableCell>{item.province}</TableCell>
+                <TableCell>{item.location}</TableCell>
+                <TableCell>{item.murderWeapon}</TableCell>
+                <TableCell>{item.victim.fullName}{item.victim.age ? ` - ${item.victim.age} años` : ""}</TableCell>
+                <TableCell>{item.aggressor.fullName}{item.aggressor.age ? ` - ${item.aggressor.age} años` : ""}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      )}
-    </TableContainer>
+      </TableContainer>
+    </Container>
   );
 };
 
