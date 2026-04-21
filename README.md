@@ -20,12 +20,15 @@ We use a dockerized development environment, so you will need [docker](https://w
 
 * Run `docker compose up`. This will take a bit the first time since the docker images need to be built or downloaded. Once done, the website can be accessed at http://localhost:5173.
 
-  
+### AQSNV API
+
+We are using [openapi-typescript](https://openapi-ts.dev/) to generate typescript types corresponding to the API definitions. If new types are available in the OpenAPI document for the API, you can follow these steps to update the types automatically:
+
+1. Download the OpenAPI document via `curl http://localhost:8080/v1/openapi.json > ./src/api/aqsnv/v1-openapi.json`.
+2. Regenerate the types via `docker compose run website npm run api-types`.
+
 ### How to add new fields in the Creat Form / New Case
-    
-* If the new fields are linked with new ENUMS in the API, Run `docker compose run website node_modules/.bin/openapi-typescript ./src/openapi.json -o ./src/api/aqsnv/v1.ts --enum`
-  * to get the json, go to `http://localhost:8081/` and download the openapi.json
-  * move the file in `/repositories-aqsnv/ui-registro-femicidios/src`
+
 * Add new ENUM also in the export in `src/api/aqsnv/cases.ts`
 * Configure default values for the form in the Const `defaultValues` in `src/routes/cases/formValues.tsx`
 * Convert what is in the form to the types that the API is expecting in the function `formValuesToCase` in `src/routes/cases/formValues.tsx`
