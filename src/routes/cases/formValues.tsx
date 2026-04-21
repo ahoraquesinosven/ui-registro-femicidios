@@ -14,6 +14,11 @@ import {
     CaseVictimBondAggressor
 } from "@/api/aqsnv/cases";
 import dayjs from "dayjs";
+import { yesNoUnknownToBoolean } from "@/utils/cast";
+import { stringToOptionalEnum } from "@/utils/cast";
+import { stringToFloat } from "@/utils/cast";
+import { stringToInteger } from "@/utils/cast";
+import { YesNoUnknown } from "@/utils/cast";
 
 export const allGenders = Object.values(Gender);
 export const allNationalities = Object.values(Nationality);
@@ -27,44 +32,6 @@ export const allCaseMurderWeapons = Object.values(CaseMurderWeapon);
 export const allCaseJudicialMeasures = Object.values(CaseJudicialMeasure);
 export const allCaseVictimBondsAggressor = Object.values(CaseVictimBondAggressor);
 export const allCaseCategories = Object.values(CaseCategory);
-
-type YesNoUnknown = "yes" | "no" | "unknown";
-
-function yesNoUnknownToBoolean(value: YesNoUnknown): boolean | undefined {
-    if (value === "yes") {
-        return true;
-    }
-
-    if (value === "no") {
-        return false;
-    }
-
-    return undefined;
-}
-
-function stringToInteger(value: string): number | undefined {
-    const result = parseInt(value);
-
-    if (isNaN(result)) {
-        return undefined;
-    }
-
-    return result;
-}
-
-function stringToFloat(value: string): number | undefined {
-    const result = parseFloat(value);
-
-    if (isNaN(result)) {
-        return undefined;
-    }
-
-    return result;
-}
-
-function stringToOptionalEnum<T>(value: string | null | undefined): T | undefined {
-    return (value !== null && value !== undefined) ? value as T : undefined;
-}
 
 const defaultValues = {
     victim: {
