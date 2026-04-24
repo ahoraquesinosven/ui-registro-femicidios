@@ -15,7 +15,7 @@ export default function Router() {
           <Route index element={<FeedIndex />} />
           <Route path='/cases' element={<CasesIndex />} />
           <Route path='/cases/new' element={<CasesNew />} />
-          <Route path='/cases/edit/:case_id' element={<CasesEdit />} />
+          <Route path='/cases/:caseId/edit' element={<CasesEdit />} />
         </Route>
       </Routes>
     </BrowserRouter>

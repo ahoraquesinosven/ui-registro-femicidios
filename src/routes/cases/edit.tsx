@@ -1,9 +1,6 @@
 import { useState } from "react";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useAppForm } from "@/hooks/form";
@@ -14,21 +11,11 @@ import CaseFields from "./components/CaseFields";
 import { formValuesToCase } from "./formValues";
 import { createCase } from "@/api/aqsnv/cases";
 import {useAccessToken} from '@/hooks/auth';
-
-function tabStyles(index: number, currentTab: number) {
-    return { 
-        display: index === currentTab ? "block" : "none",
-        py: 2,
-    };
-}
+import TabbedSections from "@/components/TabbedSections";
+import { useParams } from 'react-router-dom';
 
 export default function CasesEdit() {
-    // levantar el ID 
-    // const { id } = useParams<{ id: string }>();
-    const [currentTab, setCurrentTab] = useState(0);
-    const handleChangeCurrentTab = (_event: unknown, newTab: number) => {
-        setCurrentTab(newTab);
-    }
+    const {caseId} = useParams();
 
     const [currentNotification, setCurrentNotification] = useState({
         active: false,
@@ -51,7 +38,7 @@ export default function CasesEdit() {
             if (result.ok) {
                 setCurrentNotification({
                     active: true,
-                    message: "El caso fue guardado exitosamente",
+                    message: "El caso fue actualizado exitosamente",
                 });
                 return formApi.reset();
             }
@@ -74,24 +61,32 @@ export default function CasesEdit() {
     return (
         <Container maxWidth="md">
             <form onSubmit={handleSubmit} noValidate>
-                <Tabs variant="fullWidth" centered value={currentTab} onChange={handleChangeCurrentTab}>
-                    <Tab label="Información del Caso" />
-                    <Tab label="Víctima" />
-                    <Tab label="Agresor" />
-                </Tabs>
-
-                <Box sx={tabStyles(0, currentTab)}>
-                    <CaseFields form={form} />
-                </Box>
-
-                <Box sx={tabStyles(1, currentTab)}>
-                    <VictimFields form={form} />
-                </Box>
-
-                <Box sx={tabStyles(2, currentTab)}>
-                    <AggressorFields form={form} />
-                </Box>
-
+                <TabbedSections
+                    tabProps={{
+                        variant: "fullWidth",
+                        centered: true,
+                    }}
+                    boxProps={{
+                        py: 2,
+                    }}
+                    sections={[
+                        {
+                            key: "case",
+                            label: "Información del Caso",
+                            component: <CaseFields form={form} />
+                        },
+                        {
+                            key: "victim",
+                            label: "Víctima",
+                            component: <VictimFields form={form} />
+                        },
+                        {
+                            key: "aggressor",
+                            label: "Agresor",
+                            component: <AggressorFields form={form} />
+                        },
+                    ]}
+                />
 
                 <form.Subscribe
                     selector={(state) => [state.canSubmit, state.isSubmitting]}
