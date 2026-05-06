@@ -5,6 +5,10 @@ import {AccessToken} from "./types/auth.ts";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/es";
+import dayjs from 'dayjs';
+import dayjsUtc from 'dayjs/plugin/utc';
+
+dayjs.extend(dayjsUtc);
 
 type ProvidersProps = {
   children: React.ReactNode,

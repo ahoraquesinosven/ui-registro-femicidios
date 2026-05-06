@@ -2,9 +2,9 @@ import {CaseCategory, CaseMurderWeapon, CaseVictimBondAggressor, ListCaseFilters
 import {useAccessToken} from "@/hooks/auth";
 import {useAppForm} from '@/hooks/form';
 import {stringToOptionalEnum} from '@/utils/cast';
-import {allCaseCategories, allProvinces, allCaseMurderWeapons, allCaseVictimBondsAggressor} from './formValues';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,13 +12,13 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Grid from '@mui/material/Grid';
+import  IconButton  from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
 import dayjs, {Dayjs} from 'dayjs';
-import dayjsUtc from 'dayjs/plugin/utc';
 import {useState} from 'react';
 import {useQuery} from 'react-query';
-
-dayjs.extend(dayjsUtc);
+import {Link} from 'react-router-dom';
+import {allCaseCategories, allCaseMurderWeapons, allCaseVictimBondsAggressor, allProvinces} from './formValues';
 
 const defaultSearchOptions = {
   fromDate: dayjs().startOf("year"),
@@ -146,6 +146,7 @@ export default function CasesIndex() {
               <TableCell colSpan={5} />
               <TableCell colSpan={2} align='center'>Víctima</TableCell>
               <TableCell colSpan={2} align='center'>Agresor</TableCell>
+              <TableCell></TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Categoría</TableCell>
@@ -159,11 +160,12 @@ export default function CasesIndex() {
 
               <TableCell>Nombre</TableCell>
               <TableCell>Edad</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data && data.map((item) => (
-              <TableRow key={item.id}>
+              <TableRow key={item.id} hover>
                 <TableCell>{item.caseCategory}</TableCell>
                 <TableCell>{dayjs(item.occurredAt).utc().format("DD-MM-YYYY")}</TableCell>
                 <TableCell>{item.province}</TableCell>
@@ -173,6 +175,11 @@ export default function CasesIndex() {
                 <TableCell>{item.victim?.age}</TableCell>
                 <TableCell>{item.aggressor?.fullName}</TableCell>
                 <TableCell>{item.aggressor?.age}</TableCell>
+                <TableCell>
+                  <IconButton component={Link} to={`/cases/${item.id}/edit`}>
+                    <EditIcon />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

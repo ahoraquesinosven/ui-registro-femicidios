@@ -31,24 +31,17 @@ function Nav() {
     <div className="container my-3">
       <nav className="navbar bg-warning navbar-expand-lg rounded-4 py-3">
         <div className="container-fluid">
-          <Link className="navbar-brand" /*href="#"*/ to="/">Registro de Femicidios</Link>
+          <Link className="navbar-brand" to="/">Registro de Femicidios</Link>
           <ul className="navbar-nav me-auto">
             <li className="nav-item">
-              <a
-                className='btn btn-light'
-                href="https://docs.google.com/forms/d/e/1FAIpQLSekOpLfYzPmzFMoPWwpfQw7VlMHBrraXwvAZyxNswl6ls2VJg/viewform"
-                target='_blank'
-              >
+              <Link className="btn btn-light" to="/cases/new">
                 Cargar un caso nuevo
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a
-                className='btn btn-light ms-2'
-                href="https://docs.google.com/spreadsheets/d/1X7qtXEYP99IGLu9Wtq4ZaJAgP-Jq6ANhseAb_7kfhBg/edit?gid=918511545#gid=918511545"
-                target='_blank'>
+              <Link className='btn btn-light ms-2' to="/cases">
                 Consultar casos
-              </a>
+              </Link>
             </li>
           </ul>
           <UserPic />
