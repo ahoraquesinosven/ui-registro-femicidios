@@ -1,6 +1,7 @@
 import { withForm } from "@/hooks/form";
 import Grid from "@mui/material/Grid";
-import formDefaultValues, {
+import {
+  defaultFormValues,
   allMomentsOfDay,
   allProvinces,
   allCaseGeographicLocations,
@@ -10,7 +11,7 @@ import formDefaultValues, {
 } from "../formValues";
 
 const CaseFields = withForm({
-  defaultValues: formDefaultValues,
+  defaultValues: defaultFormValues,
   render: function Render({ form }) {
     return (
       <>

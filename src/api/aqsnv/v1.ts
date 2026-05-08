@@ -377,14 +377,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/cases/{case_id}": {
+    "/v1/cases/{caseId}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Get a case by id */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    /** @description ID of the case */
+                    caseId: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Case, victim and agreesor retrieved successfully */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Case"];
+                    };
+                };
+                404: components["responses"]["ValidationErrorNotFound"];
+            };
+        };
         /** Update a case */
         put: {
             parameters: {
@@ -392,7 +416,7 @@ export interface paths {
                 header?: never;
                 path: {
                     /** @description ID of the case */
-                    case_id: number;
+                    caseId: number;
                 };
                 cookie?: never;
             };
@@ -403,12 +427,13 @@ export interface paths {
             };
             responses: {
                 /** @description Case updated successfully */
-                201: {
+                204: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content?: never;
                 };
+                404: components["responses"]["ValidationErrorNotFound"];
                 422: components["responses"]["ValidationErrorResponse"];
             };
         };
@@ -507,6 +532,20 @@ export interface components {
                 "application/json": {
                     /** @enum {string} */
                     type: ComponentsResponsesValidationErrorResponseContentApplicationJsonType;
+                    path: string;
+                    message: string;
+                }[];
+            };
+        };
+        /** @description Not found */
+        ValidationErrorNotFound: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    /** @enum {string} */
+                    type: ComponentsResponsesValidationErrorNotFoundContentApplicationJsonType;
                     path: string;
                     message: string;
                 }[];
@@ -675,6 +714,10 @@ export enum CaseAggressorSecurityForce {
     OTRA_FUERZA = "OTRA FUERZA"
 }
 export enum ComponentsResponsesValidationErrorResponseContentApplicationJsonType {
+    parameter = "parameter",
+    body = "body"
+}
+export enum ComponentsResponsesValidationErrorNotFoundContentApplicationJsonType {
     parameter = "parameter",
     body = "body"
 }

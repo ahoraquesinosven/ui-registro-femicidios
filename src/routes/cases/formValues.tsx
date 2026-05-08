@@ -1,24 +1,31 @@
 import {
+    Aggressor,
     AggressorBehaviorPostCase,
     AggressorSecurityForce,
     Case,
     CaseCategory,
+    CaseGeographicLocation,
+    CaseJudicialMeasure,
     CaseMomentOfDay,
+    CaseMurderWeapon,
+    CasePlace,
+    CaseVictimBondAggressor,
     Gender,
     Nationality,
     Province,
-    CaseGeographicLocation,
-    CasePlace,
-    CaseMurderWeapon,
-    CaseJudicialMeasure,
-    CaseVictimBondAggressor
+    Victim
 } from "@/api/aqsnv/cases";
+import {
+    stringArrayToEnumArray,
+    stringToFloat,
+    stringToInteger,
+    stringToMandatoryEnum,
+    stringToOptionalEnum,
+    YesNoUnknown,
+    yesNoUnknownToBoolean,
+    booleanToYesNoUnknown
+} from "@/utils/cast";
 import dayjs from "dayjs";
-import { yesNoUnknownToBoolean } from "@/utils/cast";
-import { stringToOptionalEnum } from "@/utils/cast";
-import { stringToFloat } from "@/utils/cast";
-import { stringToInteger } from "@/utils/cast";
-import { YesNoUnknown } from "@/utils/cast";
 
 export const allGenders = Object.values(Gender);
 export const allNationalities = Object.values(Nationality);
@@ -33,7 +40,7 @@ export const allCaseJudicialMeasures = Object.values(CaseJudicialMeasure);
 export const allCaseVictimBondsAggressor = Object.values(CaseVictimBondAggressor);
 export const allCaseCategories = Object.values(CaseCategory);
 
-const defaultValues = {
+export const defaultFormValues = {
     victim: {
         fullName: "",
         age: "",
@@ -47,8 +54,8 @@ const defaultValues = {
         occupation: "",
         hasChildren: "unknown" as YesNoUnknown,
         numberOfChildren: "",
-        ageOfChildren:"",
-        
+        ageOfChildren: "",
+
     },
     aggressor: {
         fullName: "",
@@ -63,7 +70,7 @@ const defaultValues = {
     },
 
     caseCategory: null as string | null,
-    occurredAt: dayjs(),
+    occurredAt: dayjs().utc(),
     momentOfDay: null as string | null,
     wasItAnAttempt: false,
     isInsufficientDataOrUnderInvestigation: false,
@@ -84,60 +91,145 @@ const defaultValues = {
     newsLinks: "",
 };
 
-export default defaultValues;
+function parseVictimAgeOfChildren(value: string): number[] {
+    return value
+        .split("\n")
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0)
+        .map((s) => stringToFloat(s))
+        .filter((s) => s !== undefined) as number[];
+}
 
-export function formValuesToCase(formValues: typeof defaultValues): Case {
+function victimValuestoVictim(values: typeof defaultFormValues.victim): Victim {
+    const hasChildren = yesNoUnknownToBoolean(values.hasChildren);
+
     return {
-        victim: {
-            fullName: formValues.victim.fullName || undefined,
-            age: stringToInteger(formValues.victim.age),
-            gender: stringToOptionalEnum<Gender>(formValues.victim.gender),
-            nationality: stringToOptionalEnum<Nationality>(formValues.victim.nationality),
-            isSexualWorker: formValues.victim.isSexualWorker,
-            isMissingPerson: formValues.victim.isMissingPerson,
-            isNativePeople: formValues.victim.isNativePeople,
-            isPregnant: formValues.victim.isPregnant,
-            hasDisabillity: formValues.victim.hasDisabillity,
-            occupation: formValues.victim.occupation || undefined,
-            hasChildren: yesNoUnknownToBoolean(formValues.victim.hasChildren),
-            numberOfChildren: (yesNoUnknownToBoolean(formValues.victim.hasChildren))? stringToInteger(formValues.victim.numberOfChildren):undefined,
-            ageOfChildren: (yesNoUnknownToBoolean(formValues.victim.hasChildren)) ? formValues.victim.ageOfChildren
-                .split("\n")
-                .map((s) => s.trim())
-                .filter((s) =>  s.length > 0)
-                .map((s) => stringToFloat(s))
-                .filter((s) => s !== undefined) as number[] : undefined,
-        },
-        aggressor: {
-            fullName: formValues.aggressor.fullName || undefined,
-            age: stringToInteger(formValues.aggressor.age),
-            gender: stringToOptionalEnum<Gender>(formValues.aggressor.gender),
-            hasLegalComplaintHistory: formValues.aggressor.hasLegalComplaintHistory,
-            hasPreviousCases: formValues.aggressor.hasPreviousCases,
-            wasInPrison: formValues.aggressor.wasInPrison,
-            behaviourPostCase: stringToOptionalEnum<AggressorBehaviorPostCase>(formValues.aggressor.behaviourPostCase),
-            belongsSecurityForce: formValues.aggressor.belongsSecurityForce,
-            securityForce: stringToOptionalEnum<AggressorSecurityForce>(formValues.aggressor.securityForce),
-        },
-        caseCategory: formValues.caseCategory as CaseCategory,
-        occurredAt: formValues.occurredAt.format("YYYY-MM-DD"),
-        momentOfDay: stringToOptionalEnum<CaseMomentOfDay>(formValues.momentOfDay),
-        wasItAnAttempt: formValues.wasItAnAttempt,
-        isInsufficientDataOrUnderInvestigation: formValues.isInsufficientDataOrUnderInvestigation,
-        province: formValues.province as Province,
-        location: formValues.location,
-        geographicLocation: stringToOptionalEnum<CaseGeographicLocation>(formValues.geographicLocation),
-        place: formValues.place as CasePlace,
-        murderWeapon: stringToOptionalEnum<CaseMurderWeapon>(formValues.murderWeapon),
-        wasJudicialized: formValues.wasJudicialized,
-        judicialMeasures: (formValues.wasJudicialized)?formValues.judicialMeasures as CaseJudicialMeasure[]: undefined,
-        victimBondAggressor: stringToOptionalEnum<CaseVictimBondAggressor>(formValues.victimBondAggressor),
-        hadLegalComplaints: formValues.hadLegalComplaints,
-        totalLegalComplaints: (formValues.hadLegalComplaints)? stringToInteger(formValues.totalLegalComplaints): undefined,
-        isRape: formValues.isRape,
-        isRelatedToOrganizedCrime: formValues.isRelatedToOrganizedCrime,
-        organizedCrimeNotes: (formValues.isRelatedToOrganizedCrime) ?formValues.organizedCrimeNotes : undefined, // operador ternario (condicion)? if true: if false. Si no quiero que se envie, pongo undefined
-        generalNotes: formValues.generalNotes,
-        newsLinks: formValues.newsLinks.split("\n").map((s) => s.trim()).filter((s) => s.length > 0),
+        fullName: values.fullName || undefined,
+        age: stringToInteger(values.age),
+        gender: stringToOptionalEnum(values.gender),
+        nationality: stringToOptionalEnum(values.nationality),
+        isSexualWorker: values.isSexualWorker,
+        isMissingPerson: values.isMissingPerson,
+        isNativePeople: values.isNativePeople,
+        isPregnant: values.isPregnant,
+        hasDisabillity: values.hasDisabillity,
+        occupation: values.occupation || undefined,
+        hasChildren: hasChildren,
+        numberOfChildren: hasChildren ? stringToInteger(values.numberOfChildren) : undefined,
+        ageOfChildren: hasChildren ? parseVictimAgeOfChildren(values.ageOfChildren) : undefined,
+    };
+}
+
+function aggressorValuesToAggressor(values: typeof defaultFormValues.aggressor): Aggressor {
+    const belongsSecurityForce = values.belongsSecurityForce;
+    return {
+        fullName: values.fullName || undefined,
+        age: stringToInteger(values.age),
+        gender: stringToOptionalEnum(values.gender),
+        hasLegalComplaintHistory: values.hasLegalComplaintHistory,
+        hasPreviousCases: values.hasPreviousCases,
+        wasInPrison: values.wasInPrison,
+        behaviourPostCase: stringToOptionalEnum(values.behaviourPostCase),
+        belongsSecurityForce: belongsSecurityForce,
+        securityForce: belongsSecurityForce ? stringToOptionalEnum(values.securityForce) : undefined,
+    };
+}
+
+function parseNewsLinks(value: typeof defaultFormValues.newsLinks): string[] {
+    return value
+        .split("\n")
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
+}
+
+export function formValuesToCase(values: typeof defaultFormValues): Case {
+    const wasJudicialized = values.wasJudicialized;
+    const hadLegalComplaints = values.hadLegalComplaints;
+    const isRelatedToOrganizedCrime = values.isRelatedToOrganizedCrime;
+
+    return {
+        victim: victimValuestoVictim(values.victim),
+        aggressor: aggressorValuesToAggressor(values.aggressor),
+
+        caseCategory: stringToMandatoryEnum(values.caseCategory),
+        occurredAt: values.occurredAt.format("YYYY-MM-DD"),
+        momentOfDay: stringToOptionalEnum(values.momentOfDay),
+        wasItAnAttempt: values.wasItAnAttempt,
+        isInsufficientDataOrUnderInvestigation: values.isInsufficientDataOrUnderInvestigation,
+        province: stringToMandatoryEnum(values.province),
+        location: values.location,
+        geographicLocation: stringToOptionalEnum(values.geographicLocation),
+        place: stringToMandatoryEnum(values.place),
+        murderWeapon: stringToOptionalEnum(values.murderWeapon),
+        wasJudicialized: wasJudicialized,
+        judicialMeasures: wasJudicialized ? stringArrayToEnumArray(values.judicialMeasures) : undefined,
+        victimBondAggressor: stringToOptionalEnum(values.victimBondAggressor),
+        hadLegalComplaints: hadLegalComplaints,
+        totalLegalComplaints: hadLegalComplaints ? stringToInteger(values.totalLegalComplaints) : undefined,
+        isRape: values.isRape,
+        isRelatedToOrganizedCrime: isRelatedToOrganizedCrime,
+        organizedCrimeNotes: isRelatedToOrganizedCrime ? values.organizedCrimeNotes : undefined,
+        generalNotes: values.generalNotes,
+        newsLinks: parseNewsLinks(values.newsLinks),
+    };
+}
+
+function victimToVictimValues(value: Victim): typeof defaultFormValues.victim {
+    return {
+        fullName: value.fullName || "",
+        age: value.age?.toString() || "",
+        gender: value.gender || "",
+        nationality: value.nationality || null,
+        isSexualWorker: value.isSexualWorker || false,
+        isMissingPerson: value.isMissingPerson || false,
+        isNativePeople: value.isNativePeople || false,
+        isPregnant: value.isPregnant || false,
+        hasDisabillity: value.hasDisabillity || false,
+        occupation: value.occupation || "",
+        hasChildren: booleanToYesNoUnknown(value.hasChildren),
+        numberOfChildren: value.numberOfChildren?.toString() || "",
+        ageOfChildren: value.ageOfChildren?.join(", ") || "",
+    };
+}
+
+function aggressorToAggressorValues(value: Aggressor): typeof defaultFormValues.aggressor {
+    return {
+            fullName: value.fullName || "",
+            age: value.age?.toString() || "",
+            gender: value.gender || "",
+            hasLegalComplaintHistory: value.hasLegalComplaintHistory || false,
+            hasPreviousCases: value.hasPreviousCases || false,
+            wasInPrison: value.wasInPrison || false,
+            behaviourPostCase: value.behaviourPostCase || null,
+            belongsSecurityForce: value.belongsSecurityForce || false,
+            securityForce: value.securityForce || null,
+    };
+}
+
+export function caseToFormValues(value: Case): typeof defaultFormValues {
+    return {
+        victim: victimToVictimValues(value.victim),
+        aggressor: aggressorToAggressorValues(value.aggressor),
+
+        caseCategory: value.caseCategory,
+        occurredAt: dayjs(value.occurredAt).utc(),
+        momentOfDay: value.momentOfDay || null,
+        wasItAnAttempt: value.wasItAnAttempt || false,
+        isInsufficientDataOrUnderInvestigation: value.isInsufficientDataOrUnderInvestigation || false,
+        totalLegalComplaints: value.totalLegalComplaints?.toString() || "",
+        province: value.province,
+        location: value.location || "",
+        geographicLocation: value.geographicLocation || null,
+        place: value.place || null,
+        murderWeapon: value.murderWeapon || null,
+        wasJudicialized: value.wasJudicialized || false,
+        judicialMeasures: value.judicialMeasures || [],
+        hadLegalComplaints: value.hadLegalComplaints || false,
+        isRape: value.isRape || false,
+        victimBondAggressor: value.victimBondAggressor || null,
+        isRelatedToOrganizedCrime: value.isRelatedToOrganizedCrime || false,
+        organizedCrimeNotes: value.organizedCrimeNotes || "",
+        generalNotes: value.generalNotes || "",
+        newsLinks: value.newsLinks.join("\n"),
     };
 }
