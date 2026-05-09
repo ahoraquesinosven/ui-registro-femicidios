@@ -64,7 +64,7 @@ export default function CasesIndex() {
   });
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="xl">
       <form onSubmit={(event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -143,12 +143,13 @@ export default function CasesIndex() {
             }
           }}>
             <TableRow>
+              <TableCell></TableCell>
               <TableCell colSpan={5} />
               <TableCell colSpan={2} align='center'>Víctima</TableCell>
               <TableCell colSpan={2} align='center'>Agresor</TableCell>
-              <TableCell></TableCell>
             </TableRow>
             <TableRow>
+              <TableCell></TableCell>
               <TableCell>Categoría</TableCell>
               <TableCell>Fecha del caso</TableCell>
               <TableCell>Provincia</TableCell>
@@ -160,12 +161,16 @@ export default function CasesIndex() {
 
               <TableCell>Nombre</TableCell>
               <TableCell>Edad</TableCell>
-              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data && data.map((item) => (
               <TableRow key={item.id} hover>
+                <TableCell>
+                  <IconButton component={Link} to={`/cases/${item.id}/edit`}>
+                    <EditIcon />
+                  </IconButton>
+                </TableCell>
                 <TableCell>{item.caseCategory}</TableCell>
                 <TableCell>{dayjs(item.occurredAt).utc().format("DD-MM-YYYY")}</TableCell>
                 <TableCell>{item.province}</TableCell>
@@ -175,11 +180,6 @@ export default function CasesIndex() {
                 <TableCell>{item.victim?.age}</TableCell>
                 <TableCell>{item.aggressor?.fullName}</TableCell>
                 <TableCell>{item.aggressor?.age}</TableCell>
-                <TableCell>
-                  <IconButton component={Link} to={`/cases/${item.id}/edit`}>
-                    <EditIcon />
-                  </IconButton>
-                </TableCell>
               </TableRow>
             ))}
           </TableBody>
