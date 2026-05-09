@@ -8,6 +8,17 @@ import {
     allCaseJudicialMeasures,
 } from "../formValues";
 
+// This list exposes which fields that actually belong to the case are being
+// displayed here, in order to be able to track errors for the component
+export const controlledFields = new Set([
+    "isRape",
+    "hadLegalComplaints",
+    "wasJudicialized",
+    "totalLegalComplaints",
+    "judicialMeasures",
+    ...Object.getOwnPropertyNames(defaultFormValues.victim).map((field) => `victim.${field}`),
+]);
+
 const VictimFields = withForm({
     defaultValues: defaultFormValues,
     render: function Render({ form }) {
@@ -97,7 +108,6 @@ const VictimFields = withForm({
                             </Grid>
                         )}
                     />
-
 
                     <Grid item xs={12} sm={6}>
                         <form.AppField

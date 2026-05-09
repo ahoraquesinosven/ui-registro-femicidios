@@ -7,16 +7,29 @@ type Notification = {
   severity?: AlertColor,
 };
 
+type NotificationState = {
+  notification?: Notification,
+  isOpen: boolean,
+}
+
 export function useNotifications() {
-  const [current, setCurrentNotification] = useState<Notification>({});
+  const [current, setCurrentNotification] = useState<NotificationState>({
+    isOpen: false,
+  });
 
   return {
     show: (notification: Notification) => {
-      setCurrentNotification(notification);
+      setCurrentNotification({
+        notification,
+        isOpen: true,
+      });
     },
 
     close: () => {
-      setCurrentNotification({});
+      setCurrentNotification((value) => ({
+        notification: value.notification,
+        isOpen: false,
+      }));
     },
 
     current: current,
@@ -24,18 +37,18 @@ export function useNotifications() {
 }
 
 export type NotificationSnackBarProps = {
-  currentNotification: Notification,
+  currentNotification: NotificationState,
   closeNotification: () => void,
 };
 
 export default function NotificationSnackBar({currentNotification, closeNotification}: NotificationSnackBarProps) {
   return (
-    <Snackbar open={!!currentNotification.message} onClose={closeNotification} autoHideDuration={5000}>
+    <Snackbar open={currentNotification.isOpen} onClose={closeNotification} autoHideDuration={5000}>
       <Alert
-        severity={currentNotification.severity}
+        severity={currentNotification.notification?.severity}
         variant="filled"
         onClose={closeNotification}>
-        {currentNotification.message}
+        {currentNotification.notification?.message}
       </Alert>
     </Snackbar>
   );
