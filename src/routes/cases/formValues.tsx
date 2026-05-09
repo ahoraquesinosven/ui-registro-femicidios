@@ -64,7 +64,7 @@ export const defaultFormValues = {
         hasLegalComplaintHistory: false,
         hasPreviousCases: false,
         wasInPrison: false,
-        behaviourPostCase: null as string | null,
+        behaviourPostCase: [] as string[],
         belongsSecurityForce: false,
         securityForce: null as string | null,
     },
@@ -89,6 +89,8 @@ export const defaultFormValues = {
     organizedCrimeNotes: "",
     generalNotes: "",
     newsLinks: "",
+    hasMediaGenderPerspective: "unknown" as YesNoUnknown,
+    coverageMediaPerspectiveNotes: "",
 };
 
 function parseVictimAgeOfChildren(value: string): number[] {
@@ -129,7 +131,7 @@ function aggressorValuesToAggressor(values: typeof defaultFormValues.aggressor):
         hasLegalComplaintHistory: values.hasLegalComplaintHistory,
         hasPreviousCases: values.hasPreviousCases,
         wasInPrison: values.wasInPrison,
-        behaviourPostCase: stringToOptionalEnum(values.behaviourPostCase),
+        behaviourPostCase: stringArrayToEnumArray(values.behaviourPostCase),
         belongsSecurityForce: belongsSecurityForce,
         securityForce: belongsSecurityForce ? stringToOptionalEnum(values.securityForce) : undefined,
     };
@@ -146,6 +148,7 @@ export function formValuesToCase(values: typeof defaultFormValues): Case {
     const wasJudicialized = values.wasJudicialized;
     const hadLegalComplaints = values.hadLegalComplaints;
     const isRelatedToOrganizedCrime = values.isRelatedToOrganizedCrime;
+    const hasMediaGenderPerspective = yesNoUnknownToBoolean(values.hasMediaGenderPerspective);
 
     return {
         victim: victimValuestoVictim(values.victim),
@@ -171,6 +174,8 @@ export function formValuesToCase(values: typeof defaultFormValues): Case {
         organizedCrimeNotes: isRelatedToOrganizedCrime ? values.organizedCrimeNotes : undefined,
         generalNotes: values.generalNotes,
         newsLinks: parseNewsLinks(values.newsLinks),
+        hasMediaGenderPerspective: hasMediaGenderPerspective,
+        coverageMediaPerspectiveNotes: hasMediaGenderPerspective ? values.coverageMediaPerspectiveNotes : undefined,
     };
 }
 
@@ -194,15 +199,15 @@ function victimToVictimValues(value: Victim): typeof defaultFormValues.victim {
 
 function aggressorToAggressorValues(value: Aggressor): typeof defaultFormValues.aggressor {
     return {
-            fullName: value.fullName || "",
-            age: value.age?.toString() || "",
-            gender: value.gender || "",
-            hasLegalComplaintHistory: value.hasLegalComplaintHistory || false,
-            hasPreviousCases: value.hasPreviousCases || false,
-            wasInPrison: value.wasInPrison || false,
-            behaviourPostCase: value.behaviourPostCase || null,
-            belongsSecurityForce: value.belongsSecurityForce || false,
-            securityForce: value.securityForce || null,
+        fullName: value.fullName || "",
+        age: value.age?.toString() || "",
+        gender: value.gender || "",
+        hasLegalComplaintHistory: value.hasLegalComplaintHistory || false,
+        hasPreviousCases: value.hasPreviousCases || false,
+        wasInPrison: value.wasInPrison || false,
+        behaviourPostCase: value.behaviourPostCase || [],
+        belongsSecurityForce: value.belongsSecurityForce || false,
+        securityForce: value.securityForce || null,
     };
 }
 
@@ -231,5 +236,7 @@ export function caseToFormValues(value: Case): typeof defaultFormValues {
         organizedCrimeNotes: value.organizedCrimeNotes || "",
         generalNotes: value.generalNotes || "",
         newsLinks: value.newsLinks.join("\n"),
+        hasMediaGenderPerspective: booleanToYesNoUnknown(value.hasMediaGenderPerspective),
+        coverageMediaPerspectiveNotes: value.coverageMediaPerspectiveNotes || "",
     };
 }

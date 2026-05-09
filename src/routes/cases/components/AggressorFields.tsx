@@ -47,7 +47,7 @@ const AggressorFields = withForm({
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="aggressor.behaviourPostCase"
-                            children={(field) => <field.Combo label="Conducta del agresor luego del caso" options={allAggressorBehaviorsPostCase} />}
+                            children={(field) => <field.MultiCombo label="Conducta del agresor luego del caso" options={allAggressorBehaviorsPostCase} />}
                         />
                     </Grid>
 

@@ -494,6 +494,8 @@ export interface components {
             organizedCrimeNotes?: string;
             generalNotes?: string;
             newsLinks: string[];
+            hasMediaGenderPerspective?: boolean;
+            coverageMediaPerspectiveNotes?: string;
             victim: {
                 fullName?: string;
                 age?: number;
@@ -516,7 +518,7 @@ export interface components {
                 hasLegalComplaintHistory?: boolean;
                 hasPreviousCases?: boolean;
                 wasInPrison?: boolean;
-                behaviourPostCase?: components["schemas"]["CaseAggressorBehaviorPostCase"];
+                behaviourPostCase?: components["schemas"]["CaseAggressorBehaviorPostCase"][];
                 belongsSecurityForce?: boolean;
                 securityForce?: components["schemas"]["CaseAggressorSecurityForce"];
             };
