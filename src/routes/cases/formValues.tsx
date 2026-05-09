@@ -149,7 +149,6 @@ export function formValuesToCase(values: typeof defaultFormValues): Case {
     const hadLegalComplaints = values.hadLegalComplaints;
     const isRelatedToOrganizedCrime = values.isRelatedToOrganizedCrime;
     const hasMediaGenderPerspective = yesNoUnknownToBoolean(values.hasMediaGenderPerspective);
-    const coverageMediaPerspectiveNotes = values.coverageMediaPerspectiveNotes;
 
     return {
         victim: victimValuestoVictim(values.victim),
