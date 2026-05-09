@@ -141,7 +141,7 @@ const VictimFields = withForm({
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12}>
                         <form.AppField
                             name="victim.hasChildren"
                             children={(field) => <field.YesNoUnknown label="¿Tiene hijos?" />}
