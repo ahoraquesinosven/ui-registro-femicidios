@@ -516,7 +516,7 @@ export interface components {
                 hasLegalComplaintHistory?: boolean;
                 hasPreviousCases?: boolean;
                 wasInPrison?: boolean;
-                behaviourPostCase?: components["schemas"]["CaseAggressorBehaviorPostCase"];
+                behaviourPostCase?: components["schemas"]["CaseAggressorBehaviorPostCase"][];
                 belongsSecurityForce?: boolean;
                 securityForce?: components["schemas"]["CaseAggressorSecurityForce"];
             };

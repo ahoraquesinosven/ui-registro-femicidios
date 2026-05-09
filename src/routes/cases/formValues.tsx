@@ -64,7 +64,7 @@ export const defaultFormValues = {
         hasLegalComplaintHistory: false,
         hasPreviousCases: false,
         wasInPrison: false,
-        behaviourPostCase: null as string | null,
+        behaviourPostCase: [] as string[],
         belongsSecurityForce: false,
         securityForce: null as string | null,
     },
@@ -129,7 +129,8 @@ function aggressorValuesToAggressor(values: typeof defaultFormValues.aggressor):
         hasLegalComplaintHistory: values.hasLegalComplaintHistory,
         hasPreviousCases: values.hasPreviousCases,
         wasInPrison: values.wasInPrison,
-        behaviourPostCase: stringToOptionalEnum(values.behaviourPostCase),
+        behaviourPostCase: stringArrayToEnumArray(values.behaviourPostCase),
+
         belongsSecurityForce: belongsSecurityForce,
         securityForce: belongsSecurityForce ? stringToOptionalEnum(values.securityForce) : undefined,
     };
@@ -194,15 +195,15 @@ function victimToVictimValues(value: Victim): typeof defaultFormValues.victim {
 
 function aggressorToAggressorValues(value: Aggressor): typeof defaultFormValues.aggressor {
     return {
-            fullName: value.fullName || "",
-            age: value.age?.toString() || "",
-            gender: value.gender || "",
-            hasLegalComplaintHistory: value.hasLegalComplaintHistory || false,
-            hasPreviousCases: value.hasPreviousCases || false,
-            wasInPrison: value.wasInPrison || false,
-            behaviourPostCase: value.behaviourPostCase || null,
-            belongsSecurityForce: value.belongsSecurityForce || false,
-            securityForce: value.securityForce || null,
+        fullName: value.fullName || "",
+        age: value.age?.toString() || "",
+        gender: value.gender || "",
+        hasLegalComplaintHistory: value.hasLegalComplaintHistory || false,
+        hasPreviousCases: value.hasPreviousCases || false,
+        wasInPrison: value.wasInPrison || false,
+        behaviourPostCase: value.behaviourPostCase || [],
+        belongsSecurityForce: value.belongsSecurityForce || false,
+        securityForce: value.securityForce || null,
     };
 }
 
