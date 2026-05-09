@@ -175,7 +175,7 @@ export function formValuesToCase(values: typeof defaultFormValues): Case {
         generalNotes: values.generalNotes,
         newsLinks: parseNewsLinks(values.newsLinks),
         hasMediaGenderPerspective: hasMediaGenderPerspective,
-        coverageMediaPerspectiveNotes: hasMediaGenderPerspective ? values.coverageMediaPerspectiveNotes : undefined,
+        coverageMediaPerspectiveNotes: hasMediaGenderPerspective !== undefined ? values.coverageMediaPerspectiveNotes : undefined,
     };
 }
 
