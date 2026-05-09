@@ -1,17 +1,22 @@
 import {useState} from "react"
 import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
+import Alert, { AlertColor } from "@mui/material/Alert";
+
+type Notification = {
+  message?: string,
+  severity?: AlertColor,
+};
 
 export function useNotifications() {
-  const [current, setCurrentNotification] = useState("");
+  const [current, setCurrentNotification] = useState<Notification>({});
 
   return {
-    show: (message: string) => {
-      setCurrentNotification(message);
+    show: (notification: Notification) => {
+      setCurrentNotification(notification);
     },
 
     close: () => {
-      setCurrentNotification("");
+      setCurrentNotification({});
     },
 
     current: current,
@@ -19,18 +24,18 @@ export function useNotifications() {
 }
 
 export type NotificationSnackBarProps = {
-  currentNotification: string,
+  currentNotification: Notification,
   closeNotification: () => void,
 };
 
 export default function NotificationSnackBar({currentNotification, closeNotification}: NotificationSnackBarProps) {
   return (
-    <Snackbar open={!!currentNotification} onClose={closeNotification} autoHideDuration={5000}>
+    <Snackbar open={!!currentNotification.message} onClose={closeNotification} autoHideDuration={5000}>
       <Alert
-        severity="success"
+        severity={currentNotification.severity}
         variant="filled"
         onClose={closeNotification}>
-        {currentNotification}
+        {currentNotification.message}
       </Alert>
     </Snackbar>
   );

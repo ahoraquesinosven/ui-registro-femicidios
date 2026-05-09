@@ -25,10 +25,17 @@ export default function CaseForm({defaultValues, onSubmit, reset}: CaseFormProps
 
             if (!result.ok) {
                 setErrorMapFromValidationResponse(result.errors, formApi);
+                notification.show({
+                    message: "No se puede cargar el caso porque hay errores de carga",
+                    severity: "error",
+                });
                 return;
             }
 
-            notification.show("El caso fue guardado exitosamente");
+            notification.show({
+                message: "El caso fue guardado exitosamente",
+                severity: "success",
+            });
 
             if (reset) {
                 formApi.reset();
