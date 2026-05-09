@@ -89,6 +89,8 @@ export const defaultFormValues = {
     organizedCrimeNotes: "",
     generalNotes: "",
     newsLinks: "",
+    hasMediaGenderPerspective: "unknown" as YesNoUnknown,
+    coverageMediaPerspectiveNotes: "",
 };
 
 function parseVictimAgeOfChildren(value: string): number[] {
@@ -130,7 +132,6 @@ function aggressorValuesToAggressor(values: typeof defaultFormValues.aggressor):
         hasPreviousCases: values.hasPreviousCases,
         wasInPrison: values.wasInPrison,
         behaviourPostCase: stringArrayToEnumArray(values.behaviourPostCase),
-
         belongsSecurityForce: belongsSecurityForce,
         securityForce: belongsSecurityForce ? stringToOptionalEnum(values.securityForce) : undefined,
     };
@@ -147,6 +148,7 @@ export function formValuesToCase(values: typeof defaultFormValues): Case {
     const wasJudicialized = values.wasJudicialized;
     const hadLegalComplaints = values.hadLegalComplaints;
     const isRelatedToOrganizedCrime = values.isRelatedToOrganizedCrime;
+    const hasMediaGenderPerspective = yesNoUnknownToBoolean(values.hasMediaGenderPerspective);
 
     return {
         victim: victimValuestoVictim(values.victim),
@@ -172,6 +174,8 @@ export function formValuesToCase(values: typeof defaultFormValues): Case {
         organizedCrimeNotes: isRelatedToOrganizedCrime ? values.organizedCrimeNotes : undefined,
         generalNotes: values.generalNotes,
         newsLinks: parseNewsLinks(values.newsLinks),
+        hasMediaGenderPerspective: hasMediaGenderPerspective,
+        coverageMediaPerspectiveNotes: values.coverageMediaPerspectiveNotes,
     };
 }
 
@@ -232,5 +236,7 @@ export function caseToFormValues(value: Case): typeof defaultFormValues {
         organizedCrimeNotes: value.organizedCrimeNotes || "",
         generalNotes: value.generalNotes || "",
         newsLinks: value.newsLinks.join("\n"),
+        hasMediaGenderPerspective: booleanToYesNoUnknown(value.hasMediaGenderPerspective),
+        coverageMediaPerspectiveNotes: value.coverageMediaPerspectiveNotes || "",
     };
 }

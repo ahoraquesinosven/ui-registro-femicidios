@@ -132,6 +132,29 @@ const CaseFields = withForm({
               children={(field) => <field.Text label="Link de la nota" required={true} multiline />}
             />
           </Grid>
+
+          
+                    <Grid item xs={12}>
+                        <form.AppField
+                            name="hasMediaGenderPerspective"
+                            children={(field) => <field.YesNoUnknown label="¿Los medios que cubrieron el caso lo hicieron incorporando un enfoque de perspectiva de géneros y diversidad?" />}
+                        />
+                    </Grid>
+
+                    <form.Subscribe
+                        selector={(state) => state.values.hasMediaGenderPerspective === "yes" || state.values.hasMediaGenderPerspective === "no"}
+                        children={(hasMediaGenderPerspective) => hasMediaGenderPerspective && (
+                            <>
+                                <Grid item xs={12}>
+                                    <form.AppField
+                                        name="coverageMediaPerspectiveNotes"
+                                        children={(field) => <field.Text label="Notas de cobertura con perspectiva de género" multiline rows={3} />}
+                                    />
+                                </Grid>
+                            </>
+                        )}
+                    />  
+
         </Grid>
       </>
     );

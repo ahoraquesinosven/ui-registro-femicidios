@@ -494,6 +494,8 @@ export interface components {
             organizedCrimeNotes?: string;
             generalNotes?: string;
             newsLinks: string[];
+            hasMediaGenderPerspective?: boolean;
+            coverageMediaPerspectiveNotes?: string;
             victim: {
                 fullName?: string;
                 age?: number;
