@@ -1,9 +1,9 @@
 import {useInfiniteQuery, useMutation, useQueryClient} from 'react-query';
 import {useRef, useEffect, Fragment} from 'react';
-import {UserAvatar} from '@/components/UserAvatar';
+import UserAvatar from '@/components/UserAvatar';
 import {BlockLoader} from '@/components/Loading';
-import {MutatingButton} from '@/components/MutatingButton';
-import {Icon} from '@/components/Icon';
+import MutatingButton from '@/components/MutatingButton';
+import Icon from '@/components/Icon';
 import {useAccessToken} from '@/hooks/auth';
 import {FeedItem, FeedItemState, fetchFeedItems, assignFeedItem, unassignFeedItem, completeFeedItem, uncompleteFeedItem, markIrrelevantFeedItem, unmarkIrrelevantFeedItem} from '@/api/aqsnv/feed';
 
@@ -76,7 +76,7 @@ function useMarkIrrelevantFeedItemMutation() {
   });
 }
 
-function useunMarkIrrelevantFeedItemMutation() {
+function useUnmarkIrrelevantFeedItemMutation() {
   const accessToken = useAccessToken();
   const queryClient = useQueryClient();
   return useMutation({
@@ -164,7 +164,7 @@ export function DoneFeedItemButtons({item}: FeedItemButtonsProps) {
 }
 
 export function IrrelevantDoneFeedItemButtons({item}: FeedItemButtonsProps) {
-  const unmarkIrrelevantMutation = useunMarkIrrelevantFeedItemMutation();
+  const unmarkIrrelevantMutation = useUnmarkIrrelevantFeedItemMutation();
 
   return (
     <MutatingButton
@@ -275,10 +275,10 @@ export function FeedList({name, status}: FeedListProps) {
   )
 }
 
-export function Feed() {
+export default function FeedIndex() {
   return (
     <>
-      <div className="container mt-3">
+      <div className="container">
         <div className="row row-cols-1 row-cols-md-3">
           <FeedList name="Pendientes" status="backlog" />
           <FeedList name="En revisión" status="inProgress" />

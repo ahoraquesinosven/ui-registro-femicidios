@@ -6,7 +6,7 @@ export type UserAvatarProps = {
   showName: boolean | null,
 }
 
-export function UserAvatar({user, showName}: UserAvatarProps) {
+export default function UserAvatar({user, showName}: UserAvatarProps) {
   return (
     <>
     <img 

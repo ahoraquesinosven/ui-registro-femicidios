@@ -13,7 +13,7 @@ export class HttpError extends Error {
 export async function httpRequest(url: URL, options?: RequestInit) : Promise<Response> {
   const result = await fetch(url, options);
 
-  if (!result.ok) {
+  if (result.status >= 500) {
     throw new HttpError(`HTTP Request responded with ${result.status} ${result.statusText}`, result, options);
   }
 
