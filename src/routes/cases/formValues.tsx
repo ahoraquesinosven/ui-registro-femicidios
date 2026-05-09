@@ -149,6 +149,7 @@ export function formValuesToCase(values: typeof defaultFormValues): Case {
     const hadLegalComplaints = values.hadLegalComplaints;
     const isRelatedToOrganizedCrime = values.isRelatedToOrganizedCrime;
     const hasMediaGenderPerspective = yesNoUnknownToBoolean(values.hasMediaGenderPerspective);
+    const coverageMediaPerspectiveNotes = values.coverageMediaPerspectiveNotes;
 
     return {
         victim: victimValuestoVictim(values.victim),
@@ -175,7 +176,7 @@ export function formValuesToCase(values: typeof defaultFormValues): Case {
         generalNotes: values.generalNotes,
         newsLinks: parseNewsLinks(values.newsLinks),
         hasMediaGenderPerspective: hasMediaGenderPerspective,
-        coverageMediaPerspectiveNotes: values.coverageMediaPerspectiveNotes,
+        coverageMediaPerspectiveNotes: hasMediaGenderPerspective ? values.coverageMediaPerspectiveNotes : undefined,
     };
 }
 
