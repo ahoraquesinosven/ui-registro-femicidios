@@ -12,12 +12,16 @@ import {
   allCaseCategories,
 } from "../formValues";
 
+function difference<T>(a: Set<T>, b: Set<T>): Set<T> {
+  return new Set([...a].filter(x => !b.has(x)));
+}
+
 // This list exposes which fields that actually belong to the case are being
 // displayed here, in order to be able to track errors for the component
-export const controlledFields = new Set(Object.getOwnPropertyNames(defaultFormValues))
-  .difference(new Set(["victim", "aggressor"]))
-  .difference(aggressorControlledFields)
-  .difference(victimControlledFields);
+export const controlledFields = difference(
+  new Set(Object.getOwnPropertyNames(defaultFormValues)),
+  new Set(["victim", "aggressor", ...aggressorControlledFields, ...victimControlledFields]),
+);
 
 const CaseFields = withForm({
   defaultValues: defaultFormValues,
