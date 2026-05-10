@@ -4,6 +4,7 @@ import { TabsProps } from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { Box } from "@mui/material";
 import { BoxProps } from "@mui/material";
+import ErrorOutline from '@mui/icons-material/ErrorOutline';
 
 export type TabbedSectionsProps = {
   initialTab?: number,
@@ -11,6 +12,7 @@ export type TabbedSectionsProps = {
   sections: {
     key: string,
     label: string,
+    hasError?: boolean,
     component: React.ReactNode,
   }[],
 
@@ -30,7 +32,11 @@ export default function TabbedSections(props: TabbedSectionsProps) {
     <>
       <Tabs {...props.tabProps} value={currentTab} onChange={handleChangeCurrentTab}>
         {props.sections.map((section) => (
-          <Tab key={`${section.key}-tab`} label={section.label} />
+          <Tab 
+            key={`${section.key}-tab`} 
+            icon={section.hasError ? <ErrorOutline color="error"/> : undefined}
+            iconPosition="start"
+            label={section.label} />
         ))}
       </Tabs>
 

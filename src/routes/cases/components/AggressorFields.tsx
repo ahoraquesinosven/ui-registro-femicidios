@@ -10,6 +10,13 @@ import  {
     allCaseVictimBondsAggressor,
 } from "../formValues";
 
+// This list exposes which fields that actually belong to the case are being
+// displayed here, in order to be able to track errors for the component
+export const controlledFields = new Set([
+    "victimBondAggressor",
+    ...Object.getOwnPropertyNames(defaultFormValues.aggressor).map((field) => `aggressor.${field}`),
+]);
+
 const AggressorFields = withForm({
     defaultValues: defaultFormValues,
     render: function Render({form}) {

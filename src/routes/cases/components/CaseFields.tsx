@@ -1,5 +1,7 @@
 import { withForm } from "@/hooks/form";
 import Grid from "@mui/material/Grid";
+import { controlledFields as aggressorControlledFields } from "./AggressorFields";
+import { controlledFields as victimControlledFields } from "./VictimFields";
 import {
   defaultFormValues,
   allMomentsOfDay,
@@ -9,6 +11,17 @@ import {
   allCaseMurderWeapons,
   allCaseCategories,
 } from "../formValues";
+
+function difference<T>(a: Set<T>, b: Set<T>): Set<T> {
+  return new Set([...a].filter(x => !b.has(x)));
+}
+
+// This list exposes which fields that actually belong to the case are being
+// displayed here, in order to be able to track errors for the component
+export const controlledFields = difference(
+  new Set(Object.getOwnPropertyNames(defaultFormValues)),
+  new Set(["victim", "aggressor", ...aggressorControlledFields, ...victimControlledFields]),
+);
 
 const CaseFields = withForm({
   defaultValues: defaultFormValues,
@@ -54,9 +67,6 @@ const CaseFields = withForm({
             )}
 
           />
-
-
-
 
           <Grid item xs={12} sm={6}>
             <form.AppField
