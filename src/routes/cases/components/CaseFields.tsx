@@ -1,5 +1,7 @@
 import { withForm } from "@/hooks/form";
 import Grid from "@mui/material/Grid";
+import { controlledFields as aggressorControlledFields } from "./AggressorFields";
+import { controlledFields as victimControlledFields } from "./VictimFields";
 import {
   defaultFormValues,
   allMomentsOfDay,
@@ -9,6 +11,13 @@ import {
   allCaseMurderWeapons,
   allCaseCategories,
 } from "../formValues";
+
+// This list exposes which fields that actually belong to the case are being
+// displayed here, in order to be able to track errors for the component
+export const controlledFields = new Set(Object.getOwnPropertyNames(defaultFormValues))
+  .difference(new Set(["victim", "aggressor"]))
+  .difference(aggressorControlledFields)
+  .difference(victimControlledFields);
 
 const CaseFields = withForm({
   defaultValues: defaultFormValues,
@@ -54,9 +63,6 @@ const CaseFields = withForm({
             )}
 
           />
-
-
-
 
           <Grid item xs={12} sm={6}>
             <form.AppField

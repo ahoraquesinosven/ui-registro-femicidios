@@ -1,13 +1,14 @@
 import NotificationSnackBar, {useNotifications} from "@/components/NotificationSnackBar";
 import TabbedSections from "@/components/TabbedSections";
 import {handleFormSubmit, setErrorMapFromValidationResponse, useAppForm} from "@/hooks/form";
-import AggressorFields from "@/routes/cases/components/AggressorFields";
-import CaseFields from "@/routes/cases/components/CaseFields";
-import VictimFields from "@/routes/cases/components/VictimFields";
+import AggressorFields, { controlledFields as aggressorSectionFields } from "@/routes/cases/components/AggressorFields";
+import CaseFields, { controlledFields as caseControlledFields } from "@/routes/cases/components/CaseFields";
+import VictimFields, { controlledFields as victimSectionFields } from "@/routes/cases/components/VictimFields";
 import {defaultFormValues} from "@/routes/cases/formValues";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import {CaseValidationResult} from "@/api/aqsnv/cases";
+import { useStore } from "@tanstack/react-form";
 
 export type CaseFormProps = {
     defaultValues: typeof defaultFormValues,
@@ -43,6 +44,14 @@ export default function CaseForm({defaultValues, onSubmit, reset}: CaseFormProps
         },
     });
 
+    const fieldsWithErrors = useStore(
+        form.store, 
+        (state) => Object
+            .entries(state.fieldMeta)
+            .filter(([, meta]) => !meta.isValid)
+            .map(([field]) => field)
+    );
+
     return (
         <Container maxWidth="md">
             <form onSubmit={handleFormSubmit(form)} noValidate>
@@ -58,17 +67,20 @@ export default function CaseForm({defaultValues, onSubmit, reset}: CaseFormProps
                         {
                             key: "case",
                             label: "Información del Caso",
-                            component: <CaseFields form={form} />
+                            component: <CaseFields form={form} />,
+                            hasError: fieldsWithErrors.some((field) => caseControlledFields.has(field))
                         },
                         {
                             key: "victim",
                             label: "Víctima",
-                            component: <VictimFields form={form} />
+                            component: <VictimFields form={form} />,
+                            hasError: fieldsWithErrors.some((field) => victimSectionFields.has(field)),
                         },
                         {
                             key: "aggressor",
                             label: "Agresor",
-                            component: <AggressorFields form={form} />
+                            component: <AggressorFields form={form} />,
+                            hasError: fieldsWithErrors.some((field) => aggressorSectionFields.has(field)),
                         },
                     ]}
                 />

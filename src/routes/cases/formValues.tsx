@@ -44,7 +44,7 @@ export const defaultFormValues = {
     victim: {
         fullName: "",
         age: "",
-        gender: Gender.MUJER as string,
+        gender: Gender.MUJER as string | null,
         nationality: null as string | null,
         isSexualWorker: false,
         isMissingPerson: false,
@@ -60,7 +60,7 @@ export const defaultFormValues = {
     aggressor: {
         fullName: "",
         age: "",
-        gender: Gender.HOMBRE as string,
+        gender: Gender.HOMBRE as string | null,
         hasLegalComplaintHistory: false,
         hasPreviousCases: false,
         wasInPrison: false,
@@ -183,7 +183,7 @@ function victimToVictimValues(value: Victim): typeof defaultFormValues.victim {
     return {
         fullName: value.fullName || "",
         age: value.age?.toString() || "",
-        gender: value.gender || "",
+        gender: value.gender || null,
         nationality: value.nationality || null,
         isSexualWorker: value.isSexualWorker || false,
         isMissingPerson: value.isMissingPerson || false,
@@ -201,7 +201,7 @@ function aggressorToAggressorValues(value: Aggressor): typeof defaultFormValues.
     return {
         fullName: value.fullName || "",
         age: value.age?.toString() || "",
-        gender: value.gender || "",
+        gender: value.gender || null,
         hasLegalComplaintHistory: value.hasLegalComplaintHistory || false,
         hasPreviousCases: value.hasPreviousCases || false,
         wasInPrison: value.wasInPrison || false,
