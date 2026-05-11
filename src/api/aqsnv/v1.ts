@@ -312,6 +312,7 @@ export interface paths {
                     murderWeapon?: components["schemas"]["CaseMurderWeapon"];
                     aggressorFullName?: string;
                     victimBondAggressor?: components["schemas"]["CaseVictimBondAggressor"];
+                    wasItAnAttempt?: boolean;
                 };
                 header?: never;
                 path?: never;
@@ -333,6 +334,7 @@ export interface paths {
                             location?: components["schemas"]["Case"]["location"];
                             murderWeapon?: components["schemas"]["Case"]["location"];
                             victimBondAggressor?: components["schemas"]["CaseMurderWeapon"];
+                            wasItAnAttempt?: boolean;
                             victim: {
                                 fullName?: components["schemas"]["Case"]["victim"]["fullName"];
                                 age?: components["schemas"]["Case"]["victim"]["age"];
