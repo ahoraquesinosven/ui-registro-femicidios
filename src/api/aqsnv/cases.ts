@@ -88,7 +88,7 @@ export async function listCases(token: AccessToken, filters: ListCaseFilters): P
   if (filters) {
     Object.entries(filters).forEach(([property, value]) => {
       if (value) {
-        url.searchParams.append(property, value);
+        url.searchParams.append(property, value.toString());
       }
     })
   }
