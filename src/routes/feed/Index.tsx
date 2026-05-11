@@ -1,59 +1,73 @@
-import {useInfiniteQuery, useMutation, useQueryClient} from 'react-query';
-import {useRef, useEffect, Fragment} from 'react';
-import UserAvatar from '@/components/UserAvatar';
+import type {FeedItem, FeedItemState} from '@/api/aqsnv/feed';
+import {assignFeedItem, completeFeedItem, fetchFeedItems, markIrrelevantFeedItem, unassignFeedItem, uncompleteFeedItem, unmarkIrrelevantFeedItem} from '@/api/aqsnv/feed';
 import {BlockLoader} from '@/components/Loading';
-import MutatingButton from '@/components/MutatingButton';
-import Icon from '@/components/Icon';
+import UserAvatar from '@/components/UserAvatar';
 import {useAccessToken} from '@/hooks/auth';
-import {FeedItem, FeedItemState, fetchFeedItems, assignFeedItem, unassignFeedItem, completeFeedItem, uncompleteFeedItem, markIrrelevantFeedItem, unmarkIrrelevantFeedItem} from '@/api/aqsnv/feed';
+import type {AccessToken} from '@/types/auth';
+import BlockIcon from '@mui/icons-material/Block';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import SearchIcon from '@mui/icons-material/Search';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import {Fragment, useEffect, useRef} from 'react';
+import {useInfiniteQuery, useMutation, useQueryClient} from 'react-query';
 
-function useAssignFeedItemMutation() {
-  const accessToken = useAccessToken();
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (feedItemId: number) => assignFeedItem(accessToken, feedItemId),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["feed", "backlog"]);
-      queryClient.invalidateQueries(["feed", "inProgress"]);
-    },
-  });
+type FeedItemMutationFn = (accessToken: AccessToken, feedItemId: number) => Promise<void>;
+function createFeedItemMutationHook(fn: FeedItemMutationFn, invalidateQueries: string[]) {
+  return () => {
+    const accessToken = useAccessToken();
+    const queryClient = useQueryClient();
+    return useMutation({
+      mutationFn: (feedItemId: number) => fn(accessToken, feedItemId),
+      onSuccess: () => {
+        invalidateQueries.forEach((key) => {
+          queryClient.invalidateQueries(["feed", key]);
+        });
+      },
+    });
+  }
 }
 
-function useUnassignFeedItemMutation() {
-  const accessToken = useAccessToken();
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (feedItemId: number) => unassignFeedItem(accessToken, feedItemId),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["feed", "backlog"]);
-      queryClient.invalidateQueries(["feed", "inProgress"]);
-    },
-  });
-}
+const useAssignFeedItemMutation = createFeedItemMutationHook(
+  assignFeedItem,
+  ["backlog", "inProgress"],
+);
 
-function useCompleteFeedItemMutation() {
-  const accessToken = useAccessToken();
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (feedItemId: number) => completeFeedItem(accessToken, feedItemId),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["feed", "inProgress"]);
-      queryClient.invalidateQueries(["feed", "done"]);
-    },
-  });
-}
+const useUnassignFeedItemMutation = createFeedItemMutationHook(
+  unassignFeedItem,
+  ["backlog", "inProgress"],
+);
 
-function useUncompleteFeedItemMutation() {
-  const accessToken = useAccessToken();
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (feedItemId: number) => uncompleteFeedItem(accessToken, feedItemId),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["feed", "done"]);
-      queryClient.invalidateQueries(["feed", "inProgress"]);
-    },
-  });
-}
+const useCompleteFeedItemMutation = createFeedItemMutationHook(
+  completeFeedItem,
+  ["done", "inProgress"],
+);
+
+const useUncompleteFeedItemMutation = createFeedItemMutationHook(
+  uncompleteFeedItem,
+  ["done", "inProgress"],
+);
+
+const useMarkIrrelevantFeedItemMutation = createFeedItemMutationHook(
+  markIrrelevantFeedItem,
+  ["done", "backlog"],
+);
+
+const useUnmarkIrrelevantFeedItemMutation = createFeedItemMutationHook(
+  unmarkIrrelevantFeedItem,
+  ["done", "backlog"],
+);
 
 function useFeedQuery(state: FeedItemState) {
   const accessToken = useAccessToken();
@@ -64,116 +78,109 @@ function useFeedQuery(state: FeedItemState) {
   });
 }
 
-function useMarkIrrelevantFeedItemMutation() {
-  const accessToken = useAccessToken();
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (feedItemId: number) => markIrrelevantFeedItem(accessToken, feedItemId),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["feed", "backlog"]);
-      queryClient.invalidateQueries(["feed", "done"]);
-    },
-  });
-}
-
-function useUnmarkIrrelevantFeedItemMutation() {
-  const accessToken = useAccessToken();
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (feedItemId: number) => unmarkIrrelevantFeedItem(accessToken, feedItemId),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["feed", "backlog"]);
-      queryClient.invalidateQueries(["feed", "done"]);
-    },
-  });
+function FeedItemActionGroup({children}: {children: React.ReactNode}) {
+  return (
+    <ButtonGroup orientation="vertical" variant='contained' fullWidth>
+      {children}
+    </ButtonGroup>
+  );
 }
 
 type FeedItemButtonsProps = {
   item: FeedItem,
 }
-
-export function BacklogFeedItemButtons({item}: FeedItemButtonsProps) {
+function BacklogFeedItemButtons({item}: FeedItemButtonsProps) {
   const assignMutation = useAssignFeedItemMutation();
   const markIrrelevantMutation = useMarkIrrelevantFeedItemMutation();
 
   const isMutating = assignMutation.isLoading || markIrrelevantMutation.isLoading;
 
   return (
-    <>
-    <a
-      className="card-link btn btn-primary"
-      href={item.link}
-      target='_blank'
-      onClick={() => {
-        if (!assignMutation.isLoading) {
-          assignMutation.mutate(item.id);
-        }
-      }}>
-      <Icon icon="binoculars" />
-      Revisar
-    </a>
-    <MutatingButton
-      className='btn btn-danger'
-      disabled={isMutating}
-      onClick={() => {markIrrelevantMutation.mutate(item.id)}}>
-      <Icon icon="x-square" />
-      Irrelevante
-    </MutatingButton>
-    </>
+    <FeedItemActionGroup>
+      <Button
+        color="primary"
+        href={item.link}
+        target="_blank"
+        startIcon={<SearchIcon />}
+        onClick={() => {
+          if (!assignMutation.isLoading) {
+            assignMutation.mutate(item.id);
+          }
+        }}
+      >
+        Revisar
+      </Button>
+      <Button
+        color="error"
+        startIcon={<BlockIcon />}
+        loading={isMutating}
+        onClick={() => {markIrrelevantMutation.mutate(item.id);}}
+      >
+        Irrelevante
+      </Button>
+    </FeedItemActionGroup>
   );
 }
 
-export function InProgressFeedItemButtons({item}: FeedItemButtonsProps) {
+function InProgressFeedItemButtons({item}: FeedItemButtonsProps) {
   const unassignMutation = useUnassignFeedItemMutation();
   const completeMutation = useCompleteFeedItemMutation();
 
   const isMutating = completeMutation.isLoading || unassignMutation.isLoading;
 
   return (
-    <>
-      <MutatingButton
-        className='btn btn-success'
-        disabled={isMutating}
-        onClick={() => {completeMutation.mutate(item.id)}}>
-        <Icon icon="check-circle-fill" />
+    <FeedItemActionGroup>
+      <Button
+        color="success"
+        startIcon={<CheckCircleIcon />}
+        loading={isMutating}
+        onClick={() => {completeMutation.mutate(item.id);}}
+      >
         Revisado
-      </MutatingButton>
-      <MutatingButton
-        className='btn btn-secondary'
-        disabled={isMutating}
-        onClick={() => {unassignMutation.mutate(item.id)}}>
-        <Icon icon="x-circle-fill" />
+      </Button>
+      <Button
+        color="secondary"
+        startIcon={<CancelIcon />}
+        loading={isMutating}
+        onClick={() => {unassignMutation.mutate(item.id);}}
+      >
         Pendiente
-      </MutatingButton>
-    </>
+      </Button>
+    </FeedItemActionGroup>
   );
 }
 
-export function DoneFeedItemButtons({item}: FeedItemButtonsProps) {
+function DoneFeedItemButtons({item}: FeedItemButtonsProps) {
   const uncompleteMutation = useUncompleteFeedItemMutation();
 
   return (
-    <MutatingButton
-      className='btn btn-secondary'
-      disabled={uncompleteMutation.isLoading}
-      onClick={() => {uncompleteMutation.mutate(item.id)}}>
-      <Icon icon="x-circle-fill" />
-      Volver a revisar
-    </MutatingButton>
+    <FeedItemActionGroup>
+      <Button
+        color="secondary"
+        startIcon={<CancelIcon />}
+        loading={uncompleteMutation.isLoading}
+        onClick={() => {uncompleteMutation.mutate(item.id);}}
+      >
+        Volver a revisar
+      </Button>
+    </FeedItemActionGroup>
   );
 }
 
-export function IrrelevantDoneFeedItemButtons({item}: FeedItemButtonsProps) {
+function IrrelevantDoneFeedItemButtons({item}: FeedItemButtonsProps) {
   const unmarkIrrelevantMutation = useUnmarkIrrelevantFeedItemMutation();
 
   return (
-    <MutatingButton
-      className='btn btn-secondary'
-      disabled={unmarkIrrelevantMutation.isLoading}
-      onClick={() => {unmarkIrrelevantMutation.mutate(item.id)}}>
-      <Icon icon="x-circle-fill" />
-      Volver a pendiente
-    </MutatingButton>
+    <FeedItemActionGroup>
+      <Button
+        color="secondary"
+        startIcon={<CancelIcon />}
+        loading={unmarkIrrelevantMutation.isLoading}
+        onClick={() => {unmarkIrrelevantMutation.mutate(item.id);}}
+      >
+        Volver a pendiente
+      </Button>
+    </FeedItemActionGroup>
   );
 }
 
@@ -181,40 +188,36 @@ type FeedItemCardProps = {
   item: FeedItem,
 };
 
-export function FeedItemCard({item}: FeedItemCardProps) {
+function FeedItemCard({item}: FeedItemCardProps) {
   return (
-    <div className="card mb-2">
+    <Card sx={{mb: 1}}>
       {item.assignedUser && (
-        <div className="card-header">
-          <UserAvatar user={item.assignedUser} showName />
-        </div>
+        <CardHeader
+          avatar={<UserAvatar user={item.assignedUser} showName />}
+          sx={{pb: 0}}
+        />
       )}
-      <div className="card-body">
-        <h3 className="card-title h5 mb-3">
-          {item.title}
-        </h3>
-        <h4 className="card-subtitle h6 text-body-secondary mb-3">
+      <CardContent sx={{pt: "0.5em"}}>
+        <Link variant="subtitle1" fontWeight="bold" gutterBottom href={item.link} target="_blank">
+          {item.title} 
+        </Link>
+        <Typography variant="body2" color="text.secondary" gutterBottom>
           {new Intl.DateTimeFormat('es').format(new Date(item.publishedAt))} - {item.feed.name}
-        </h4>
-        <div className="btn-group w-100">
-          {!item.assignedUser && (
-            <BacklogFeedItemButtons item={item} />
-          )}
-          {item.assignedUser && !item.isDone && (
-            <InProgressFeedItemButtons item={item} />
-          )} 
-          {item.isDone && !item.isIrrelevant && (
-            <DoneFeedItemButtons item={item} />
-          )}
-          {item.isDone && item.isIrrelevant && (
-            <IrrelevantDoneFeedItemButtons item={item} />
-          )}
-          <a className="card-link btn btn-outline-secondary" href={item.link} target='_blank' title="Ver artículo">
-            <Icon icon="box-arrow-up-right" />
-          </a>
-        </div>
-      </div>
-    </div>
+        </Typography>
+        {!item.assignedUser && (
+          <BacklogFeedItemButtons item={item} />
+        )}
+        {item.assignedUser && !item.isDone && (
+          <InProgressFeedItemButtons item={item} />
+        )}
+        {item.isDone && !item.isIrrelevant && (
+          <DoneFeedItemButtons item={item} />
+        )}
+        {item.isDone && item.isIrrelevant && (
+          <IrrelevantDoneFeedItemButtons item={item} />
+        )}
+      </CardContent>
+    </Card>
   );
 }
 
@@ -223,7 +226,7 @@ type FeedListProps = {
   status: FeedItemState,
 };
 
-export function FeedList({name, status}: FeedListProps) {
+function FeedList({name, status}: FeedListProps) {
   const query = useFeedQuery(status);
   const observerTarget = useRef(null);
 
@@ -250,11 +253,11 @@ export function FeedList({name, status}: FeedListProps) {
   }, [query, observerTarget]);
 
   return (
-    <div className="col my-2" style={{ maxHeight: "100vh", }}>
-      <div className="p-1 bg-secondary-subtle rounded h-100 overflow-y-auto">
-        <h2 className='h4 my-4'>
+    <Grid item xs={12} md={4}>
+      <Paper sx={{p: 1, maxHeight: '100vh', overflowY: 'auto', backgroundColor: "#e2e3e5"}}>
+        <Typography variant="h5" sx={{my: 2}}>
           {name} ({query.data?.pages[0]?.total})
-        </h2>
+        </Typography>
         {!query.data || (query.isFetching && !query.isFetchingNextPage) ? (
           <BlockLoader />
         ) : (
@@ -269,23 +272,20 @@ export function FeedList({name, status}: FeedListProps) {
         {query.isFetchingNextPage && (
           <BlockLoader />
         )}
-        <div ref={observerTarget}></div>
-      </div>
-    </div>
-  )
+        <Box ref={observerTarget} />
+      </Paper>
+    </Grid>
+  );
 }
 
 export default function FeedIndex() {
   return (
-    <>
-      <div className="container">
-        <div className="row row-cols-1 row-cols-md-3">
-          <FeedList name="Pendientes" status="backlog" />
-          <FeedList name="En revisión" status="inProgress" />
-          <FeedList name="Revisadas" status="done" />
-        </div>
-      </div>
-    </>
+    <Container maxWidth="xl">
+      <Grid container spacing={2}>
+        <FeedList name="Pendientes" status="backlog" />
+        <FeedList name="En revisión" status="inProgress" />
+        <FeedList name="Revisadas" status="done" />
+      </Grid>
+    </Container>
   );
 }
-
