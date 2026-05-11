@@ -26,6 +26,7 @@ const defaultSearchOptions = {
   province: null as string | null,
   location: "",
   caseCategory: null as string | null,
+  wasItAnAttempt: false,
   murderWeapon: null as string | null,
   victimBondAggressor: null as string | null,
   victimFullName: "",
@@ -38,6 +39,7 @@ const searchOptionsToListCaseFilters = (searchOptions: typeof defaultSearchOptio
   province: stringToOptionalEnum<Province>(searchOptions.province),
   location: searchOptions.location,
   caseCategory: stringToOptionalEnum<CaseCategory>(searchOptions.caseCategory),
+  wasItAnAttempt: searchOptions.wasItAnAttempt,
   murderWeapon: stringToOptionalEnum<CaseMurderWeapon>(searchOptions.murderWeapon),
   victimBondAggressor: stringToOptionalEnum<CaseVictimBondAggressor>(searchOptions.victimBondAggressor),
   victimFullName: searchOptions.victimFullName,
@@ -92,17 +94,25 @@ export default function CasesIndex() {
               children={(field) => <field.Text label="Localidad" />} />
           </Grid>
 
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={3}>
             <searchForm.AppField
               name='caseCategory'
               children={(field) => <field.Combo label="Categoría" options={allCaseCategories} />} />
           </Grid>
-          <Grid item xs={12} sm={4}>
+
+          <Grid item xs={12} sm={3}>
+            <searchForm.AppField
+              name='wasItAnAttempt'
+              children={(field) => <field.Checkbox label="¿Fue un intento?" />} />
+          </Grid>
+
+
+          <Grid item xs={12} sm={3}>
             <searchForm.AppField
               name='murderWeapon'
               children={(field) => <field.Combo label="Forma" options={allCaseMurderWeapons} />} />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={3}>
             <searchForm.AppField
               name='victimBondAggressor'
               children={(field) => <field.Combo label="Vínculo con la víctima" options={allCaseVictimBondsAggressor} />} />
@@ -151,6 +161,7 @@ export default function CasesIndex() {
             <TableRow>
               <TableCell></TableCell>
               <TableCell>Categoría</TableCell>
+               <TableCell>Fue un intento</TableCell>
               <TableCell>Fecha del caso</TableCell>
               <TableCell>Provincia</TableCell>
               <TableCell>Localidad</TableCell>
@@ -172,6 +183,7 @@ export default function CasesIndex() {
                   </IconButton>
                 </TableCell>
                 <TableCell>{item.caseCategory}</TableCell>
+                <TableCell>{item.wasItAnAttempt ? "Sí" : "No"}</TableCell>
                 <TableCell>{dayjs(item.occurredAt).utc().format("DD-MM-YYYY")}</TableCell>
                 <TableCell>{item.province}</TableCell>
                 <TableCell>{item.location}</TableCell>
