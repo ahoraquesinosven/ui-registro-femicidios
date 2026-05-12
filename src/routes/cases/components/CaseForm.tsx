@@ -1,4 +1,5 @@
-import NotificationSnackBar, {useNotifications} from "@/components/NotificationSnackBar";
+import NotificationSnackBar from "@/components/NotificationSnackBar";
+import { useNotifications } from "@/hooks/notifications";
 import TabbedSections from "@/components/TabbedSections";
 import {handleFormSubmit, setErrorMapFromValidationResponse, useAppForm} from "@/hooks/form";
 import AggressorFields, { controlledFields as aggressorSectionFields } from "@/routes/cases/components/AggressorFields";

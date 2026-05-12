@@ -10,6 +10,7 @@ import {
 
 // This list exposes which fields that actually belong to the case are being
 // displayed here, in order to be able to track errors for the component
+// eslint-disable-next-line react-refresh/only-export-components
 export const controlledFields = new Set([
     "isRape",
     "hadLegalComplaints",

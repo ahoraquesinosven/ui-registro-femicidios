@@ -18,6 +18,7 @@ function difference<T>(a: Set<T>, b: Set<T>): Set<T> {
 
 // This list exposes which fields that actually belong to the case are being
 // displayed here, in order to be able to track errors for the component
+// eslint-disable-next-line react-refresh/only-export-components
 export const controlledFields = difference(
   new Set(Object.getOwnPropertyNames(defaultFormValues)),
   new Set(["victim", "aggressor", ...aggressorControlledFields, ...victimControlledFields]),
