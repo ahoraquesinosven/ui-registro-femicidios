@@ -55,7 +55,6 @@ export default function CasesIndex() {
   const searchForm = useAppForm({
     defaultValues: defaultSearchOptions,
     onSubmit: ({value}) => {
-      console.log("Search with options", value);
       const newFilters = searchOptionsToListCaseFilters(value);
       setFilters(newFilters);
     }
