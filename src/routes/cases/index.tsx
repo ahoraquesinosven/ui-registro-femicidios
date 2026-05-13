@@ -1,7 +1,7 @@
 import {CaseCategory, CaseMurderWeapon, CaseVictimBondAggressor, ListCaseFilters, listCases, Province} from '@/api/aqsnv/cases';
 import {useAccessToken} from "@/hooks/auth";
 import {useAppForm} from '@/hooks/form';
-import {stringToOptionalEnum} from '@/utils/cast';
+import {stringToOptionalEnum,YesNoUnknown,yesNoUnknownToBoolean} from '@/utils/cast';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -20,13 +20,14 @@ import {useQuery} from 'react-query';
 import {Link} from 'react-router-dom';
 import {allCaseCategories, allCaseMurderWeapons, allCaseVictimBondsAggressor, allProvinces} from './formValues';
 
+//es mas que solo el default del formulario, tambien como usamos typyscript se usa para inferir el tipo
 const defaultSearchOptions = {
   fromDate: dayjs().startOf("year"),
   toDate: null as Dayjs | null,
   province: null as string | null,
   location: "",
   caseCategory: null as string | null,
-  wasItAnAttempt: false,
+  wasItAnAttempt: "unknown" as YesNoUnknown,
   murderWeapon: null as string | null,
   victimBondAggressor: null as string | null,
   victimFullName: "",
@@ -37,13 +38,13 @@ const searchOptionsToListCaseFilters = (searchOptions: typeof defaultSearchOptio
   fromDate: searchOptions.fromDate?.format("YYYY-MM-DD"),
   toDate: searchOptions.toDate?.format("YYYY-MM-DD"),
   province: stringToOptionalEnum<Province>(searchOptions.province),
-  location: searchOptions.location,
+  location: searchOptions.location.trim(),
   caseCategory: stringToOptionalEnum<CaseCategory>(searchOptions.caseCategory),
-  wasItAnAttempt: searchOptions.wasItAnAttempt,
+  wasItAnAttempt: yesNoUnknownToBoolean(searchOptions.wasItAnAttempt),
   murderWeapon: stringToOptionalEnum<CaseMurderWeapon>(searchOptions.murderWeapon),
   victimBondAggressor: stringToOptionalEnum<CaseVictimBondAggressor>(searchOptions.victimBondAggressor),
-  victimFullName: searchOptions.victimFullName,
-  aggressorFullName: searchOptions.aggressorFullName,
+  victimFullName: searchOptions.victimFullName.trim(),
+  aggressorFullName: searchOptions.aggressorFullName.trim(),
 });
 
 const defaultListCaseFilters = searchOptionsToListCaseFilters(defaultSearchOptions);
@@ -103,7 +104,7 @@ export default function CasesIndex() {
           <Grid item xs={12} sm={3}>
             <searchForm.AppField
               name='wasItAnAttempt'
-              children={(field) => <field.Checkbox label="¿Fue un intento?" />} />
+              children={(field) => <field.YesNoUnknown label="¿Fue un intento?" />} />
           </Grid>
 
 
