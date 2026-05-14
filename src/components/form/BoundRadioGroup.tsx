@@ -4,18 +4,23 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
+import FieldHelp from "./FieldHelp";
 
 export type BoundRadioGroupProps = {
   label: string,
   options: {value: string, label: string}[],
+  helpText?: string,
 };
 
-export default function BoundRadioGroup({label, options} : BoundRadioGroupProps) {
+export default function BoundRadioGroup({label, options, helpText} : BoundRadioGroupProps) {
   const field = useFieldContext<string>();
 
   return (
     <FormControl>
-      <FormLabel>{label}</FormLabel>
+      <FormLabel>
+        {label}
+        {helpText && <FieldHelp title={label} helpText={helpText} />}
+      </FormLabel>
       <RadioGroup
         row
         value={field.state.value}
