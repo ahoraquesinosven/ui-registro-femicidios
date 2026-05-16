@@ -107,7 +107,7 @@ function victimValuestoVictim(values: typeof defaultFormValues.victim): Victim {
 
     return {
         fullName: values.fullName || undefined,
-        age: stringToInteger(values.age),
+        age: stringToFloat(values.age),
         gender: stringToOptionalEnum(values.gender),
         nationality: stringToOptionalEnum(values.nationality),
         isSexualWorker: values.isSexualWorker,
@@ -182,7 +182,7 @@ export function formValuesToCase(values: typeof defaultFormValues): Case {
 function victimToVictimValues(value: Victim): typeof defaultFormValues.victim {
     return {
         fullName: value.fullName || "",
-        age: value.age?.toString() || "",
+        age: value.age ? (value.age * 1).toString() : "",
         gender: value.gender || null,
         nationality: value.nationality || null,
         isSexualWorker: value.isSexualWorker || false,

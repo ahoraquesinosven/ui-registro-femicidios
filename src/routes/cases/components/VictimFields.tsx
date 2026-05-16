@@ -1,4 +1,3 @@
-
 import { withForm } from "@/hooks/form";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -70,9 +69,13 @@ const VictimJudicializedHelper = () => (
 );
 const VICTIM_LEGAL_COMPLAINTS_HELPER = "Se refiere a si la víctima había realizado denuncias previas al momento del hecho. Se elige la opción de acuerdo a la información brindada o inferida por los medios.";
 
+function isValidNumber(value: string) {
+    return Number.isFinite(Number(value));
+}
+
 const VictimFields = withForm({
     defaultValues: defaultFormValues,
-    render: function Render({ form }) {
+    render: function Render({form}) {
         return (
             <>
                 <Grid container spacing={2}>
@@ -89,7 +92,12 @@ const VictimFields = withForm({
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="victim.age"
-                            children={(field) => <field.Text label="Edad" type="number" helpText={<VictimAgeHelper />} />}
+                            children={(field) => <field.Text label="Edad" type="text" inputMode="decimal" helpText={<VictimAgeHelper />} />}
+                            validators={{
+                                onBlur: ({value}) => {
+                                    !isValidNumber(value) ? "debe ser un número válido" : undefined
+                                }
+                            }}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -165,7 +173,7 @@ const VictimFields = withForm({
                             name="wasJudicialized"
                             children={(field) => <field.Checkbox label="¿Tenía medidas judiciales?" helpText={<VictimJudicializedHelper />}  /> }
                             listeners={{
-                                onChange: ({ value }) => {
+                                onChange: ({value}) => {
                                     if (value)
                                         form.setFieldValue('hadLegalComplaints', true)
                                 },
