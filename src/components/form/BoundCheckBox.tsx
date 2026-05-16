@@ -7,7 +7,7 @@ export type BoundCheckboxProps = {
   label: string,
   disabled?: boolean,
   checkbox?: CheckboxProps,
-  helpText?: string,
+  helpText?: React.ReactNode,
 };
 
 export default function BoundCheckbox({label, checkbox, disabled, helpText} : BoundCheckboxProps) {

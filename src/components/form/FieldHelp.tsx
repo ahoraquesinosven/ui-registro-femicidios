@@ -5,12 +5,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 type FieldHelpProps = {
   title: string;
-  helpText: string;
+  helpText: React.ReactNode;
 };
 
 export default function FieldHelp({ title, helpText }: FieldHelpProps) {
@@ -31,7 +30,7 @@ export default function FieldHelp({ title, helpText }: FieldHelpProps) {
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
-          <Typography>{helpText}</Typography>
+          {helpText}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}>Cerrar</Button>

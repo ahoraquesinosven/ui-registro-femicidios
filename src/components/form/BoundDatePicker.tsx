@@ -6,9 +6,9 @@ import {useMemo} from "react";
 import FieldHelp from "./FieldHelp";
 
 type BoundDatePickerProps = {
-  label: string
-  clearable?: boolean
-  helpText?: string
+  label: string,
+  clearable?: boolean,
+  helpText?: React.ReactNode,
 };
 
 export default function BoundDatePicker({label, clearable, helpText}: BoundDatePickerProps) {

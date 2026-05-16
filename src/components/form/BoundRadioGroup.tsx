@@ -9,7 +9,7 @@ import FieldHelp from "./FieldHelp";
 export type BoundRadioGroupProps = {
   label: string,
   options: {value: string, label: string}[],
-  helpText?: string,
+  helpText?: React.ReactNode,
 };
 
 export default function BoundRadioGroup({label, options, helpText} : BoundRadioGroupProps) {

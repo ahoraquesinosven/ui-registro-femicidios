@@ -1,4 +1,4 @@
-import { useFieldContext } from "@/hooks/form";
+import {useFieldContext} from "@/hooks/form";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -8,10 +8,10 @@ export type BoundComboProps = {
   options: string[],
   label: string,
   required?: boolean,
-  helpText?: string,
+  helpText?: React.ReactNode,
 }
 
-export default function BoundCombo({options, label, required, helpText} : BoundComboProps) {
+export default function BoundCombo({options, label, required, helpText}: BoundComboProps) {
   const field = useFieldContext<string | null>();
 
   return (
@@ -27,18 +27,20 @@ export default function BoundCombo({options, label, required, helpText} : BoundC
           label={label}
           error={!field.state.meta.isValid}
           helperText={field.state.meta.errors.join(", ")}
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <>
-                {params.InputProps.endAdornment}
-                {helpText && (
-                  <InputAdornment position="end">
-                    <FieldHelp title={label} helpText={helpText} />
-                  </InputAdornment>
-                )}
-              </>
-            ),
+          slotProps={{
+            input: {
+              ...params.InputProps,
+              endAdornment: (
+                <>
+                  {params.InputProps.endAdornment}
+                  {helpText && (
+                    <InputAdornment position="end">
+                      <FieldHelp title={label} helpText={helpText} />
+                    </InputAdornment>
+                  )}
+                </>
+              )
+            }
           }}
         />
       )}
