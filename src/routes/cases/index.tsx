@@ -190,7 +190,7 @@ export default function CasesIndex() {
                 <TableCell>{item.location}</TableCell>
                 <TableCell>{item.murderWeapon}</TableCell>
                 <TableCell>{item.victim?.fullName}</TableCell>
-                <TableCell>{item.victim?.age}</TableCell>
+                <TableCell>{(item.victim && item.victim.age) ? (item.victim.age * 1).toString() : undefined}</TableCell>
                 <TableCell>{item.aggressor?.fullName}</TableCell>
                 <TableCell>{item.aggressor?.age}</TableCell>
               </TableRow>
