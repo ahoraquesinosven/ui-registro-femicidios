@@ -68,12 +68,7 @@ const VictimJudicializedHelper = () => (
 
     </>
 );
-
-
-
 const VICTIM_LEGAL_COMPLAINTS_HELPER = "Se refiere a si la víctima había realizado denuncias previas al momento del hecho. Se elige la opción de acuerdo a la información brindada o inferida por los medios.";
-
-
 
 const VictimFields = withForm({
     defaultValues: defaultFormValues,
@@ -159,7 +154,7 @@ const VictimFields = withForm({
                             <Grid item xs={12} sm={6}>
                                 <form.AppField
                                     name="hadLegalComplaints"
-                                    children={(field) => <field.Checkbox label="¿Había realizado denuncias?" disabled={wasJudicialized} />}
+                                    children={(field) => <field.Checkbox label="¿Había realizado denuncias?" disabled={wasJudicialized} helpText={VICTIM_LEGAL_COMPLAINTS_HELPER} />}
                                 />
                             </Grid>
                         )}
