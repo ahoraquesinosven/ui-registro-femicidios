@@ -17,7 +17,7 @@ export default function BoundDatePicker(props: BoundDatePickerProps) {
         textField: {
           fullWidth: true,
           error: !field.state.meta.isValid,
-          helperText: field.state.meta.errors.join(", ")
+          helperText: field.state.meta.errors.join(", "),
         },
         field: {
           clearable: props.clearable

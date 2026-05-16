@@ -1,7 +1,7 @@
-import { withForm } from "@/hooks/form";
+import {withForm} from "@/hooks/form";
 import Grid from "@mui/material/Grid";
-import { controlledFields as aggressorControlledFields } from "./AggressorFields";
-import { controlledFields as victimControlledFields } from "./VictimFields";
+import {controlledFields as aggressorControlledFields} from "./AggressorFields";
+import {controlledFields as victimControlledFields} from "./VictimFields";
 import {
   defaultFormValues,
   allMomentsOfDay,
@@ -26,7 +26,7 @@ export const controlledFields = difference(
 
 const CaseFields = withForm({
   defaultValues: defaultFormValues,
-  render: function Render({ form }) {
+  render: function Render({form}) {
     return (
       <>
         <Grid container spacing={2}>
@@ -40,15 +40,15 @@ const CaseFields = withForm({
           <Grid item xs={12} sm={6}>
             <form.AppField
               name="caseCategory"
-              children={(field) => <field.Combo label="Categoría" required={true} options={allCaseCategories}  />}
+              children={(field) => <field.Combo label="Categoría" required={true} options={allCaseCategories} />}
             />
           </Grid>
-          <Grid item xs={12} sm={6}> 
+          <Grid item xs={12} sm={6}>
             <form.AppField
               name="wasItAnAttempt"
               children={(field) => <field.Checkbox label="¿Fue un intento?" />}
               listeners={{
-                onChange: ({ value }) => {
+                onChange: ({value}) => {
                   if (value)
                     form.setFieldValue('isInsufficientDataOrUnderInvestigation', false)
                 },
@@ -124,7 +124,7 @@ const CaseFields = withForm({
               <Grid item xs={12}>
                 <form.AppField
                   name="organizedCrimeNotes"
-                  children={(field) => <field.Text label="Observaciones de Crimen Organizado" multiline rows={3} />}
+                  children={(field) => <field.Text label="Observaciones de Crimen Organizado" multiline />}
                 />
               </Grid>
             )}
@@ -133,38 +133,38 @@ const CaseFields = withForm({
           <Grid item xs={12}>
             <form.AppField
               name="generalNotes"
-              children={(field) => <field.Text label="Notas del Caso" multiline rows={3} />}
+              children={(field) => <field.Text label="Notas del Caso" multiline />}
             />
           </Grid>
 
           <Grid item xs={12}>
             <form.AppField
               name="newsLinks"
-              children={(field) => <field.Text label="Link de la nota" required={true} multiline />}
+              children={(field) => <field.Text label="Link de la nota" required={true} multiline maxRows={5} />}
             />
           </Grid>
 
-          
-                    <Grid item xs={12}>
-                        <form.AppField
-                            name="hasMediaGenderPerspective"
-                            children={(field) => <field.YesNoUnknown label="¿Los medios que cubrieron el caso lo hicieron incorporando un enfoque de perspectiva de géneros y diversidad?" />}
-                        />
-                    </Grid>
 
-                    <form.Subscribe
-                        selector={(state) => state.values.hasMediaGenderPerspective === "yes" || state.values.hasMediaGenderPerspective === "no"}
-                        children={(hasMediaGenderPerspective) => hasMediaGenderPerspective && (
-                            <>
-                                <Grid item xs={12}>
-                                    <form.AppField
-                                        name="coverageMediaPerspectiveNotes"
-                                        children={(field) => <field.Text label="Notas de cobertura con perspectiva de género" multiline rows={3} />}
-                                    />
-                                </Grid>
-                            </>
-                        )}
-                    />  
+          <Grid item xs={12}>
+            <form.AppField
+              name="hasMediaGenderPerspective"
+              children={(field) => <field.YesNoUnknown label="¿Los medios que cubrieron el caso lo hicieron incorporando un enfoque de perspectiva de géneros y diversidad?" />}
+            />
+          </Grid>
+
+          <form.Subscribe
+            selector={(state) => state.values.hasMediaGenderPerspective === "yes" || state.values.hasMediaGenderPerspective === "no"}
+            children={(hasMediaGenderPerspective) => hasMediaGenderPerspective && (
+              <>
+                <Grid item xs={12}>
+                  <form.AppField
+                    name="coverageMediaPerspectiveNotes"
+                    children={(field) => <field.Text label="Notas de cobertura con perspectiva de género" multiline rows={3} />}
+                  />
+                </Grid>
+              </>
+            )}
+          />
 
         </Grid>
       </>
