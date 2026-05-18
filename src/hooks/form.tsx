@@ -8,6 +8,7 @@ import BoundMultiCombo from "@/components/form/BoundMultiCombo";
 import {createFormHook, createFormHookContexts} from "@tanstack/react-form";
 import { AnyFormApi } from "@tanstack/react-form";
 import { ValidationErrors } from "@/api/aqsnv/cases";
+import {isValidInteger, isValidNumber} from "@/utils/validations";
 export const { fieldContext, useFieldContext, formContext, useFormContext } = createFormHookContexts();
 
 export const { useAppForm, withForm, withFieldGroup } = createFormHook({
@@ -40,4 +41,12 @@ export function setErrorMapFromValidationResponse(errors: ValidationErrors, form
 
     fieldInfo?.instance?.setErrorMap({onSubmit: error.message});
   });
+}
+
+export function validateDecimalField({value}: {value: string}) {
+  return !isValidNumber(value) ? "debe ser un número" : undefined
+}
+
+export function validateIntegerField({value}: {value:string}) {
+  return !isValidInteger(value) ? "debe ser un número entero" : undefined;
 }
