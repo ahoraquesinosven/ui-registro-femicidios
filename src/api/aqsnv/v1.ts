@@ -312,6 +312,7 @@ export interface paths {
                     murderWeapon?: components["schemas"]["CaseMurderWeapon"];
                     aggressorFullName?: string;
                     victimBondAggressor?: components["schemas"]["CaseVictimBondAggressor"];
+                    wasItAnAttempt?: boolean;
                 };
                 header?: never;
                 path?: never;
@@ -333,6 +334,7 @@ export interface paths {
                             location?: components["schemas"]["Case"]["location"];
                             murderWeapon?: components["schemas"]["Case"]["location"];
                             victimBondAggressor?: components["schemas"]["CaseMurderWeapon"];
+                            wasItAnAttempt?: boolean;
                             victim: {
                                 fullName?: components["schemas"]["Case"]["victim"]["fullName"];
                                 age?: components["schemas"]["Case"]["victim"]["age"];
@@ -620,8 +622,7 @@ export enum CaseCategory {
     TRAVESTICIDIO = "TRAVESTICIDIO",
     TRANSFEMICIDIO = "TRANSFEMICIDIO",
     LESBICIDIO = "LESBICIDIO",
-    INSTIGACION_AL_SUICIDIO = "INSTIGACION_AL_SUICIDIO",
-    CRIMEN_DE_ODIO = "CRIMEN_DE_ODIO"
+    INSTIGACION_AL_SUICIDIO = "INSTIGACION_AL_SUICIDIO"
 }
 export enum CaseMomentOfDay {
     DIURNO = "DIURNO",

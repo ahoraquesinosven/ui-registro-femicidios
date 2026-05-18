@@ -87,8 +87,8 @@ export async function listCases(token: AccessToken, filters: ListCaseFilters): P
   const url = new URL(endpoints.cases());
   if (filters) {
     Object.entries(filters).forEach(([property, value]) => {
-      if (value) {
-        url.searchParams.append(property, value);
+      if (value !== null && value !== undefined && value !== "") {
+        url.searchParams.append(property, value.toString());
       }
     })
   }

@@ -1,7 +1,7 @@
 import {CaseCategory, CaseMurderWeapon, CaseVictimBondAggressor, ListCaseFilters, listCases, Province} from '@/api/aqsnv/cases';
 import {useAccessToken} from "@/hooks/auth";
 import {useAppForm} from '@/hooks/form';
-import {stringToOptionalEnum} from '@/utils/cast';
+import {stringToOptionalEnum,YesNoUnknown,yesNoUnknownToBoolean} from '@/utils/cast';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -20,12 +20,14 @@ import {useQuery} from 'react-query';
 import {Link} from 'react-router-dom';
 import {allCaseCategories, allCaseMurderWeapons, allCaseVictimBondsAggressor, allProvinces} from './formValues';
 
+//es mas que solo el default del formulario, tambien como usamos typyscript se usa para inferir el tipo
 const defaultSearchOptions = {
   fromDate: dayjs().startOf("year"),
   toDate: null as Dayjs | null,
   province: null as string | null,
   location: "",
   caseCategory: null as string | null,
+  wasItAnAttempt: "unknown" as YesNoUnknown,
   murderWeapon: null as string | null,
   victimBondAggressor: null as string | null,
   victimFullName: "",
@@ -36,12 +38,13 @@ const searchOptionsToListCaseFilters = (searchOptions: typeof defaultSearchOptio
   fromDate: searchOptions.fromDate?.format("YYYY-MM-DD"),
   toDate: searchOptions.toDate?.format("YYYY-MM-DD"),
   province: stringToOptionalEnum<Province>(searchOptions.province),
-  location: searchOptions.location,
+  location: searchOptions.location.trim(),
   caseCategory: stringToOptionalEnum<CaseCategory>(searchOptions.caseCategory),
+  wasItAnAttempt: yesNoUnknownToBoolean(searchOptions.wasItAnAttempt),
   murderWeapon: stringToOptionalEnum<CaseMurderWeapon>(searchOptions.murderWeapon),
   victimBondAggressor: stringToOptionalEnum<CaseVictimBondAggressor>(searchOptions.victimBondAggressor),
-  victimFullName: searchOptions.victimFullName,
-  aggressorFullName: searchOptions.aggressorFullName,
+  victimFullName: searchOptions.victimFullName.trim(),
+  aggressorFullName: searchOptions.aggressorFullName.trim(),
 });
 
 const defaultListCaseFilters = searchOptionsToListCaseFilters(defaultSearchOptions);
@@ -92,17 +95,25 @@ export default function CasesIndex() {
               children={(field) => <field.Text label="Localidad" />} />
           </Grid>
 
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={3}>
             <searchForm.AppField
               name='caseCategory'
               children={(field) => <field.Combo label="Categoría" options={allCaseCategories} />} />
           </Grid>
-          <Grid item xs={12} sm={4}>
+
+          <Grid item xs={12} sm={3}>
+            <searchForm.AppField
+              name='wasItAnAttempt'
+              children={(field) => <field.YesNoUnknown label="¿Fue un intento?" />} />
+          </Grid>
+
+
+          <Grid item xs={12} sm={3}>
             <searchForm.AppField
               name='murderWeapon'
               children={(field) => <field.Combo label="Forma" options={allCaseMurderWeapons} />} />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={3}>
             <searchForm.AppField
               name='victimBondAggressor'
               children={(field) => <field.Combo label="Vínculo con la víctima" options={allCaseVictimBondsAggressor} />} />
@@ -151,6 +162,7 @@ export default function CasesIndex() {
             <TableRow>
               <TableCell></TableCell>
               <TableCell>Categoría</TableCell>
+               <TableCell>Fue un intento</TableCell>
               <TableCell>Fecha del caso</TableCell>
               <TableCell>Provincia</TableCell>
               <TableCell>Localidad</TableCell>
@@ -172,12 +184,13 @@ export default function CasesIndex() {
                   </IconButton>
                 </TableCell>
                 <TableCell>{item.caseCategory}</TableCell>
+                <TableCell>{item.wasItAnAttempt ? "Sí" : "No"}</TableCell>
                 <TableCell>{dayjs(item.occurredAt).utc().format("DD-MM-YYYY")}</TableCell>
                 <TableCell>{item.province}</TableCell>
                 <TableCell>{item.location}</TableCell>
                 <TableCell>{item.murderWeapon}</TableCell>
                 <TableCell>{item.victim?.fullName}</TableCell>
-                <TableCell>{item.victim?.age}</TableCell>
+                <TableCell>{(item.victim && item.victim.age) ? (item.victim.age * 1).toString() : undefined}</TableCell>
                 <TableCell>{item.aggressor?.fullName}</TableCell>
                 <TableCell>{item.aggressor?.age}</TableCell>
               </TableRow>

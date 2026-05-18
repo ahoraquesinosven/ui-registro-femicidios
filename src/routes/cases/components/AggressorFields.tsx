@@ -1,4 +1,4 @@
-import {withForm} from "@/hooks/form";
+import {validateIntegerField, withForm} from "@/hooks/form";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -12,6 +12,7 @@ import  {
 
 // This list exposes which fields that actually belong to the case are being
 // displayed here, in order to be able to track errors for the component
+// eslint-disable-next-line react-refresh/only-export-components
 export const controlledFields = new Set([
     "victimBondAggressor",
     ...Object.getOwnPropertyNames(defaultFormValues.aggressor).map((field) => `aggressor.${field}`),
@@ -36,7 +37,8 @@ const AggressorFields = withForm({
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="aggressor.age"
-                            children={(field) => <field.Text label="Edad" type="number" />}
+                            validators={{onBlur: validateIntegerField}}
+                            children={(field) => <field.Text label="Edad" type="text" inputMode="numeric" />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
