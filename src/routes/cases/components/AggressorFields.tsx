@@ -18,6 +18,18 @@ export const controlledFields = new Set([
     ...Object.getOwnPropertyNames(defaultFormValues.aggressor).map((field) => `aggressor.${field}`),
 ]);
 
+const AGRESSOR_NAME_HELPER = "Se completa el nombre y /o el apellido del femicida o sospechoso o su apodo. En las noticias a veces aparecen las iniciales, también lo cargamos. En caso de que no haya ninguno de los datos, el campo no se completa.";
+
+const AggressorAgeHelper = () => (
+    <>
+        <p>
+          En este espacio se carga la edad del femicida o sospechoso. De acuerdo a la información recabada de los medios.
+        </p>
+        <p>Si no se tiene la edad, se deja vacío.</p>
+
+    </>
+);
+
 const AggressorFields = withForm({
     defaultValues: defaultFormValues,
     render: function Render({form}) {
@@ -31,14 +43,14 @@ const AggressorFields = withForm({
                     <Grid item xs={12}>
                         <form.AppField
                             name="aggressor.fullName"
-                            children={(field) => <field.Text label="Nombre y Apellido" />}
+                            children={(field) => <field.Text label="Nombre y Apellido" helpText={AGRESSOR_NAME_HELPER}  />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="aggressor.age"
                             validators={{onBlur: validateIntegerField}}
-                            children={(field) => <field.Text label="Edad" type="text" inputMode="numeric" />}
+                            children={(field) => <field.Text label="Edad" type="text" inputMode="numeric" helpText={<AggressorAgeHelper />} />}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
