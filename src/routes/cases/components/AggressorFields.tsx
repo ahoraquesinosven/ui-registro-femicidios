@@ -49,12 +49,33 @@ const AggressorBehaviorsPostCaseHelper = () => (
         <p>
             Con el objetivo de poder contar con todos los elementos que intervienen en los femicidios (o intentos) y transfemicidios (o intentos) es necesario conocer lo que hizo el femicida o agresor luego de cometer el hecho.
         </p>
-        <p>En esta instancia se prioriza la primera conducta del violento y se completa entre las siguientes opciones.</p>
+        <p>El sistema permite cargar múltiples opciones.</p>
+        <p>
+            Si no está contemplada entre las opciones mencionadas, elegir la opción "Ninguna de las anteriores" y se debe sugerir la nueva opción <a href="https://docs.google.com/spreadsheets/d/1UruAWj0X2Fw5cBapc-7-sHuGcDyq0-pCfsVECiWCNIo/edit?gid=1735086912#gid=1735086912" target="_blank">agregando los detalles en esta planilla.</a>
+        </p>
 
     </>
 );
 
+const AGRESSOR_BELONGS_SECURITY_FORCE_HELPER = "En el mismo análisis de los casos observamos otros datos sobre los agresores que pueden ser útiles para la implementación de nuevas y mejores políticas que protejan las vidas de las mujeres y disidencias. Uno de ellos es consignar si el violento pertenece o no a alguna fuerza, para esto se tilda si se conoce o se deja vacio en caso contrario.";
 
+const AggressorSecurityForceHelper = () => (
+    <>
+        <p>
+            En caso de indicarse, seleccionar a qué fuerza pertenece el agresor.
+        </p>
+        <p>
+            Si no está contemplada entre las opciones mencionadas, elegir la opción "Otra Fuerza" y se debe sugerir la nueva opción <a href="https://docs.google.com/spreadsheets/d/1UruAWj0X2Fw5cBapc-7-sHuGcDyq0-pCfsVECiWCNIo/edit?gid=1735086912#gid=1735086912" target="_blank">agregando los detalles en esta planilla.</a>
+        </p>
+
+    </>
+);
+
+const AGRESSOR_LEGAL_COMPLAINT_HISTORY_HELPER = "Refiere a si el agresor o femicida tiene antecedentes de denuncias por violencia de género, lo que permite contextualizar los hechos.";
+
+const AGRESSOR_PREVIOUS_CASES_HELPER = "Refiere a si el agresor o femicida tiene antecedentes de femicidios, lo que permite contextualizar los hechos.";
+
+const AGRESSOR_WAS_IN_PRISON_HELPER = "Refiere a si el agresor o femicida ha estado en prisión por delitos relacionados con violencia de género, lo que permite contextualizar los hechos.";
 
 
 
@@ -104,7 +125,7 @@ const AggressorFields = withForm({
                     <Grid item xs={12}>
                         <form.AppField
                             name="aggressor.belongsSecurityForce"
-                            children={(field) => <field.Checkbox label="¿Pertenece a alguna fuerza?" />}
+                            children={(field) => <field.Checkbox label="¿Pertenece a alguna fuerza?" helpText={AGRESSOR_BELONGS_SECURITY_FORCE_HELPER} />}
                         />
                     </Grid>
 
@@ -114,7 +135,7 @@ const AggressorFields = withForm({
                             <Grid item xs={12}>
                                 <form.AppField
                                     name="aggressor.securityForce"
-                                    children={(field) => <field.Combo label="Fuerza a la que pertenece" options={allAggressorSecurityForces} />}
+                                    children={(field) => <field.Combo label="Fuerza a la que pertenece" options={allAggressorSecurityForces} helpText={<AggressorSecurityForceHelper />} />}
                                 />
                             </Grid>
                         )}
@@ -128,7 +149,7 @@ const AggressorFields = withForm({
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="aggressor.hasLegalComplaintHistory"
-                            children={(field) => <field.Checkbox label="¿Tiene en su historial denuncias previas?" />}
+                            children={(field) => <field.Checkbox label="¿Tiene en su historial denuncias previas?" helpText={AGRESSOR_LEGAL_COMPLAINT_HISTORY_HELPER} />}
                         />
                     </Grid>
 
@@ -136,14 +157,14 @@ const AggressorFields = withForm({
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="aggressor.hasPreviousCases"
-                            children={(field) => <field.Checkbox label="¿Tiene en su historial más víctimas?" />}
+                            children={(field) => <field.Checkbox label="¿Tiene en su historial más víctimas?" helpText={AGRESSOR_PREVIOUS_CASES_HELPER} />}
                         />
                     </Grid>
 
                     <Grid item xs={12}>
                         <form.AppField
                             name="aggressor.wasInPrison"
-                            children={(field) => <field.Checkbox label="¿Estuvo preso por delitos relacionados con violencia?" />}
+                            children={(field) => <field.Checkbox label="¿Estuvo preso por delitos relacionados con violencia?" helpText={AGRESSOR_WAS_IN_PRISON_HELPER} />}
                         />
                     </Grid>
                 </Grid>
