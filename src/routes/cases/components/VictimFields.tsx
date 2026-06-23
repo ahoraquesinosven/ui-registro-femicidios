@@ -69,9 +69,30 @@ const VictimJudicializedHelper = () => (
 );
 const VICTIM_LEGAL_COMPLAINTS_HELPER = "Se refiere a si la víctima había realizado denuncias previas al momento del hecho. Se elige la opción de acuerdo a la información brindada o inferida por los medios.";
 
+const VictimChildrenHelper = () => (
+    <>
+        <p>
+            Les hijes son también víctimas de los hechos de violencia de género y de los femicidios (a veces de manera indirecta y directamente), por lo tanto recabamos esta información para visibilizar el grado de impacto que estas situaciones extremas de violencia ocasionan en los vínculos afectivos y filiales de todas las víctimas.
+        </p>
+        <p>
+            En este espacio se completa la opción recabada: “Si” (si tiene hijes), “No” (si no tiene) y “Sin Datos” (cuando el medio no brinda detalles de esa información).
+        </p>
+        <p>
+            Posteriormente, siempre en caso de que hayamos puesto que sí tiene hijes, nos aparece la posibilidad de escribir la edad de les mismes, de manera manual, presionando Enter luego de cada edad.
+            Al no ser un espacio para completar obligatoriamente podremos pasar al siguiente paso, pero sí se tiene el dato hay que colocarlo.
+        </p>
+
+    </>
+);
+
+
+
+
+
+
 const VictimFields = withForm({
     defaultValues: defaultFormValues,
-    render: function Render({form}) {
+    render: function Render({ form }) {
         return (
             <>
                 <Grid container spacing={2}>
@@ -163,9 +184,9 @@ const VictimFields = withForm({
                     <Grid item xs={12} sm={6}>
                         <form.AppField
                             name="wasJudicialized"
-                            children={(field) => <field.Checkbox label="¿Tenía medidas judiciales?" helpText={<VictimJudicializedHelper />}  /> }
+                            children={(field) => <field.Checkbox label="¿Tenía medidas judiciales?" helpText={<VictimJudicializedHelper />} />}
                             listeners={{
-                                onChange: ({value}) => {
+                                onChange: ({ value }) => {
                                     if (value)
                                         form.setFieldValue('hadLegalComplaints', true)
                                 },
@@ -204,7 +225,7 @@ const VictimFields = withForm({
                     <Grid item xs={12}>
                         <form.AppField
                             name="victim.hasChildren"
-                            children={(field) => <field.YesNoUnknown label="¿Tiene hijos?" />}
+                            children={(field) => <field.YesNoUnknown label="¿Tiene hijos?"  helpText={<VictimChildrenHelper />} />}
                         />
                     </Grid>
 
