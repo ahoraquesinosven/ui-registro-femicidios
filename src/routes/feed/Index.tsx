@@ -227,29 +227,27 @@ type FeedListProps = {
 
 function FeedList({name, status}: FeedListProps) {
   const query = useFeedQuery(status);
+  const {hasNextPage, isFetching, fetchNextPage} = query;
   const observerTarget = useRef(null);
 
   useEffect(() => {
     const target = observerTarget.current;
-    const observer = new IntersectionObserver(
-      entries => {
-        if (entries[0].isIntersecting && query.hasNextPage && !query.isFetching) {
-          query.fetchNextPage();
-        }
-      },
-      {threshold: 1},
-    );
-
-    if (target) {
-      observer.observe(target);
+    if (!target) {
+      return;
     }
 
-    return () => {
-      if (target) {
-        observer.unobserve(target);
+    // Default threshold: fire as soon as the sentinel enters the viewport,
+    // i.e. when the user reaches the end of the list. Re-observing on state
+    // change re-fires if the sentinel is still visible after a page loads.
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasNextPage && !isFetching) {
+        fetchNextPage();
       }
-    };
-  }, [query, observerTarget]);
+    });
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetching, fetchNextPage]);
 
   return (
     <Grid item xs={12} md={4}>

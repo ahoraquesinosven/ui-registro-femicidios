@@ -12,12 +12,17 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Toolbar from '@mui/material/Toolbar';
 import  IconButton  from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Chip from '@mui/material/Chip';
 import EditIcon from '@mui/icons-material/Edit';
 import dayjs, {Dayjs} from 'dayjs';
-import {useState} from 'react';
-import {useQuery} from 'react-query';
+import {Fragment, useEffect, useRef, useState} from 'react';
+import {useInfiniteQuery} from 'react-query';
 import {Link} from 'react-router-dom';
+import {BlockLoader} from '@/components/Loading';
 import {allCaseCategories, allCaseMurderWeapons, allCaseVictimBondsAggressor, allProvinces} from './formValues';
 
 //es mas que solo el default del formulario, tambien como usamos typyscript se usa para inferir el tipo
@@ -61,10 +66,34 @@ export default function CasesIndex() {
   });
 
   const accessToken = useAccessToken();
-  const {data} = useQuery({
+  const query = useInfiniteQuery({
     queryKey: ["cases", filters],
-    queryFn: () => listCases(accessToken, filters),
+    queryFn: ({pageParam}) => listCases(accessToken, filters, 100, pageParam),
+    getNextPageParam: (lastPage) => lastPage.next ?? undefined,
   });
+
+  const {hasNextPage, isFetching, fetchNextPage} = query;
+  const totalCount = query.data?.pages[0]?.total ?? 0;
+  const observerTarget = useRef(null);
+
+  useEffect(() => {
+    const target = observerTarget.current;
+    if (!target) {
+      return;
+    }
+
+    // Default threshold: fire as soon as the sentinel enters the viewport,
+    // i.e. when the user reaches the end of the list. Re-observing on state
+    // change re-fires if the sentinel is still visible after a page loads.
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasNextPage && !isFetching) {
+        fetchNextPage();
+      }
+    });
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetching, fetchNextPage]);
 
   return (
     <Container maxWidth="xl">
@@ -146,7 +175,13 @@ export default function CasesIndex() {
         </Button>
       </form>
 
-      <TableContainer component={Paper}>
+      <Paper sx={{mt: 2}}>
+        <Toolbar>
+          <Typography variant="h6" component="div">
+            {query.isLoading ? "Cargando casos…" : `Casos (${totalCount})`}
+          </Typography>
+        </Toolbar>
+        <TableContainer>
         <Table stickyHeader>
           <TableHead sx={{
             "& th": {
@@ -176,7 +211,9 @@ export default function CasesIndex() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data && data.map((item) => (
+            {query.data?.pages.map((page, i) => (
+              <Fragment key={i}>
+                {page.page.map((item) => (
               <TableRow key={item.id} hover>
                 <TableCell>
                   <IconButton component={Link} to={`/cases/${item.id}/edit`}>
@@ -194,10 +231,27 @@ export default function CasesIndex() {
                 <TableCell>{item.aggressor?.fullName}</TableCell>
                 <TableCell>{item.aggressor?.age}</TableCell>
               </TableRow>
+                ))}
+              </Fragment>
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
+        </TableContainer>
+      </Paper>
+
+      {query.isFetching && (
+        <BlockLoader />
+      )}
+      <Box ref={observerTarget} />
+
+      {query.data && (
+        <Box sx={{display: 'flex', justifyContent: 'center', my: 3}}>
+          <Chip
+            label={`${totalCount} ${totalCount === 1 ? "caso" : "casos"} en total`}
+            variant="outlined"
+          />
+        </Box>
+      )}
     </Container>
   );
 }

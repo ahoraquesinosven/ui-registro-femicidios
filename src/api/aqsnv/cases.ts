@@ -80,10 +80,11 @@ export async function updateCase(token: AccessToken, caseId: string, entity: Cas
   };
 }
 
-export type CaseSummary = paths["/v1/cases/"]["get"]["responses"]["200"]["content"]["application/json"][0];
-export type ListCaseFilters = paths["/v1/cases/"]["get"]["parameters"]["query"];
+export type CaseListItem = components["schemas"]["CaseListItem"];
+export type CaseListPage = components["schemas"]["CaseListPage"];
+export type ListCaseFilters = paths["/v1/cases"]["get"]["parameters"]["query"];
 
-export async function listCases(token: AccessToken, filters: ListCaseFilters): Promise<CaseSummary[]> {
+export async function listCases(token: AccessToken, filters: ListCaseFilters, limit?: number, start?: string): Promise<CaseListPage> {
   const url = new URL(endpoints.cases());
   if (filters) {
     Object.entries(filters).forEach(([property, value]) => {
@@ -91,6 +92,12 @@ export async function listCases(token: AccessToken, filters: ListCaseFilters): P
         url.searchParams.append(property, value.toString());
       }
     })
+  }
+  if (limit) {
+    url.searchParams.append("limit", limit.toString());
+  }
+  if (start) {
+    url.searchParams.append("start", start);
   }
 
   const response = await httpRequest(url, {
@@ -100,7 +107,7 @@ export async function listCases(token: AccessToken, filters: ListCaseFilters): P
       "Content-Type": "application/json",
     },
   });
-  return await response.json() as CaseSummary[];
+  return await response.json() as CaseListPage;
 }
 
 export async function getCase(token: AccessToken, caseId: string): Promise<Case> {
