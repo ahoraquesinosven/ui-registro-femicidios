@@ -18,6 +18,8 @@ We use a dockerized development environment, so you will need [docker](https://w
     * Run `docker compose up` to run the server
 
 
+* Run `./bin/setup-local-env`. This creates a `.env` file pinning your host UID/GID so the dev container writes files as you instead of root.
+
 * Run `docker compose up`. This will take a bit the first time since the docker images need to be built or downloaded. Once done, the website can be accessed at http://localhost:5173.
 
 ### AQSNV API

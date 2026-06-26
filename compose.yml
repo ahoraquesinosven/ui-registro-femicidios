@@ -1,7 +1,7 @@
 services:
   dev:
     image: "observatorio/ui-registro-femicidios"
-    user: "${UID}:${GID}"
+    user: "${HOST_UID}:${HOST_GID}"
     build:
       context: .
       target: development
