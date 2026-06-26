@@ -228,6 +228,7 @@ type FeedListProps = {
 function FeedList({name, status}: FeedListProps) {
   const query = useFeedQuery(status);
   const {hasNextPage, isFetching, fetchNextPage} = query;
+  const scrollRootRef = useRef(null);
   const observerTarget = useRef(null);
 
   useEffect(() => {
@@ -236,14 +237,19 @@ function FeedList({name, status}: FeedListProps) {
       return;
     }
 
-    // Default threshold: fire as soon as the sentinel enters the viewport,
-    // i.e. when the user reaches the end of the list. Re-observing on state
-    // change re-fires if the sentinel is still visible after a page loads.
-    const observer = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasNextPage && !isFetching) {
-        fetchNextPage();
-      }
-    });
+    // Measure against the scrollable list container (not the viewport) so the
+    // sentinel triggers when the user reaches the bottom of the internally
+    // scrolled list, regardless of where the container sits on the page.
+    // Re-observing on state change re-fires if the sentinel is still visible
+    // after a page loads.
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetching) {
+          fetchNextPage();
+        }
+      },
+      {root: scrollRootRef.current},
+    );
 
     observer.observe(target);
     return () => observer.disconnect();
@@ -251,7 +257,7 @@ function FeedList({name, status}: FeedListProps) {
 
   return (
     <Grid item xs={12} md={4}>
-      <Paper sx={{p: 1, maxHeight: '100vh', overflowY: 'auto', backgroundColor: "#e2e3e5"}}>
+      <Paper ref={scrollRootRef} sx={{p: 1, maxHeight: '100vh', overflowY: 'auto', backgroundColor: "#e2e3e5"}}>
         <Typography variant="h5" sx={{my: 2}}>
           {name} ({query.data?.pages[0]?.total})
         </Typography>
@@ -269,7 +275,11 @@ function FeedList({name, status}: FeedListProps) {
         {query.isFetchingNextPage && (
           <BlockLoader />
         )}
-        <Box ref={observerTarget} />
+        {/* Sentinel for infinite scroll. Needs real height (not 0): at the very
+            bottom of the scroll container the last sub-pixel can't be reached,
+            so a 0/1px target's intersection ratio rounds to 0 and the observer
+            never fires. */}
+        <Box ref={observerTarget} sx={{height: 10}} />
       </Paper>
     </Grid>
   );
