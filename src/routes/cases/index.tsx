@@ -181,7 +181,7 @@ export default function CasesIndex() {
       </form>
 
       <Paper sx={{ mt: 2 }}>
-        <TableContainer ref={scrollRootRef} sx={{ maxHeight: '60vh' }}>
+        <TableContainer ref={scrollRootRef} sx={{ maxHeight: '55vh' }}>
           <Table size="small" stickyHeader>
             <TableHead sx={{
               "& th": {
