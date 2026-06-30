@@ -1,0 +1,88 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## About
+
+Internal web app for the femicide registry at Observatorio de las Violencias de Género "Ahora Que Sí Nos Ven". Operators use it to register and edit femicide cases.
+
+## Commands
+
+Development runs inside Docker — the host needs no Node.js installed.
+
+```bash
+# Start the dev server (http://localhost:5173)
+docker compose up
+
+# Type-check + lint (this is the test suite)
+docker compose run website npm run test
+
+# Build for production
+docker compose run website npm run build
+
+# Regenerate API types after updating the OpenAPI spec
+curl http://localhost:8080/v1/openapi.json > ./src/api/aqsnv/v1-openapi.json
+docker compose run website npm run api-types
+```
+
+Lint runs with `--max-warnings 0`, so zero warnings are allowed.
+
+## Architecture
+
+**Tech stack:** React 18, TypeScript, Vite, MUI v6, TanStack Form v1, React Query v3, React Router v6, Dayjs.
+
+**Path alias:** `@/` maps to `src/`.
+
+### API layer (`src/api/aqsnv/`)
+
+- `v1.ts` — generated TypeScript types from the OpenAPI spec (do not edit manually)
+- `v1-openapi.json` — source OpenAPI document used to generate `v1.ts`
+- `cases.ts`, `auth.ts`, `feed.ts`, `profiles.ts` — typed API wrappers that re-export enums from `v1.ts` and expose fetch functions using `src/utils/http.ts`
+
+All enums used in the form come from `v1.ts` via re-exports in `cases.ts`.
+
+### Form system (`src/routes/cases/`)
+
+The case form is the core of the app. Its data flow:
+
+1. **`formValues.tsx`** — single source of truth for form shape:
+   - `defaultFormValues` — initial values for the create form
+   - `formValuesToCase()` — converts form state → `Case` API payload
+   - `caseToFormValues()` — converts API `Case` → form state (used by edit)
+
+2. **`components/CaseForm.tsx`** — shared form shell used by both new and edit routes; handles submission, error display, and the tabbed layout (Case / Victim / Aggressor tabs)
+
+3. **Field group components** (`CaseFields`, `VictimFields`, `AggressorFields`) — render the actual fields using `form.AppField`. Each exports a `controlledFields` set so `CaseForm` can show a tab-level error indicator.
+
+### Form hook (`src/hooks/form.tsx`)
+
+Creates `useAppForm` and `form.AppField` via TanStack Form's `createFormHook`. All form fields use the pre-registered components:
+
+| Component name | Used for |
+|---|---|
+| `Text` | Free text input |
+| `Combo` | Single-select dropdown |
+| `MultiCombo` | Multi-select dropdown |
+| `Checkbox` | Boolean toggle |
+| `YesNoUnknown` | Tri-state: yes / no / unknown (maps to `boolean \| undefined`) |
+| `RadioGroup` | Exclusive choice |
+| `DatePicker` | Date input |
+
+`YesNoUnknown` maps to `boolean | undefined` in the API via `yesNoUnknownToBoolean` / `booleanToYesNoUnknown` in `src/utils/cast.ts`.
+
+### Adding a new field to the case form
+
+1. Add the field to `defaultFormValues` in `formValues.tsx`
+2. Add conversion logic in `formValuesToCase()` (form → API)
+3. Add reverse conversion in `caseToFormValues()` (API → form)
+4. Add the new enum to the re-exports in `cases.ts` if it's an enum type
+5. Add `form.AppField` in the relevant field group component (`CaseFields`, `VictimFields`, or `AggressorFields`)
+6. Add the field name to the component's `controlledFields` set for tab-level error tracking
+
+### Conditional field visibility
+
+Use `form.Subscribe` to show/hide fields based on other field values. See `wasJudicialized` → `judicialMeasures` in `VictimFields.tsx` as the canonical pattern.
+
+### Auth
+
+OAuth callback lives at `/oauth/cb`. `AccessToken` is provided via context (`src/hooks/auth.ts`) and passed explicitly to every API call.
