@@ -4,6 +4,7 @@ import {useAccessToken} from '@/hooks/auth';
 import {useParams} from 'react-router-dom';
 import {defaultFormValues, caseToFormValues, formValuesToCase} from "@/routes/cases/formValues";
 import CaseForm from "@/routes/cases/components/CaseForm";
+import useDocumentTitle from "@/hooks/documentTitle";
 
 function useParamCaseId() {
     const {caseId} = useParams();
@@ -15,6 +16,8 @@ function useParamCaseId() {
 }
 
 export default function CasesEdit() {
+  useDocumentTitle("Editar Caso");
+
     const caseId = useParamCaseId();
     const accessToken = useAccessToken();
     const {data, isLoading} = useQuery({
