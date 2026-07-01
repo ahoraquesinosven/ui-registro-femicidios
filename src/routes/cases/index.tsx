@@ -23,6 +23,7 @@ import { useInfiniteQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { BlockLoader } from '@/components/Loading';
 import { allCaseCategories, allCaseMurderWeapons, allCaseVictimBondsAggressor, allProvinces } from './formValues';
+import useDocumentTitle from '@/hooks/documentTitle';
 
 //es mas que solo el default del formulario, tambien como usamos typyscript se usa para inferir el tipo
 const defaultSearchOptions = {
@@ -54,6 +55,8 @@ const searchOptionsToListCaseFilters = (searchOptions: typeof defaultSearchOptio
 const defaultListCaseFilters = searchOptionsToListCaseFilters(defaultSearchOptions);
 
 export default function CasesIndex() {
+  useDocumentTitle("Buscar casos");
+
   const [filters, setFilters] = useState(defaultListCaseFilters);
 
   const searchForm = useAppForm({
