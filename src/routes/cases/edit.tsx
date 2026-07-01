@@ -16,7 +16,7 @@ function useParamCaseId() {
 }
 
 export default function CasesEdit() {
-  useDocumentTitle("Editar Caso");
+  useDocumentTitle("Editar caso");
 
     const caseId = useParamCaseId();
     const accessToken = useAccessToken();

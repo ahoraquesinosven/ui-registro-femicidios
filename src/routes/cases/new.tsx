@@ -5,7 +5,7 @@ import { useAccessToken } from "@/hooks/auth";
 import useDocumentTitle from "@/hooks/documentTitle";
 
 export default function CasesNew() {
-    useDocumentTitle("Nuevo Caso");
+    useDocumentTitle("Crear caso");
     const accessToken = useAccessToken();
 
     return (

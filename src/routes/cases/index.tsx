@@ -55,7 +55,7 @@ const searchOptionsToListCaseFilters = (searchOptions: typeof defaultSearchOptio
 const defaultListCaseFilters = searchOptionsToListCaseFilters(defaultSearchOptions);
 
 export default function CasesIndex() {
-  useDocumentTitle("Casos");
+  useDocumentTitle("Buscar casos");
 
   const [filters, setFilters] = useState(defaultListCaseFilters);
 
