@@ -1,57 +1,43 @@
-import {createContext, useContext, useEffect} from "react";
-import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
-import localforage from "localforage";
-import {generatePKCEPair, buildAuthorizationUrl, exchangeAuthorizationCode} from '@/api/aqsnv/auth.ts';
+import { createContext, useContext, useRef } from "react";
 import { AccessToken } from "@/types/auth";
 
-export const AccessTokenContext = createContext(new AccessToken());
-
-export const AccessTokenProvider = AccessTokenContext.Provider
-
-export function useAccessToken() {
-  return useContext(AccessTokenContext);
+export interface AuthContextValue {
+  token: AccessToken;
+  login: (rawToken: string) => void;
 }
 
-export function RequiresAuthorization({ children } : { children: React.ReactNode }) {
-  const accessToken = useAccessToken();
-  const location = useLocation();
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-  useEffect(() => {
-    (async () => {
-      if(!accessToken.isAvailable()) {
-        const pkce = await generatePKCEPair();
-        await localforage.setItem("pkce", pkce.verifier);
-        const authorizationUrl = await buildAuthorizationUrl(location.pathname, pkce);
-        window.location.replace(authorizationUrl);
-      }
-    })();
-  });
+export const AuthContextProvider = AuthContext.Provider;
 
-  if (!accessToken.isAvailable()) {
-    return;
+export function useAuth(): AuthContextValue {
+  const ctx = useContext(AuthContext);
+  if (!ctx) {
+    throw new Error("useAuth must be used within an AuthProvider");
   }
-
-  return children;
+  return ctx;
 }
 
-export function AuthorizationCallback() : React.ReactNode {
-  const accessToken = useAccessToken();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-
-  useEffect(() => {
-    (async () => {
-      const code = searchParams.get("code") || "";
-      const state = searchParams.get("state") || "/";
-
-      const pkceVerifier = await localforage.getItem<string>("pkce") || "";
-      const response = await exchangeAuthorizationCode(code, pkceVerifier);
-      accessToken.accessToken = response.access_token;
-
-      navigate(state);
-    })();
-  });
-
-  return;
+export function useAccessToken(): AccessToken {
+  return useAuth().token;
 }
 
+// The access token is a deliberately imperative in-memory store, not React render
+// state: the router's beforeLoad guard must read it synchronously during navigation.
+// A single stable instance mutated in place means context.auth.token reflects login()
+// the instant it runs, so the post-login redirect passes the guard. Lost on reload,
+// as required. Nothing mounted at login time reads the token (authenticated components
+// mount only after the post-login redirect), so no reactivity is needed here.
+export function useAuthProviderValue(): AuthContextValue {
+  const ref = useRef<AuthContextValue>();
+  if (!ref.current) {
+    const token = new AccessToken();
+    ref.current = {
+      token,
+      login: (rawToken: string) => {
+        token.accessToken = rawToken;
+      },
+    };
+  }
+  return ref.current;
+}

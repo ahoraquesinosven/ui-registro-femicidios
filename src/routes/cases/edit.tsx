@@ -1,24 +1,17 @@
 import {useQuery} from "react-query";
 import {getCase, updateCase} from "@/api/aqsnv/cases";
 import {useAccessToken} from '@/hooks/auth';
-import {useParams} from 'react-router-dom';
+import {getRouteApi} from '@tanstack/react-router';
 import {defaultFormValues, caseToFormValues, formValuesToCase} from "@/routes/cases/formValues";
 import CaseForm from "@/routes/cases/components/CaseForm";
 import useDocumentTitle from "@/hooks/documentTitle";
 
-function useParamCaseId() {
-    const {caseId} = useParams();
-    if (!caseId) {
-        throw new Error("Invalid state, edit case without case id");
-    }
-
-    return caseId;
-}
+const routeApi = getRouteApi('/_authenticated/cases/$caseId/edit');
 
 export default function CasesEdit() {
   useDocumentTitle("Editar caso");
 
-    const caseId = useParamCaseId();
+    const {caseId} = routeApi.useParams();
     const accessToken = useAccessToken();
     const {data, isLoading} = useQuery({
         queryKey: ["case", caseId],

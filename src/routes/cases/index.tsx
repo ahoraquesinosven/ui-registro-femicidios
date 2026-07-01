@@ -13,17 +13,24 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import EditIcon from '@mui/icons-material/Edit';
 import dayjs, { Dayjs } from 'dayjs';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, forwardRef, useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
-import { Link } from 'react-router-dom';
+import { createLink } from '@tanstack/react-router';
 import { BlockLoader } from '@/components/Loading';
 import { allCaseCategories, allCaseMurderWeapons, allCaseVictimBondsAggressor, allProvinces } from './formValues';
 import useDocumentTitle from '@/hooks/documentTitle';
+
+// MUI's `component` polymorphism erases TanStack Router's typed `to`/`params`,
+// so wrap IconButton with createLink to get a type-safe, anchor-rendering link.
+const MuiIconButtonLink = forwardRef<HTMLAnchorElement, IconButtonProps<'a'>>(
+  (props, ref) => <IconButton ref={ref} component="a" {...props} />,
+);
+const IconButtonLink = createLink(MuiIconButtonLink);
 
 //es mas que solo el default del formulario, tambien como usamos typyscript se usa para inferir el tipo
 const defaultSearchOptions = {
@@ -211,9 +218,9 @@ export default function CasesIndex() {
                   {page.page.map((item) => (
                     <TableRow key={item.id} hover>
                       <TableCell>
-                        <IconButton component={Link} to={`/cases/${item.id}/edit`}>
+                        <IconButtonLink to="/cases/$caseId/edit" params={{ caseId: String(item.id) }}>
                           <EditIcon />
-                        </IconButton>
+                        </IconButtonLink>
                       </TableCell>
                       <TableCell>{item.caseCategory}</TableCell>
                       <TableCell>{item.wasItAnAttempt ? "Sí" : "No"}</TableCell>

@@ -6,8 +6,7 @@ import "dayjs/locale/es";
 import dayjsUtc from 'dayjs/plugin/utc';
 import React from "react";
 import {QueryClient, QueryClientProvider} from "react-query";
-import {AccessTokenProvider} from './hooks/auth.ts';
-import {AccessToken} from "./types/auth.ts";
+import {AuthContextProvider, useAuthProviderValue} from './hooks/auth.ts';
 
 dayjs.extend(dayjsUtc);
 
@@ -26,15 +25,16 @@ const queryClient = new QueryClient(
 );
 
 export default function Providers({children}: ProvidersProps) {
+  const auth = useAuthProviderValue();
   return (
     <React.Fragment>
       <CssBaseline />
       <QueryClientProvider client={queryClient}>
-        <AccessTokenProvider value={new AccessToken()}>
+        <AuthContextProvider value={auth}>
           <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
             {children}
           </LocalizationProvider>
-        </AccessTokenProvider>
+        </AuthContextProvider>
       </QueryClientProvider>
     </React.Fragment>
   );
