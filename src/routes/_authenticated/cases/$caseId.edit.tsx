@@ -3,7 +3,7 @@ import CasesEdit from '@/features/cases/CaseEdit';
 
 export const Route = createFileRoute('/_authenticated/cases/$caseId/edit')({
   head: () => ({
-    meta: [{ title: 'Femicidios - Editar caso' }],
+    meta: [{ title: 'RF - Editar caso' }],
   }),
   component: RouteComponent,
 });

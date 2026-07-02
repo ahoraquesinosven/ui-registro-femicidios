@@ -5,7 +5,7 @@ import { parseCaseSearch } from '@/features/cases/searchFilters';
 export const Route = createFileRoute('/_authenticated/cases/')({
   validateSearch: parseCaseSearch,
   head: () => ({
-    meta: [{ title: 'Femicidios - Buscar casos' }],
+    meta: [{ title: 'RF - Buscar casos' }],
   }),
   component: RouteComponent,
 });
