@@ -78,57 +78,57 @@ export default function CasesIndex({ search, onSearchChange }: CasesListProps) {
         searchForm.handleSubmit();
       }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={3}>
+          <Grid size={{ xs: 12, sm: 3 }}>
             <searchForm.AppField
               name='fromDate'
               children={(field) => <field.DatePicker label="Desde" clearable />} />
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid size={{ xs: 12, sm: 3 }}>
             <searchForm.AppField
               name='toDate'
               children={(field) => <field.DatePicker label="Hasta" clearable />} />
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid size={{ xs: 12, sm: 3 }}>
             <searchForm.AppField
               name='province'
               children={(field) => <field.Combo label="Provincia" options={allProvinces} />} />
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid size={{ xs: 12, sm: 3 }}>
             <searchForm.AppField
               name='location'
               children={(field) => <field.Text label="Localidad" />} />
           </Grid>
 
-          <Grid item xs={12} sm={3}>
+          <Grid size={{ xs: 12, sm: 3 }}>
             <searchForm.AppField
               name='caseCategory'
               children={(field) => <field.Combo label="Categoría" options={allCaseCategories} />} />
           </Grid>
 
-          <Grid item xs={12} sm={3}>
+          <Grid size={{ xs: 12, sm: 3 }}>
             <searchForm.AppField
               name='wasItAnAttempt'
               children={(field) => <field.YesNoUnknown label="¿Fue un intento?" />} />
           </Grid>
 
 
-          <Grid item xs={12} sm={3}>
+          <Grid size={{ xs: 12, sm: 3 }}>
             <searchForm.AppField
               name='murderWeapon'
               children={(field) => <field.Combo label="Forma" options={allCaseMurderWeapons} />} />
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid size={{ xs: 12, sm: 3 }}>
             <searchForm.AppField
               name='victimBondAggressor'
               children={(field) => <field.Combo label="Vínculo con la víctima" options={allCaseVictimBondsAggressor} />} />
           </Grid>
 
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <searchForm.AppField
               name='victimFullName'
               children={(field) => <field.Text label="Nombre de la víctima" />} />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <searchForm.AppField
               name='aggressorFullName'
               children={(field) => <field.Text label="Nombre del agresor" />} />

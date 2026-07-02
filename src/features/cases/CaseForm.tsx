@@ -62,7 +62,7 @@ export default function CaseForm({defaultValues, onSubmit, reset}: CaseFormProps
                         centered: true,
                     }}
                     boxProps={{
-                        py: 2,
+                        sx: { py: 2 },
                     }}
                     sections={[
                         {

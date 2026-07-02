@@ -4,7 +4,7 @@ import { TabsProps } from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { Box } from "@mui/material";
 import { BoxProps } from "@mui/material";
-import ErrorOutline from '@mui/icons-material/ErrorOutline';
+import ErrorOutline from '@mui/icons-material/ErrorOutlineOutlined';
 
 export type TabbedSectionsProps = {
   initialTab?: number,
