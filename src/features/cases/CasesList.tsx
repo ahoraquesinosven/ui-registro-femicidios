@@ -11,24 +11,16 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import EditIcon from '@mui/icons-material/Edit';
 import dayjs from '@/lib/dayjs';
-import { Fragment, forwardRef, useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { useInfiniteQuery } from 'react-query';
-import { createLink } from '@tanstack/react-router';
+import { IconButtonLink } from '@/components/links';
 import { BlockLoader } from '@/components/Loading';
 import { allCaseCategories, allCaseMurderWeapons, allCaseVictimBondsAggressor, allProvinces } from './formValues';
 import { defaultSearchOptions, searchOptionsToFilters, filtersToSearchOptions } from './searchFilters';
-
-// MUI's `component` polymorphism erases TanStack Router's typed `to`/`params`,
-// so wrap IconButton with createLink to get a type-safe, anchor-rendering link.
-const MuiIconButtonLink = forwardRef<HTMLAnchorElement, IconButtonProps<'a'>>(
-  (props, ref) => <IconButton ref={ref} component="a" {...props} />,
-);
-const IconButtonLink = createLink(MuiIconButtonLink);
 
 type CasesListProps = {
   search: ListCaseFilters,

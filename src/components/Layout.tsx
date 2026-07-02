@@ -5,8 +5,8 @@ import { fetchCurrentUser } from '@/api/aqsnv/profiles';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import { ButtonLink } from '@/components/links';
 
 function UserPic() {
   const { data } = useQuery({
@@ -33,15 +33,15 @@ function Nav() {
           Registro de Femicidios
         </Typography>
         <Box sx={{ flexGrow: 1 }}>
-          <Button color="inherit" component={RouterLink} to="/cases/new">
+          <ButtonLink color="inherit" to="/cases/new">
             Cargar caso
-          </Button>
-          <Button color="inherit" component={RouterLink} to="/cases" sx={{ ml: 1 }}>
+          </ButtonLink>
+          <ButtonLink color="inherit" to="/cases" sx={{ ml: 1 }}>
             Consultar casos
-          </Button>
-          <Button color="inherit" component={RouterLink} to="/" sx={{ ml: 1 }}>
+          </ButtonLink>
+          <ButtonLink color="inherit" to="/" sx={{ ml: 1 }}>
             Noticias
-          </Button>
+          </ButtonLink>
         </Box>
         <UserPic />
       </Toolbar>
