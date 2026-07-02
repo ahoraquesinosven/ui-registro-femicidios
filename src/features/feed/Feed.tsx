@@ -193,7 +193,7 @@ function FeedItemCard({item}: FeedItemCardProps) {
         />
       )}
       <CardContent sx={{pt: "0.5em"}}>
-        <Link variant="subtitle1" fontWeight="bold" gutterBottom href={item.link} target="_blank">
+        <Link variant="subtitle1" gutterBottom href={item.link} target="_blank" sx={{ fontWeight: "bold" }}>
           {item.title} 
         </Link>
         <Typography variant="body2" color="text.secondary" gutterBottom>
@@ -252,7 +252,7 @@ function FeedList({name, status}: FeedListProps) {
   }, [hasNextPage, isFetching, fetchNextPage]);
 
   return (
-    <Grid item xs={12} md={4}>
+    <Grid size={{ xs: 12, md: 4 }}>
       <Paper ref={scrollRootRef} sx={{p: 1, maxHeight: '100vh', overflowY: 'auto', backgroundColor: "#e2e3e5"}}>
         <Typography variant="h5" sx={{my: 2}}>
           {name} ({query.data?.pages[0]?.total})

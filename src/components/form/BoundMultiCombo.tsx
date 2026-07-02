@@ -30,11 +30,12 @@ export default function BoundMultiCombo({options, label, helpText}: BoundMultiCo
           error={!field.state.meta.isValid}
           helperText={field.state.meta.errors.join(", ")}
           slotProps={{
+            ...params.slotProps,
             input: {
-              ...params.InputProps,
+              ...params.slotProps.input,
               endAdornment: (
                 <>
-                  {params.InputProps.endAdornment}
+                  {params.slotProps.input.endAdornment}
                   {helpText && (
                     <InputAdornment position="end">
                       <FieldHelp title={label} helpText={helpText} />
