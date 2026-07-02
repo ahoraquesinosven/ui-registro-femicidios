@@ -1,6 +1,5 @@
-import { CaseCategory, CaseMurderWeapon, CaseVictimBondAggressor, ListCaseFilters, listCases, Province } from '@/api/aqsnv/cases';
+import { ListCaseFilters, listCases } from '@/api/aqsnv/cases';
 import { useAppForm } from '@/hooks/form';
-import { stringToOptionalEnum, YesNoUnknown, yesNoUnknownToBoolean } from '@/utils/cast';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -16,12 +15,13 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import EditIcon from '@mui/icons-material/Edit';
-import dayjs, { type Dayjs } from '@/lib/dayjs';
-import { Fragment, forwardRef, useEffect, useRef, useState } from 'react';
+import dayjs from '@/lib/dayjs';
+import { Fragment, forwardRef, useEffect, useRef } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import { createLink } from '@tanstack/react-router';
 import { BlockLoader } from '@/components/Loading';
 import { allCaseCategories, allCaseMurderWeapons, allCaseVictimBondsAggressor, allProvinces } from './formValues';
+import { defaultSearchOptions, searchOptionsToFilters, filtersToSearchOptions } from './searchFilters';
 
 // MUI's `component` polymorphism erases TanStack Router's typed `to`/`params`,
 // so wrap IconButton with createLink to get a type-safe, anchor-rendering link.
@@ -30,49 +30,22 @@ const MuiIconButtonLink = forwardRef<HTMLAnchorElement, IconButtonProps<'a'>>(
 );
 const IconButtonLink = createLink(MuiIconButtonLink);
 
-//es mas que solo el default del formulario, tambien como usamos typyscript se usa para inferir el tipo
-const defaultSearchOptions = {
-  fromDate: dayjs().startOf("year"),
-  toDate: null as Dayjs | null,
-  province: null as string | null,
-  location: "",
-  caseCategory: null as string | null,
-  wasItAnAttempt: "unknown" as YesNoUnknown,
-  murderWeapon: null as string | null,
-  victimBondAggressor: null as string | null,
-  victimFullName: "",
-  aggressorFullName: "",
+type CasesListProps = {
+  search: ListCaseFilters,
+  onSearchChange: (search: ListCaseFilters) => void,
 };
 
-const searchOptionsToListCaseFilters = (searchOptions: typeof defaultSearchOptions): ListCaseFilters => ({
-  fromDate: searchOptions.fromDate?.format("YYYY-MM-DD"),
-  toDate: searchOptions.toDate?.format("YYYY-MM-DD"),
-  province: stringToOptionalEnum<Province>(searchOptions.province),
-  location: searchOptions.location.trim(),
-  caseCategory: stringToOptionalEnum<CaseCategory>(searchOptions.caseCategory),
-  wasItAnAttempt: yesNoUnknownToBoolean(searchOptions.wasItAnAttempt),
-  murderWeapon: stringToOptionalEnum<CaseMurderWeapon>(searchOptions.murderWeapon),
-  victimBondAggressor: stringToOptionalEnum<CaseVictimBondAggressor>(searchOptions.victimBondAggressor),
-  victimFullName: searchOptions.victimFullName.trim(),
-  aggressorFullName: searchOptions.aggressorFullName.trim(),
-});
-
-const defaultListCaseFilters = searchOptionsToListCaseFilters(defaultSearchOptions);
-
-export default function CasesIndex() {
-  const [filters, setFilters] = useState(defaultListCaseFilters);
-
+export default function CasesIndex({ search, onSearchChange }: CasesListProps) {
   const searchForm = useAppForm({
-    defaultValues: defaultSearchOptions,
+    defaultValues: filtersToSearchOptions(search),
     onSubmit: ({ value }) => {
-      const newFilters = searchOptionsToListCaseFilters(value);
-      setFilters(newFilters);
+      onSearchChange(searchOptionsToFilters(value));
     }
   });
 
   const query = useInfiniteQuery({
-    queryKey: ["cases", filters],
-    queryFn: ({ pageParam }) => listCases(filters, 100, pageParam),
+    queryKey: ["cases", search],
+    queryFn: ({ pageParam }) => listCases(search, 100, pageParam),
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
   });
 
@@ -179,7 +152,8 @@ export default function CasesIndex() {
           sx={{ m: 2 }}
           onClick={(event) => {
             event.preventDefault();
-            searchForm.reset();
+            searchForm.reset(defaultSearchOptions);
+            onSearchChange({});
           }}>
           Limpiar filtros
         </Button>

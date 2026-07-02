@@ -5,5 +5,10 @@ export const Route = createFileRoute('/_authenticated/cases/$caseId/edit')({
   head: () => ({
     meta: [{ title: 'Femicidios - Editar caso' }],
   }),
-  component: CasesEdit,
+  component: RouteComponent,
 });
+
+function RouteComponent() {
+  const { caseId } = Route.useParams();
+  return <CasesEdit caseId={caseId} />;
+}

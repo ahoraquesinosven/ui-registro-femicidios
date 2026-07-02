@@ -42,8 +42,8 @@ Lint runs with `--max-warnings 0`, so zero warnings are allowed.
   - `reactQuery.ts` — the preconfigured `queryClient` singleton.
   - `reactRouter.ts` — the preconfigured TanStack `router` plus its `Register` type augmentation.
   - `auth.ts` — the in-memory `authToken` singleton + `login()`, read by the HTTP layer and the router guards.
-- **`src/routes/`** — TanStack Router **file-based route files** (the `routesDirectory` in `vite.config.ts`). These are thin: routing config (`createFileRoute`, `beforeLoad`, `head`) plus a `component` pointing at a page component. `routeTree.gen.ts` (at `src/` root) is auto-generated from this dir — do not edit by hand.
-- **`src/features/<domain>/`** — the page components (and their sub-components) that route files render, e.g. `features/cases/`, `features/feed/`.
+- **`src/routes/`** — TanStack Router **file-based route files** (the `routesDirectory` in `vite.config.ts`). These are thin and own **all** router concerns: routing config (`createFileRoute`, `beforeLoad`, `head`, `validateSearch`) and a `component` that acts as an adapter — it reads router state (`Route.useSearch()` / `Route.useParams()` / `Route.useNavigate()`) and passes plain props + domain callbacks (e.g. `search` + `onSearchChange`) down to the feature component. `routeTree.gen.ts` (at `src/` root) is auto-generated from this dir — do not edit by hand.
+- **`src/features/<domain>/`** — the page components (and their sub-components) that route files render, e.g. `features/cases/`, `features/feed/`. They are **router-agnostic**: no route ids, no `useSearch`/`useParams`/`getRouteApi` — router state arrives as props (a typed `<Link>` for cross-route navigation is fine).
 - **`src/components/`** — shared/reusable UI (`Loading`, `UserAvatar`, `Layout`, the `form/` inputs). `Layout` is the authenticated app shell (nav + `<Outlet />`).
 
 ### Document head / titles

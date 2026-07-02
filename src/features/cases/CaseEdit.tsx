@@ -1,13 +1,9 @@
 import {useQuery} from "react-query";
 import {getCase, updateCase} from "@/api/aqsnv/cases";
-import {getRouteApi} from '@tanstack/react-router';
 import {defaultFormValues, caseToFormValues, formValuesToCase} from "./formValues";
 import CaseForm from "./CaseForm";
 
-const routeApi = getRouteApi('/_authenticated/cases/$caseId/edit');
-
-export default function CasesEdit() {
-    const {caseId} = routeApi.useParams();
+export default function CasesEdit({caseId}: {caseId: string}) {
     const {data, isLoading} = useQuery({
         queryKey: ["case", caseId],
         queryFn: async () => {
