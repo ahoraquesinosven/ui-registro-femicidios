@@ -8,6 +8,25 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { ButtonLink } from '@/components/links';
 
+const navLinkActiveProps = {
+  sx: { backgroundColor: 'rgba(255, 255, 255, 0.16)', fontWeight: 600 },
+};
+// Match on pathname only: `exact` so "/" (Noticias) doesn't match every route, and
+// `includeSearch: false` so "Consultar casos" stays highlighted with filters in the URL.
+const navLinkActiveOptions = { exact: true, includeSearch: false } as const;
+
+// The Toolbar links differ only in their destination — preset the shared color and
+// active styling here. Typed as `typeof ButtonLink` (a TanStack LinkComponent) so the
+// typed `to`/`params` survive the wrapper.
+const AppBarLink: typeof ButtonLink = (props) => (
+  <ButtonLink
+    color="inherit"
+    activeProps={navLinkActiveProps}
+    activeOptions={navLinkActiveOptions}
+    {...props}
+  />
+);
+
 function UserPic() {
   const { data } = useQuery({
     queryKey: ["me"],
@@ -32,16 +51,10 @@ function Nav() {
         >
           Registro de Femicidios
         </Typography>
-        <Box sx={{ flexGrow: 1 }}>
-          <ButtonLink color="inherit" to="/cases/new">
-            Cargar caso
-          </ButtonLink>
-          <ButtonLink color="inherit" to="/cases" sx={{ ml: 1 }}>
-            Consultar casos
-          </ButtonLink>
-          <ButtonLink color="inherit" to="/" sx={{ ml: 1 }}>
-            Noticias
-          </ButtonLink>
+        <Box sx={{ flexGrow: 1, display: 'flex', gap: 1 }}>
+          <AppBarLink to="/cases/new">Cargar caso</AppBarLink>
+          <AppBarLink to="/cases">Consultar casos</AppBarLink>
+          <AppBarLink to="/">Noticias</AppBarLink>
         </Box>
         <UserPic />
       </Toolbar>
