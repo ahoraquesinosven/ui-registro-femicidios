@@ -41,6 +41,7 @@ Lint runs with `--max-warnings 0`, so zero warnings are allowed.
   - `dayjs.ts` — extends dayjs with the `utc` plugin, loads the `es` locale, and re-exports `dayjs`. **Always import dayjs from `@/lib/dayjs`, never from `'dayjs'`** (enforced by a `no-restricted-imports` lint rule) — this guarantees the plugin/locale are registered before any module-level `dayjs().utc()` runs, regardless of import order or code-splitting.
   - `reactQuery.ts` — the preconfigured `queryClient` singleton.
   - `reactRouter.ts` — the preconfigured TanStack `router` plus its `Register` type augmentation.
+  - `auth.ts` — the in-memory `authToken` singleton + `login()`, read by the HTTP layer and the router guards.
 - **`src/routes/`** — TanStack Router **file-based route files** (the `routesDirectory` in `vite.config.ts`). These are thin: routing config (`createFileRoute`, `beforeLoad`, `head`) plus a `component` pointing at a page component. `routeTree.gen.ts` (at `src/` root) is auto-generated from this dir — do not edit by hand.
 - **`src/features/<domain>/`** — the page components (and their sub-components) that route files render, e.g. `features/cases/`, `features/feed/`.
 - **`src/components/`** — shared/reusable UI (`Loading`, `UserAvatar`, `Layout`, the `form/` inputs). `Layout` is the authenticated app shell (nav + `<Outlet />`).
@@ -101,4 +102,4 @@ Use `form.Subscribe` to show/hide fields based on other field values. See `wasJu
 
 ### Auth
 
-OAuth callback lives at `/oauth/cb`. `AccessToken` is provided via context (`src/hooks/auth.ts`) and passed explicitly to every API call.
+OAuth (PKCE) callback lives at `/oauth/cb`. The access token is an in-memory module singleton in `src/lib/auth.ts` (`authToken` + `login()`), lost on reload. Authenticated API wrappers call `authorizedRequest()` (`src/utils/http.ts`), which attaches the `Bearer` header from that singleton — **components and API signatures never handle the token**. The router's `_authenticated` guard reads `authToken.isAvailable()` and `/oauth/cb` calls `login()`, both importing the singleton directly (auth is not kept in the router context). Unauthenticated calls (the OAuth handshake in `api/aqsnv/auth.ts`) use `httpRequest()` directly.

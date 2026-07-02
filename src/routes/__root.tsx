@@ -1,11 +1,6 @@
-import { createRootRouteWithContext, HeadContent, Outlet } from '@tanstack/react-router';
-import type { AuthContextValue } from '@/hooks/auth';
+import { createRootRoute, HeadContent, Outlet } from '@tanstack/react-router';
 
-export interface RouterContext {
-  auth: AuthContextValue;
-}
-
-export const Route = createRootRouteWithContext<RouterContext>()({
+export const Route = createRootRoute({
   head: () => ({
     meta: [{ title: 'Registro de Femicidios' }],
   }),

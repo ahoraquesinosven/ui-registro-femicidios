@@ -1,6 +1,5 @@
 import config from "@/config/config";
-import {AccessToken} from "@/types/auth";
-import {httpRequest} from "@/utils/http";
+import {authorizedRequest} from "@/utils/http";
 import type {paths, components} from "./v1";
 
 export type Case = components["schemas"]["Case"];
@@ -30,12 +29,11 @@ const endpoints = {
 
 export type CaseValidationResult = { ok: true } | { ok: false, errors: ValidationErrors };
 
-export async function createCase(token: AccessToken, entity: Case): Promise<CaseValidationResult> {
+export async function createCase(entity: Case): Promise<CaseValidationResult> {
   const payload = JSON.stringify(entity);
-  const response = await httpRequest(endpoints.cases(), {
+  const response = await authorizedRequest(endpoints.cases(), {
     method: 'post',
     headers: {
-      "Authorization": token.asAuthorizationHeader(),
       "Content-Type": "application/json",
     },
     body: payload,
@@ -55,12 +53,11 @@ export async function createCase(token: AccessToken, entity: Case): Promise<Case
   };
 }
 
-export async function updateCase(token: AccessToken, caseId: string, entity: Case): Promise<CaseValidationResult> {
+export async function updateCase(caseId: string, entity: Case): Promise<CaseValidationResult> {
   const payload = JSON.stringify(entity);
-  const response = await httpRequest(endpoints.case(caseId), {
+  const response = await authorizedRequest(endpoints.case(caseId), {
     method: "put",
     headers: {
-      "Authorization": token.asAuthorizationHeader(),
       "Content-Type": "application/json",
     },
     body: payload,
@@ -84,7 +81,7 @@ export type CaseListItem = components["schemas"]["CaseListItem"];
 export type CaseListPage = components["schemas"]["CaseListPage"];
 export type ListCaseFilters = paths["/v1/cases"]["get"]["parameters"]["query"];
 
-export async function listCases(token: AccessToken, filters: ListCaseFilters, limit?: number, start?: string): Promise<CaseListPage> {
+export async function listCases(filters: ListCaseFilters, limit?: number, start?: string): Promise<CaseListPage> {
   const url = new URL(endpoints.cases());
   if (filters) {
     Object.entries(filters).forEach(([property, value]) => {
@@ -100,23 +97,21 @@ export async function listCases(token: AccessToken, filters: ListCaseFilters, li
     url.searchParams.append("start", start);
   }
 
-  const response = await httpRequest(url, {
+  const response = await authorizedRequest(url, {
     method: 'get',
     headers: {
-      "Authorization": token.asAuthorizationHeader(),
       "Content-Type": "application/json",
     },
   });
   return await response.json() as CaseListPage;
 }
 
-export async function getCase(token: AccessToken, caseId: string): Promise<Case> {
+export async function getCase(caseId: string): Promise<Case> {
   const url = new URL(endpoints.case(caseId));
 
-  const response = await httpRequest(url, {
+  const response = await authorizedRequest(url, {
     method: "get",
     headers: {
-      "Authorization": token.asAuthorizationHeader(),
       "Content-Type": "application/json",
     },
   });

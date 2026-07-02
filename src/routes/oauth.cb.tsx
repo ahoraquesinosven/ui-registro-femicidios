@@ -1,6 +1,7 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import localforage from 'localforage';
 import { exchangeAuthorizationCode } from '@/api/aqsnv/auth';
+import { login } from '@/lib/auth';
 
 interface OAuthCallbackSearch {
   code: string;
@@ -12,10 +13,10 @@ export const Route = createFileRoute('/oauth/cb')({
     code: typeof search.code === 'string' ? search.code : '',
     state: typeof search.state === 'string' ? search.state : '/',
   }),
-  beforeLoad: async ({ context, search }) => {
+  beforeLoad: async ({ search }) => {
     const verifier = (await localforage.getItem<string>('pkce')) || '';
     const response = await exchangeAuthorizationCode(search.code, verifier);
-    context.auth.login(response.access_token);
+    login(response.access_token);
     throw redirect({ to: search.state });
   },
 });

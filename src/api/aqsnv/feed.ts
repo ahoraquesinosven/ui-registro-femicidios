@@ -1,6 +1,5 @@
 import config from "@/config/config";
-import {httpRequest} from "@/utils/http";
-import {AccessToken} from "@/types/auth";
+import {authorizedRequest} from "@/utils/http";
 
 const endpoints = {
   feedItems: () => new URL("/v1/feed/items", config.api.aqsnv.server),
@@ -37,7 +36,7 @@ export type FeedItemPages = {
 
 export type FeedItemState = "backlog" | "inProgress" | "done";
 
-export async function fetchFeedItems(token: AccessToken, state: FeedItemState, limit?: number, start?: string): Promise<FeedItemPages> {
+export async function fetchFeedItems(state: FeedItemState, limit?: number, start?: string): Promise<FeedItemPages> {
   const url = new URL(endpoints.feedItems());
   url.searchParams.append("status", state);
   if (limit) {
@@ -46,77 +45,31 @@ export async function fetchFeedItems(token: AccessToken, state: FeedItemState, l
   if (start) {
     url.searchParams.append("start", start);
   }
-  const response = await httpRequest(url, {
-    headers: {
-      "Authorization": token.asAuthorizationHeader(),
-    },
-  });
+  const response = await authorizedRequest(url);
 
   return response.json();
 }
 
-export async function assignFeedItem(token: AccessToken, feedItemId: number): Promise<void> {
-  await httpRequest(endpoints.feedItemAssignment(feedItemId), {
-    method: 'post',
-    headers: {
-      "Authorization": token.asAuthorizationHeader(),
-    },
-  });
-
-  return;
+export async function assignFeedItem(feedItemId: number): Promise<void> {
+  await authorizedRequest(endpoints.feedItemAssignment(feedItemId), {method: 'post'});
 }
 
-export async function unassignFeedItem(token: AccessToken, feedItemId: number): Promise<void> {
-  await httpRequest(endpoints.feedItemAssignment(feedItemId), {
-    method: 'delete',
-    headers: {
-      "Authorization": token.asAuthorizationHeader(),
-    },
-  });
-
-  return;
+export async function unassignFeedItem(feedItemId: number): Promise<void> {
+  await authorizedRequest(endpoints.feedItemAssignment(feedItemId), {method: 'delete'});
 }
 
-export async function completeFeedItem(token: AccessToken, feedItemId: number): Promise<void> {
-  await httpRequest(endpoints.feedItemCompletion(feedItemId), {
-    method: 'post',
-    headers: {
-      "Authorization": token.asAuthorizationHeader(),
-    },
-  });
-
-  return;
+export async function completeFeedItem(feedItemId: number): Promise<void> {
+  await authorizedRequest(endpoints.feedItemCompletion(feedItemId), {method: 'post'});
 }
 
-export async function uncompleteFeedItem(token: AccessToken, feedItemId: number): Promise<void> {
-  await httpRequest(endpoints.feedItemCompletion(feedItemId), {
-    method: 'delete',
-    headers: {
-      "Authorization": token.asAuthorizationHeader(),
-    },
-  });
-
-  return;
+export async function uncompleteFeedItem(feedItemId: number): Promise<void> {
+  await authorizedRequest(endpoints.feedItemCompletion(feedItemId), {method: 'delete'});
 }
 
-export async function markIrrelevantFeedItem(token: AccessToken, feedItemId: number): Promise<void> {
-  await httpRequest(endpoints.feedItemIrrelevant(feedItemId), {
-    method: 'post',
-    headers: {
-      "Authorization": token.asAuthorizationHeader(),
-    },
-  });
-
-  return;
+export async function markIrrelevantFeedItem(feedItemId: number): Promise<void> {
+  await authorizedRequest(endpoints.feedItemIrrelevant(feedItemId), {method: 'post'});
 }
 
-export async function unmarkIrrelevantFeedItem(token: AccessToken, feedItemId: number): Promise<void> {
-  await httpRequest(endpoints.feedItemIrrelevant(feedItemId), {
-    method: 'delete',
-    headers: {
-      "Authorization": token.asAuthorizationHeader(),
-    },
-  });
-
-  return;
+export async function unmarkIrrelevantFeedItem(feedItemId: number): Promise<void> {
+  await authorizedRequest(endpoints.feedItemIrrelevant(feedItemId), {method: 'delete'});
 }

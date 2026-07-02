@@ -1,7 +1,6 @@
 import { Outlet, Link as RouterLink } from '@tanstack/react-router';
 import { useQuery } from 'react-query';
 import UserAvatar from '@/components/UserAvatar';
-import { useAccessToken } from '@/hooks/auth';
 import { fetchCurrentUser } from '@/api/aqsnv/profiles';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,10 +9,9 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
 function UserPic() {
-  const token = useAccessToken();
   const { data } = useQuery({
-    queryKey: ["me", token],
-    queryFn: () => fetchCurrentUser(token),
+    queryKey: ["me"],
+    queryFn: () => fetchCurrentUser(),
   });
 
   if (data) {

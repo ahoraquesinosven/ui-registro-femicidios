@@ -1,5 +1,4 @@
 import { CaseCategory, CaseMurderWeapon, CaseVictimBondAggressor, ListCaseFilters, listCases, Province } from '@/api/aqsnv/cases';
-import { useAccessToken } from "@/hooks/auth";
 import { useAppForm } from '@/hooks/form';
 import { stringToOptionalEnum, YesNoUnknown, yesNoUnknownToBoolean } from '@/utils/cast';
 import Button from '@mui/material/Button';
@@ -71,10 +70,9 @@ export default function CasesIndex() {
     }
   });
 
-  const accessToken = useAccessToken();
   const query = useInfiniteQuery({
     queryKey: ["cases", filters],
-    queryFn: ({ pageParam }) => listCases(accessToken, filters, 100, pageParam),
+    queryFn: ({ pageParam }) => listCases(filters, 100, pageParam),
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
   });
 
