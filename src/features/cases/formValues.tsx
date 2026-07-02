@@ -25,7 +25,7 @@ import {
     yesNoUnknownToBoolean,
     booleanToYesNoUnknown
 } from "@/utils/cast";
-import dayjs from "dayjs";
+import dayjs from "@/lib/dayjs";
 
 export const allGenders = Object.values(Gender);
 export const allNationalities = Object.values(Nationality);

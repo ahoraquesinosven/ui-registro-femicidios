@@ -17,13 +17,12 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import EditIcon from '@mui/icons-material/Edit';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs, { type Dayjs } from '@/lib/dayjs';
 import { Fragment, forwardRef, useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import { createLink } from '@tanstack/react-router';
 import { BlockLoader } from '@/components/Loading';
 import { allCaseCategories, allCaseMurderWeapons, allCaseVictimBondsAggressor, allProvinces } from './formValues';
-import useDocumentTitle from '@/hooks/documentTitle';
 
 // MUI's `component` polymorphism erases TanStack Router's typed `to`/`params`,
 // so wrap IconButton with createLink to get a type-safe, anchor-rendering link.
@@ -62,8 +61,6 @@ const searchOptionsToListCaseFilters = (searchOptions: typeof defaultSearchOptio
 const defaultListCaseFilters = searchOptionsToListCaseFilters(defaultSearchOptions);
 
 export default function CasesIndex() {
-  useDocumentTitle("Buscar casos");
-
   const [filters, setFilters] = useState(defaultListCaseFilters);
 
   const searchForm = useAppForm({

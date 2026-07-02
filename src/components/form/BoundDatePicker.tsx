@@ -1,6 +1,6 @@
 import {useFieldContext} from "@/hooks/form";
 import {DatePicker} from "@mui/x-date-pickers";
-import {Dayjs} from "dayjs";
+import type {Dayjs} from "@/lib/dayjs";
 import InputAdornment, {InputAdornmentProps} from "@mui/material/InputAdornment";
 import {useMemo} from "react";
 import FieldHelp from "./FieldHelp";

@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import localforage from 'localforage';
 import { generatePKCEPair, buildAuthorizationUrl } from '@/api/aqsnv/auth';
-import Layout from '@/routes/Layout';
+import Layout from '@/components/Layout';
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: async ({ context, location }) => {

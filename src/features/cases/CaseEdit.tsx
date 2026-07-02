@@ -2,15 +2,12 @@ import {useQuery} from "react-query";
 import {getCase, updateCase} from "@/api/aqsnv/cases";
 import {useAccessToken} from '@/hooks/auth';
 import {getRouteApi} from '@tanstack/react-router';
-import {defaultFormValues, caseToFormValues, formValuesToCase} from "@/routes/cases/formValues";
-import CaseForm from "@/routes/cases/components/CaseForm";
-import useDocumentTitle from "@/hooks/documentTitle";
+import {defaultFormValues, caseToFormValues, formValuesToCase} from "./formValues";
+import CaseForm from "./CaseForm";
 
 const routeApi = getRouteApi('/_authenticated/cases/$caseId/edit');
 
 export default function CasesEdit() {
-  useDocumentTitle("Editar caso");
-
     const {caseId} = routeApi.useParams();
     const accessToken = useAccessToken();
     const {data, isLoading} = useQuery({

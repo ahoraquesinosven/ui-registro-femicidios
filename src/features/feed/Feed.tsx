@@ -21,7 +21,6 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import {Fragment, useEffect, useRef} from 'react';
 import {useInfiniteQuery, useMutation, useQueryClient} from 'react-query';
-import useDocumentTitle from '@/hooks/documentTitle';
 
 type FeedItemMutationFn = (accessToken: AccessToken, feedItemId: number) => Promise<void>;
 function createFeedItemMutationHook(fn: FeedItemMutationFn, invalidateQueries: string[]) {
@@ -287,8 +286,6 @@ function FeedList({name, status}: FeedListProps) {
 }
 
 export default function FeedIndex() {
-  useDocumentTitle("Noticias");
-
   return (
     <Container maxWidth="xl">
       <Grid container spacing={2}>

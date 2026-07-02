@@ -8,13 +8,13 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './app/__root'
-import { Route as AuthenticatedRouteImport } from './app/_authenticated'
-import { Route as AuthenticatedIndexRouteImport } from './app/_authenticated/index'
-import { Route as OauthCbRouteImport } from './app/oauth.cb'
-import { Route as AuthenticatedCasesIndexRouteImport } from './app/_authenticated/cases/index'
-import { Route as AuthenticatedCasesNewRouteImport } from './app/_authenticated/cases/new'
-import { Route as AuthenticatedCasesCaseIdEditRouteImport } from './app/_authenticated/cases/$caseId.edit'
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as OauthCbRouteImport } from './routes/oauth.cb'
+import { Route as AuthenticatedCasesIndexRouteImport } from './routes/_authenticated/cases/index'
+import { Route as AuthenticatedCasesNewRouteImport } from './routes/_authenticated/cases/new'
+import { Route as AuthenticatedCasesCaseIdEditRouteImport } from './routes/_authenticated/cases/$caseId.edit'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',

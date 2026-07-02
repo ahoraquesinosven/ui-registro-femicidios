@@ -14,5 +14,24 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    'no-restricted-imports': [
+      'error',
+      {
+        paths: [
+          {
+            name: 'dayjs',
+            message:
+              "Import dayjs from '@/lib/dayjs' so the utc plugin and es locale are always registered first.",
+          },
+        ],
+      },
+    ],
   },
+  overrides: [
+    {
+      // The dayjs setup module is the one place allowed to import 'dayjs' directly.
+      files: ['src/lib/dayjs.ts'],
+      rules: { 'no-restricted-imports': 'off' },
+    },
+  ],
 }

@@ -15,23 +15,39 @@ Development runs inside Docker — the host needs no Node.js installed.
 docker compose up
 
 # Type-check + lint (this is the test suite)
-docker compose run website npm run test
+docker compose run --rm dev npm run test
 
 # Build for production
-docker compose run website npm run build
+docker compose run --rm dev npm run build
 
 # Regenerate API types after updating the OpenAPI spec
 curl http://localhost:8080/v1/openapi.json > ./src/api/aqsnv/v1-openapi.json
-docker compose run website npm run api-types
+docker compose run --rm dev npm run api-types
 ```
 
 Lint runs with `--max-warnings 0`, so zero warnings are allowed.
 
 ## Architecture
 
-**Tech stack:** React 18, TypeScript, Vite, MUI v6, TanStack Form v1, React Query v3, React Router v6, Dayjs.
+**Tech stack:** React 18, TypeScript, Vite, MUI v6, TanStack Form v1, React Query v3, TanStack Router v1, Dayjs.
 
 **Path alias:** `@/` maps to `src/`.
+
+### App structure & folder conventions
+
+- **`src/main.tsx`** — only mounts `<App />` onto `#root`. Nothing else.
+- **`src/App.tsx`** — the single top-level component: `StrictMode → Errors (error boundary) → providers → RouterProvider`. It only *composes* providers and mounts the router — library setup lives in `src/lib/` (see below). It flattens the provider list as a flat array of wrapper functions composed with `reduceRight` (instead of a nested JSX pyramid). `useAuthProviderValue()` is called once and the value is passed to both the auth context and the router context.
+- **`src/lib/`** — library initialization and preconfigured singletons, so setup isn't tangled into `App`:
+  - `dayjs.ts` — extends dayjs with the `utc` plugin, loads the `es` locale, and re-exports `dayjs`. **Always import dayjs from `@/lib/dayjs`, never from `'dayjs'`** (enforced by a `no-restricted-imports` lint rule) — this guarantees the plugin/locale are registered before any module-level `dayjs().utc()` runs, regardless of import order or code-splitting.
+  - `reactQuery.ts` — the preconfigured `queryClient` singleton.
+  - `reactRouter.ts` — the preconfigured TanStack `router` plus its `Register` type augmentation.
+- **`src/routes/`** — TanStack Router **file-based route files** (the `routesDirectory` in `vite.config.ts`). These are thin: routing config (`createFileRoute`, `beforeLoad`, `head`) plus a `component` pointing at a page component. `routeTree.gen.ts` (at `src/` root) is auto-generated from this dir — do not edit by hand.
+- **`src/features/<domain>/`** — the page components (and their sub-components) that route files render, e.g. `features/cases/`, `features/feed/`.
+- **`src/components/`** — shared/reusable UI (`Loading`, `UserAvatar`, `Layout`, the `form/` inputs). `Layout` is the authenticated app shell (nav + `<Outlet />`).
+
+### Document head / titles
+
+Per-route titles use TanStack Router's native `head` option — each route file returns `head: () => ({ title, meta })`. `<HeadContent />` is rendered in `src/routes/__root.tsx`; the deepest matched route's title wins. `index.html` intentionally has **no** static `<title>` (in a client-only SPA `HeadContent` appends rather than overwrites, so a static tag would win over the route title).
 
 ### API layer (`src/api/aqsnv/`)
 
@@ -41,7 +57,7 @@ Lint runs with `--max-warnings 0`, so zero warnings are allowed.
 
 All enums used in the form come from `v1.ts` via re-exports in `cases.ts`.
 
-### Form system (`src/routes/cases/`)
+### Form system (`src/features/cases/`)
 
 The case form is the core of the app. Its data flow:
 
@@ -50,7 +66,7 @@ The case form is the core of the app. Its data flow:
    - `formValuesToCase()` — converts form state → `Case` API payload
    - `caseToFormValues()` — converts API `Case` → form state (used by edit)
 
-2. **`components/CaseForm.tsx`** — shared form shell used by both new and edit routes; handles submission, error display, and the tabbed layout (Case / Victim / Aggressor tabs)
+2. **`CaseForm.tsx`** — shared form shell used by both the new and edit pages; handles submission, error display, and the tabbed layout (Case / Victim / Aggressor tabs)
 
 3. **Field group components** (`CaseFields`, `VictimFields`, `AggressorFields`) — render the actual fields using `form.AppField`. Each exports a `controlledFields` set so `CaseForm` can show a tab-level error indicator.
 
