@@ -1,6 +1,5 @@
 import config from "@/config/config";
-import {httpRequest} from "@/utils/http";
-import {AccessToken} from "@/types/auth";
+import {authorizedRequest} from "@/utils/http";
 
 const endpoints = {
   me: () => new URL('/v1/profiles/me', config.api.aqsnv.server),
@@ -11,13 +10,8 @@ export type User = {
   pictureUrl: string,
 };
 
-export async function fetchCurrentUser(token: AccessToken): Promise<User> {
-  const response = await httpRequest(endpoints.me(), {
-    headers: {
-      "Authorization": token.asAuthorizationHeader(),
-    },
-  });
-
+export async function fetchCurrentUser(): Promise<User> {
+  const response = await authorizedRequest(endpoints.me());
   return response.json();
 }
 

@@ -1,7 +1,5 @@
-import { CaseCategory, CaseMurderWeapon, CaseVictimBondAggressor, ListCaseFilters, listCases, Province } from '@/api/aqsnv/cases';
-import { useAccessToken } from "@/hooks/auth";
+import { ListCaseFilters, listCases } from '@/api/aqsnv/cases';
 import { useAppForm } from '@/hooks/form';
-import { stringToOptionalEnum, YesNoUnknown, yesNoUnknownToBoolean } from '@/utils/cast';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -13,64 +11,33 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import EditIcon from '@mui/icons-material/Edit';
-import dayjs, { Dayjs } from 'dayjs';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import dayjs from '@/lib/dayjs';
+import { Fragment, useEffect, useRef } from 'react';
 import { useInfiniteQuery } from 'react-query';
-import { Link } from 'react-router-dom';
+import { IconButtonLink } from '@/components/links';
 import { BlockLoader } from '@/components/Loading';
 import { allCaseCategories, allCaseMurderWeapons, allCaseVictimBondsAggressor, allProvinces } from './formValues';
-import useDocumentTitle from '@/hooks/documentTitle';
+import { defaultSearchOptions, searchOptionsToFilters, filtersToSearchOptions } from './searchFilters';
 
-//es mas que solo el default del formulario, tambien como usamos typyscript se usa para inferir el tipo
-const defaultSearchOptions = {
-  fromDate: dayjs().startOf("year"),
-  toDate: null as Dayjs | null,
-  province: null as string | null,
-  location: "",
-  caseCategory: null as string | null,
-  wasItAnAttempt: "unknown" as YesNoUnknown,
-  murderWeapon: null as string | null,
-  victimBondAggressor: null as string | null,
-  victimFullName: "",
-  aggressorFullName: "",
+type CasesListProps = {
+  search: ListCaseFilters,
+  onSearchChange: (search: ListCaseFilters) => void,
 };
 
-const searchOptionsToListCaseFilters = (searchOptions: typeof defaultSearchOptions): ListCaseFilters => ({
-  fromDate: searchOptions.fromDate?.format("YYYY-MM-DD"),
-  toDate: searchOptions.toDate?.format("YYYY-MM-DD"),
-  province: stringToOptionalEnum<Province>(searchOptions.province),
-  location: searchOptions.location.trim(),
-  caseCategory: stringToOptionalEnum<CaseCategory>(searchOptions.caseCategory),
-  wasItAnAttempt: yesNoUnknownToBoolean(searchOptions.wasItAnAttempt),
-  murderWeapon: stringToOptionalEnum<CaseMurderWeapon>(searchOptions.murderWeapon),
-  victimBondAggressor: stringToOptionalEnum<CaseVictimBondAggressor>(searchOptions.victimBondAggressor),
-  victimFullName: searchOptions.victimFullName.trim(),
-  aggressorFullName: searchOptions.aggressorFullName.trim(),
-});
-
-const defaultListCaseFilters = searchOptionsToListCaseFilters(defaultSearchOptions);
-
-export default function CasesIndex() {
-  useDocumentTitle("Buscar casos");
-
-  const [filters, setFilters] = useState(defaultListCaseFilters);
-
+export default function CasesIndex({ search, onSearchChange }: CasesListProps) {
   const searchForm = useAppForm({
-    defaultValues: defaultSearchOptions,
+    defaultValues: filtersToSearchOptions(search),
     onSubmit: ({ value }) => {
-      const newFilters = searchOptionsToListCaseFilters(value);
-      setFilters(newFilters);
+      onSearchChange(searchOptionsToFilters(value));
     }
   });
 
-  const accessToken = useAccessToken();
   const query = useInfiniteQuery({
-    queryKey: ["cases", filters],
-    queryFn: ({ pageParam }) => listCases(accessToken, filters, 100, pageParam),
+    queryKey: ["cases", search],
+    queryFn: ({ pageParam }) => listCases(search, 100, pageParam),
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
   });
 
@@ -177,7 +144,8 @@ export default function CasesIndex() {
           sx={{ m: 2 }}
           onClick={(event) => {
             event.preventDefault();
-            searchForm.reset();
+            searchForm.reset(defaultSearchOptions);
+            onSearchChange({});
           }}>
           Limpiar filtros
         </Button>
@@ -211,9 +179,9 @@ export default function CasesIndex() {
                   {page.page.map((item) => (
                     <TableRow key={item.id} hover>
                       <TableCell>
-                        <IconButton component={Link} to={`/cases/${item.id}/edit`}>
+                        <IconButtonLink to="/cases/$caseId/edit" params={{ caseId: String(item.id) }}>
                           <EditIcon />
-                        </IconButton>
+                        </IconButtonLink>
                       </TableCell>
                       <TableCell>{item.caseCategory}</TableCell>
                       <TableCell>{item.wasItAnAttempt ? "Sí" : "No"}</TableCell>

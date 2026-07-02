@@ -2,8 +2,6 @@ import type {FeedItem, FeedItemState} from '@/api/aqsnv/feed';
 import {assignFeedItem, completeFeedItem, fetchFeedItems, markIrrelevantFeedItem, unassignFeedItem, uncompleteFeedItem, unmarkIrrelevantFeedItem} from '@/api/aqsnv/feed';
 import {BlockLoader} from '@/components/Loading';
 import UserAvatar from '@/components/UserAvatar';
-import {useAccessToken} from '@/hooks/auth';
-import type {AccessToken} from '@/types/auth';
 import BlockIcon from '@mui/icons-material/Block';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -21,15 +19,13 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import {Fragment, useEffect, useRef} from 'react';
 import {useInfiniteQuery, useMutation, useQueryClient} from 'react-query';
-import useDocumentTitle from '@/hooks/documentTitle';
 
-type FeedItemMutationFn = (accessToken: AccessToken, feedItemId: number) => Promise<void>;
+type FeedItemMutationFn = (feedItemId: number) => Promise<void>;
 function createFeedItemMutationHook(fn: FeedItemMutationFn, invalidateQueries: string[]) {
   return () => {
-    const accessToken = useAccessToken();
     const queryClient = useQueryClient();
     return useMutation({
-      mutationFn: (feedItemId: number) => fn(accessToken, feedItemId),
+      mutationFn: fn,
       onSuccess: () => {
         invalidateQueries.forEach((key) => {
           queryClient.invalidateQueries(["feed", key]);
@@ -70,10 +66,9 @@ const useUnmarkIrrelevantFeedItemMutation = createFeedItemMutationHook(
 );
 
 function useFeedQuery(state: FeedItemState) {
-  const accessToken = useAccessToken();
   return useInfiniteQuery({
     queryKey: ["feed", state],
-    queryFn: ({pageParam}) => fetchFeedItems(accessToken, state, 5, pageParam),
+    queryFn: ({pageParam}) => fetchFeedItems(state, 5, pageParam),
     getNextPageParam: (lastPage) => lastPage.next,
   });
 }
@@ -287,8 +282,6 @@ function FeedList({name, status}: FeedListProps) {
 }
 
 export default function FeedIndex() {
-  useDocumentTitle("Noticias");
-
   return (
     <Container maxWidth="xl">
       <Grid container spacing={2}>

@@ -8,7 +8,7 @@ import {
     allAggressorSecurityForces,
     allGenders,
     allCaseVictimBondsAggressor,
-} from "../formValues";
+} from "./formValues";
 
 // This list exposes which fields that actually belong to the case are being
 // displayed here, in order to be able to track errors for the component
