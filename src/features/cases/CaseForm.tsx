@@ -49,7 +49,7 @@ export default function CaseForm({defaultValues, onSubmit, reset}: CaseFormProps
         form.store, 
         (state) => Object
             .entries(state.fieldMeta)
-            .filter(([, meta]) => !meta.isValid)
+            .filter(([, meta]) => meta && !meta.isValid)
             .map(([field]) => field)
     );
 

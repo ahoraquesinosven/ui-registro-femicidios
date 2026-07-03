@@ -1,4 +1,4 @@
-import {useQuery} from "react-query";
+import {useQuery} from "@tanstack/react-query";
 import {getCase, updateCase} from "@/api/aqsnv/cases";
 import {defaultFormValues, caseToFormValues, formValuesToCase} from "./formValues";
 import CaseForm from "./CaseForm";

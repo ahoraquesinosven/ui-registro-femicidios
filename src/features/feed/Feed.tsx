@@ -18,7 +18,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import {Fragment, useEffect, useRef} from 'react';
-import {useInfiniteQuery, useMutation, useQueryClient} from 'react-query';
+import {useInfiniteQuery, useMutation, useQueryClient} from '@tanstack/react-query';
 
 type FeedItemMutationFn = (feedItemId: number) => Promise<void>;
 function createFeedItemMutationHook(fn: FeedItemMutationFn, invalidateQueries: string[]) {
@@ -28,7 +28,7 @@ function createFeedItemMutationHook(fn: FeedItemMutationFn, invalidateQueries: s
       mutationFn: fn,
       onSuccess: () => {
         invalidateQueries.forEach((key) => {
-          queryClient.invalidateQueries(["feed", key]);
+          queryClient.invalidateQueries({queryKey: ["feed", key]});
         });
       },
     });
@@ -69,6 +69,7 @@ function useFeedQuery(state: FeedItemState) {
   return useInfiniteQuery({
     queryKey: ["feed", state],
     queryFn: ({pageParam}) => fetchFeedItems(state, 5, pageParam),
+    initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => lastPage.next,
   });
 }
@@ -88,7 +89,7 @@ function BacklogFeedItemButtons({item}: FeedItemButtonsProps) {
   const assignMutation = useAssignFeedItemMutation();
   const markIrrelevantMutation = useMarkIrrelevantFeedItemMutation();
 
-  const isMutating = assignMutation.isLoading || markIrrelevantMutation.isLoading;
+  const isMutating = assignMutation.isPending || markIrrelevantMutation.isPending;
 
   return (
     <FeedItemActionGroup>
@@ -98,7 +99,7 @@ function BacklogFeedItemButtons({item}: FeedItemButtonsProps) {
         target="_blank"
         startIcon={<SearchIcon />}
         onClick={() => {
-          if (!assignMutation.isLoading) {
+          if (!assignMutation.isPending) {
             assignMutation.mutate(item.id);
           }
         }}
@@ -121,7 +122,7 @@ function InProgressFeedItemButtons({item}: FeedItemButtonsProps) {
   const unassignMutation = useUnassignFeedItemMutation();
   const completeMutation = useCompleteFeedItemMutation();
 
-  const isMutating = completeMutation.isLoading || unassignMutation.isLoading;
+  const isMutating = completeMutation.isPending || unassignMutation.isPending;
 
   return (
     <FeedItemActionGroup>
@@ -153,7 +154,7 @@ function DoneFeedItemButtons({item}: FeedItemButtonsProps) {
       <Button
         color="secondary"
         startIcon={<CancelIcon />}
-        loading={uncompleteMutation.isLoading}
+        loading={uncompleteMutation.isPending}
         onClick={() => {uncompleteMutation.mutate(item.id);}}
       >
         Volver a revisar
@@ -170,7 +171,7 @@ function IrrelevantDoneFeedItemButtons({item}: FeedItemButtonsProps) {
       <Button
         color="secondary"
         startIcon={<CancelIcon />}
-        loading={unmarkIrrelevantMutation.isLoading}
+        loading={unmarkIrrelevantMutation.isPending}
         onClick={() => {unmarkIrrelevantMutation.mutate(item.id);}}
       >
         Volver a pendiente

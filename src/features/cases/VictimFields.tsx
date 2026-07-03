@@ -201,7 +201,8 @@ const VictimFields = withForm({
 
                                 <form.AppField
                                     name="totalLegalComplaints"
-                                    children={(field) => <field.Text label="Indicar cantidad de denuncias" />}
+                                    validators={{ onBlur: validateIntegerField }}
+                                    children={(field) => <field.Text label="Indicar cantidad de denuncias" type="text" inputMode="numeric" />}
                                 />
 
                             )}

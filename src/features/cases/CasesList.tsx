@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography';
 import EditIcon from '@mui/icons-material/Edit';
 import dayjs from '@/lib/dayjs';
 import { Fragment, useEffect, useRef } from 'react';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { IconButtonLink } from '@/components/links';
 import { BlockLoader } from '@/components/Loading';
 import { allCaseCategories, allCaseMurderWeapons, allCaseVictimBondsAggressor, allProvinces } from './formValues';
@@ -38,6 +38,7 @@ export default function CasesIndex({ search, onSearchChange }: CasesListProps) {
   const query = useInfiniteQuery({
     queryKey: ["cases", search],
     queryFn: ({ pageParam }) => listCases(search, 100, pageParam),
+    initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
   });
 
