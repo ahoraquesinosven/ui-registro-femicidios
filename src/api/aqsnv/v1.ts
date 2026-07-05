@@ -12,29 +12,7 @@ export interface paths {
             cookie?: never;
         };
         /** Retrieves the current user profile */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Current user profile retrieved successfully */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            name: string;
-                            pictureUrl: string;
-                        };
-                    };
-                };
-            };
-        };
+        get: operations["getCurrentUserProfile"];
         put?: never;
         post?: never;
         delete?: never;
@@ -53,24 +31,7 @@ export interface paths {
         get?: never;
         put?: never;
         /** Refreshes the feeds by connecting to our feed sources */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        post: operations["refreshFeeds"];
         delete?: never;
         options?: never;
         head?: never;
@@ -85,31 +46,7 @@ export interface paths {
             cookie?: never;
         };
         /** Retrieves the full list of feed items */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description Filter results to only contain feed items in the given status */
-                    status?: PathsV1FeedItemsGetParametersQueryStatus;
-                    /** @description Maximum amount of results to return */
-                    limit?: number;
-                    /** @description Cursor as returned on the `next` property of a previous request to this endpoint */
-                    start?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        get: operations["listFeedItems"];
         put?: never;
         post?: never;
         delete?: never;
@@ -128,49 +65,9 @@ export interface paths {
         get?: never;
         put?: never;
         /** Assigns a given feed item to the current user */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Feed item to update */
-                    feedItemId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        post: operations["assignFeedItem"];
         /** Removes the assigned user for a given feed item */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Feed item to update */
-                    feedItemId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        delete: operations["unassignFeedItem"];
         options?: never;
         head?: never;
         patch?: never;
@@ -186,49 +83,9 @@ export interface paths {
         get?: never;
         put?: never;
         /** Marks a single feed item that is assigned to the current user as done */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Feed item to update */
-                    feedItemId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        post: operations["completeFeedItem"];
         /** Marks a single feed item that is assigned to the current user as in progress */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Feed item to update */
-                    feedItemId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        delete: operations["uncompleteFeedItem"];
         options?: never;
         head?: never;
         patch?: never;
@@ -244,55 +101,15 @@ export interface paths {
         get?: never;
         put?: never;
         /** Mark a single feed item as irrelevant and assign to current user */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Feed item to update */
-                    feedItemId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        post: operations["markFeedItemIrrelevant"];
         /** Removes the flag irrelevant for a given feed item */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description Feed item to update */
-                    feedItemId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        delete: operations["unmarkFeedItemIrrelevant"];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/cases/": {
+    "/v1/cases": {
         parameters: {
             query?: never;
             header?: never;
@@ -300,79 +117,10 @@ export interface paths {
             cookie?: never;
         };
         /** List all cases */
-        get: {
-            parameters: {
-                query?: {
-                    fromDate?: string;
-                    toDate?: string;
-                    province?: components["schemas"]["Province"];
-                    location?: string;
-                    caseCategory?: components["schemas"]["CaseCategory"];
-                    victimFullName?: string;
-                    murderWeapon?: components["schemas"]["CaseMurderWeapon"];
-                    aggressorFullName?: string;
-                    victimBondAggressor?: components["schemas"]["CaseVictimBondAggressor"];
-                    wasItAnAttempt?: boolean;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description List of cases */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            id: number;
-                            caseCategory: components["schemas"]["Case"]["caseCategory"];
-                            occurredAt: components["schemas"]["Case"]["occurredAt"];
-                            province: components["schemas"]["Case"]["province"];
-                            location?: components["schemas"]["Case"]["location"];
-                            murderWeapon?: components["schemas"]["Case"]["location"];
-                            victimBondAggressor?: components["schemas"]["CaseMurderWeapon"];
-                            wasItAnAttempt?: boolean;
-                            victim: {
-                                fullName?: components["schemas"]["Case"]["victim"]["fullName"];
-                                age?: components["schemas"]["Case"]["victim"]["age"];
-                            };
-                            aggressor: {
-                                fullName?: components["schemas"]["Case"]["aggressor"]["fullName"];
-                                age?: components["schemas"]["Case"]["aggressor"]["age"];
-                            };
-                        }[];
-                    };
-                };
-            };
-        };
+        get: operations["listCases"];
         put?: never;
         /** Create a new case */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["Case"];
-                };
-            };
-            responses: {
-                /** @description Case created successfully */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                422: components["responses"]["ValidationErrorResponse"];
-            };
-        };
+        post: operations["createCase"];
         delete?: never;
         options?: never;
         head?: never;
@@ -387,58 +135,9 @@ export interface paths {
             cookie?: never;
         };
         /** Get a case by id */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description ID of the case */
-                    caseId: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Case, victim and agreesor retrieved successfully */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Case"];
-                    };
-                };
-                404: components["responses"]["ValidationErrorNotFound"];
-            };
-        };
+        get: operations["getCase"];
         /** Update a case */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description ID of the case */
-                    caseId: number;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["Case"];
-                };
-            };
-            responses: {
-                /** @description Case updated successfully */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                404: components["responses"]["ValidationErrorNotFound"];
-                422: components["responses"]["ValidationErrorResponse"];
-            };
-        };
+        put: operations["updateCase"];
         post?: never;
         delete?: never;
         options?: never;
@@ -475,6 +174,7 @@ export interface components {
         /** @enum {unknown} */
         CaseAggressorSecurityForce: CaseAggressorSecurityForce;
         Case: {
+            readonly id?: number;
             caseCategory: components["schemas"]["CaseCategory"];
             wasItAnAttempt?: boolean;
             isInsufficientDataOrUnderInvestigation?: boolean;
@@ -525,6 +225,63 @@ export interface components {
                 securityForce?: components["schemas"]["CaseAggressorSecurityForce"];
             };
         };
+        CaseListItem: {
+            id: number;
+            caseCategory: components["schemas"]["Case"]["caseCategory"];
+            occurredAt: components["schemas"]["Case"]["occurredAt"];
+            province: components["schemas"]["Case"]["province"];
+            location?: components["schemas"]["Case"]["location"];
+            murderWeapon?: components["schemas"]["Case"]["murderWeapon"];
+            victimBondAggressor?: components["schemas"]["Case"]["victimBondAggressor"];
+            wasItAnAttempt?: components["schemas"]["Case"]["wasItAnAttempt"];
+            victim: {
+                fullName?: components["schemas"]["Case"]["victim"]["fullName"];
+                age?: components["schemas"]["Case"]["victim"]["age"];
+            };
+            aggressor: {
+                fullName?: components["schemas"]["Case"]["aggressor"]["fullName"];
+                age?: components["schemas"]["Case"]["aggressor"]["age"];
+            };
+        };
+        FeedItem: {
+            id: number;
+            feed: {
+                id: string;
+                name: string;
+                /** Format: date-time */
+                updatedAt: string;
+            };
+            /** Format: date-time */
+            publishedAt: string;
+            title: string;
+            link: string;
+            contentSnippet: string;
+            isDone: boolean;
+            isIrrelevant: boolean;
+            assignedUser: {
+                name: string;
+                email: string;
+                pictureUrl: string;
+            } | null;
+        };
+        UserProfile: {
+            name: string;
+            pictureUrl: string;
+        };
+        CaseListPage: {
+            limit: number;
+            total: number;
+            start: string | null;
+            next: string | null;
+            page: components["schemas"]["CaseListItem"][];
+        };
+        FeedItemListPage: {
+            limit: number;
+            total: number;
+            start: string | null;
+            next: string | null;
+            page: components["schemas"]["FeedItem"][];
+        };
     };
     responses: {
         /** @description Bad request */
@@ -555,6 +312,24 @@ export interface components {
                 }[];
             };
         };
+        /** @description Invalid cursor */
+        InvalidCursorResponse: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": {
+                    message?: string;
+                };
+            };
+        };
+        /** @description Missing or invalid authentication credentials */
+        UnauthorizedResponse: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content?: never;
+        };
     };
     parameters: never;
     requestBodies: never;
@@ -562,6 +337,363 @@ export interface components {
     pathItems: never;
 }
 export type $defs = Record<string, never>;
+export interface operations {
+    getCurrentUserProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Current user profile retrieved successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserProfile"];
+                };
+            };
+            401: components["responses"]["UnauthorizedResponse"];
+        };
+    };
+    refreshFeeds: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["UnauthorizedResponse"];
+        };
+    };
+    listFeedItems: {
+        parameters: {
+            query?: {
+                /** @description Filter results to only contain feed items in the given status */
+                status?: PathsV1FeedItemsGetParametersQueryStatus;
+                /** @description Maximum amount of results to return */
+                limit?: number;
+                /** @description Cursor as returned on the `next` property of a previous request to this endpoint */
+                start?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeedItemListPage"];
+                };
+            };
+            400: components["responses"]["InvalidCursorResponse"];
+            401: components["responses"]["UnauthorizedResponse"];
+        };
+    };
+    assignFeedItem: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Feed item to update */
+                feedItemId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["UnauthorizedResponse"];
+            /** @description The feed item could not be transitioned (e.g. not found or not assigned to the current user) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    unassignFeedItem: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Feed item to update */
+                feedItemId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["UnauthorizedResponse"];
+            /** @description The feed item could not be transitioned (e.g. not found or not assigned to the current user) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    completeFeedItem: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Feed item to update */
+                feedItemId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["UnauthorizedResponse"];
+            /** @description The feed item could not be transitioned (e.g. not found or not assigned to the current user) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    uncompleteFeedItem: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Feed item to update */
+                feedItemId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["UnauthorizedResponse"];
+            /** @description The feed item could not be transitioned (e.g. not found or not assigned to the current user) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    markFeedItemIrrelevant: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Feed item to update */
+                feedItemId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["UnauthorizedResponse"];
+            /** @description The feed item could not be transitioned (e.g. not found or not assigned to the current user) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    unmarkFeedItemIrrelevant: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Feed item to update */
+                feedItemId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["UnauthorizedResponse"];
+            /** @description The feed item could not be transitioned (e.g. not found or not assigned to the current user) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    listCases: {
+        parameters: {
+            query?: {
+                fromDate?: string;
+                toDate?: string;
+                province?: components["schemas"]["Province"];
+                location?: string;
+                caseCategory?: components["schemas"]["CaseCategory"];
+                victimFullName?: string;
+                murderWeapon?: components["schemas"]["CaseMurderWeapon"];
+                aggressorFullName?: string;
+                victimBondAggressor?: components["schemas"]["CaseVictimBondAggressor"];
+                wasItAnAttempt?: boolean;
+                limit?: number;
+                start?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Paginated list of cases */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CaseListPage"];
+                };
+            };
+            400: components["responses"]["InvalidCursorResponse"];
+            401: components["responses"]["UnauthorizedResponse"];
+        };
+    };
+    createCase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Case"];
+            };
+        };
+        responses: {
+            /** @description Case created successfully */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["UnauthorizedResponse"];
+            422: components["responses"]["ValidationErrorResponse"];
+        };
+    };
+    getCase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ID of the case */
+                caseId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Case, victim and agreesor retrieved successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Case"];
+                };
+            };
+            401: components["responses"]["UnauthorizedResponse"];
+            404: components["responses"]["ValidationErrorNotFound"];
+        };
+    };
+    updateCase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ID of the case */
+                caseId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Case"];
+            };
+        };
+        responses: {
+            /** @description Case updated successfully */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["UnauthorizedResponse"];
+            404: components["responses"]["ValidationErrorNotFound"];
+            422: components["responses"]["ValidationErrorResponse"];
+        };
+    };
+}
 export enum PathsV1FeedItemsGetParametersQueryStatus {
     backlog = "backlog",
     inProgress = "inProgress",
@@ -731,4 +863,3 @@ export enum ComponentsResponsesValidationErrorNotFoundContentApplicationJsonType
     parameter = "parameter",
     body = "body"
 }
-export type operations = Record<string, never>;

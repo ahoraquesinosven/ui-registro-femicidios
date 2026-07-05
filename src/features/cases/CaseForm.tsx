@@ -2,10 +2,10 @@ import NotificationSnackBar from "@/components/NotificationSnackBar";
 import { useNotifications } from "@/hooks/notifications";
 import TabbedSections from "@/components/TabbedSections";
 import {handleFormSubmit, setErrorMapFromValidationResponse, useAppForm} from "@/hooks/form";
-import AggressorFields, { controlledFields as aggressorSectionFields } from "@/routes/cases/components/AggressorFields";
-import CaseFields, { controlledFields as caseControlledFields } from "@/routes/cases/components/CaseFields";
-import VictimFields, { controlledFields as victimSectionFields } from "@/routes/cases/components/VictimFields";
-import {defaultFormValues} from "@/routes/cases/formValues";
+import AggressorFields, { controlledFields as aggressorSectionFields } from "./AggressorFields";
+import CaseFields, { controlledFields as caseControlledFields } from "./CaseFields";
+import VictimFields, { controlledFields as victimSectionFields } from "./VictimFields";
+import {defaultFormValues} from "./formValues";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import {CaseValidationResult} from "@/api/aqsnv/cases";
@@ -49,7 +49,7 @@ export default function CaseForm({defaultValues, onSubmit, reset}: CaseFormProps
         form.store, 
         (state) => Object
             .entries(state.fieldMeta)
-            .filter(([, meta]) => !meta.isValid)
+            .filter(([, meta]) => meta && !meta.isValid)
             .map(([field]) => field)
     );
 
@@ -62,7 +62,7 @@ export default function CaseForm({defaultValues, onSubmit, reset}: CaseFormProps
                         centered: true,
                     }}
                     boxProps={{
-                        py: 2,
+                        sx: { py: 2 },
                     }}
                     sections={[
                         {

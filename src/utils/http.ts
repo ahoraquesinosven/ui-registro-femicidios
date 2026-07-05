@@ -1,3 +1,5 @@
+import { authToken } from "@/lib/auth";
+
 export class HttpError extends Error {
   readonly request?: RequestInit;
   readonly response: Response;
@@ -18,4 +20,17 @@ export async function httpRequest(url: URL, options?: RequestInit) : Promise<Res
   }
 
   return result;
+}
+
+// Same as httpRequest but attaches the current in-memory auth token as a Bearer
+// header. Authenticated API wrappers call this; unauthenticated endpoints (the
+// OAuth handshake in api/aqsnv/auth.ts) keep using httpRequest directly.
+export async function authorizedRequest(url: URL, options: RequestInit = {}): Promise<Response> {
+  return httpRequest(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      "Authorization": authToken.asAuthorizationHeader(),
+    },
+  });
 }

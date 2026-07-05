@@ -1,7 +1,6 @@
 services:
   dev:
     image: "observatorio/ui-registro-femicidios"
-    user: "${UID}:${GID}"
     build:
       context: .
       target: development
@@ -10,6 +9,10 @@ services:
       - NODE_ENV=development
       - VITE_API_AQSNV_SERVER=http://localhost:8080
       - VITE_API_AQSNV_CLIENT_ID=1234
+      # TanStack Router writes the route tree via write-temp-then-rename. The default
+      # temp dir lives on the image overlay while ./src is a bind mount, so the rename
+      # is cross-device and fails with EXDEV. Keep the temp dir on the mounted volume.
+      - TSR_TMP_DIR=/app/src/.tanstack
     ports:
       - "5173:5173"
     volumes:

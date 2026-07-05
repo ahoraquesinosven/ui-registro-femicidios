@@ -2,8 +2,6 @@ import type {FeedItem, FeedItemState} from '@/api/aqsnv/feed';
 import {assignFeedItem, completeFeedItem, fetchFeedItems, markIrrelevantFeedItem, unassignFeedItem, uncompleteFeedItem, unmarkIrrelevantFeedItem} from '@/api/aqsnv/feed';
 import {BlockLoader} from '@/components/Loading';
 import UserAvatar from '@/components/UserAvatar';
-import {useAccessToken} from '@/hooks/auth';
-import type {AccessToken} from '@/types/auth';
 import BlockIcon from '@mui/icons-material/Block';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -20,18 +18,17 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import {Fragment, useEffect, useRef} from 'react';
-import {useInfiniteQuery, useMutation, useQueryClient} from 'react-query';
+import {useInfiniteQuery, useMutation, useQueryClient} from '@tanstack/react-query';
 
-type FeedItemMutationFn = (accessToken: AccessToken, feedItemId: number) => Promise<void>;
+type FeedItemMutationFn = (feedItemId: number) => Promise<void>;
 function createFeedItemMutationHook(fn: FeedItemMutationFn, invalidateQueries: string[]) {
   return () => {
-    const accessToken = useAccessToken();
     const queryClient = useQueryClient();
     return useMutation({
-      mutationFn: (feedItemId: number) => fn(accessToken, feedItemId),
+      mutationFn: fn,
       onSuccess: () => {
         invalidateQueries.forEach((key) => {
-          queryClient.invalidateQueries(["feed", key]);
+          queryClient.invalidateQueries({queryKey: ["feed", key]});
         });
       },
     });
@@ -69,10 +66,10 @@ const useUnmarkIrrelevantFeedItemMutation = createFeedItemMutationHook(
 );
 
 function useFeedQuery(state: FeedItemState) {
-  const accessToken = useAccessToken();
   return useInfiniteQuery({
     queryKey: ["feed", state],
-    queryFn: ({pageParam}) => fetchFeedItems(accessToken, state, 5, pageParam),
+    queryFn: ({pageParam}) => fetchFeedItems(state, 5, pageParam),
+    initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => lastPage.next,
   });
 }
@@ -92,7 +89,7 @@ function BacklogFeedItemButtons({item}: FeedItemButtonsProps) {
   const assignMutation = useAssignFeedItemMutation();
   const markIrrelevantMutation = useMarkIrrelevantFeedItemMutation();
 
-  const isMutating = assignMutation.isLoading || markIrrelevantMutation.isLoading;
+  const isMutating = assignMutation.isPending || markIrrelevantMutation.isPending;
 
   return (
     <FeedItemActionGroup>
@@ -102,7 +99,7 @@ function BacklogFeedItemButtons({item}: FeedItemButtonsProps) {
         target="_blank"
         startIcon={<SearchIcon />}
         onClick={() => {
-          if (!assignMutation.isLoading) {
+          if (!assignMutation.isPending) {
             assignMutation.mutate(item.id);
           }
         }}
@@ -125,7 +122,7 @@ function InProgressFeedItemButtons({item}: FeedItemButtonsProps) {
   const unassignMutation = useUnassignFeedItemMutation();
   const completeMutation = useCompleteFeedItemMutation();
 
-  const isMutating = completeMutation.isLoading || unassignMutation.isLoading;
+  const isMutating = completeMutation.isPending || unassignMutation.isPending;
 
   return (
     <FeedItemActionGroup>
@@ -157,7 +154,7 @@ function DoneFeedItemButtons({item}: FeedItemButtonsProps) {
       <Button
         color="secondary"
         startIcon={<CancelIcon />}
-        loading={uncompleteMutation.isLoading}
+        loading={uncompleteMutation.isPending}
         onClick={() => {uncompleteMutation.mutate(item.id);}}
       >
         Volver a revisar
@@ -174,7 +171,7 @@ function IrrelevantDoneFeedItemButtons({item}: FeedItemButtonsProps) {
       <Button
         color="secondary"
         startIcon={<CancelIcon />}
-        loading={unmarkIrrelevantMutation.isLoading}
+        loading={unmarkIrrelevantMutation.isPending}
         onClick={() => {unmarkIrrelevantMutation.mutate(item.id);}}
       >
         Volver a pendiente
@@ -197,7 +194,7 @@ function FeedItemCard({item}: FeedItemCardProps) {
         />
       )}
       <CardContent sx={{pt: "0.5em"}}>
-        <Link variant="subtitle1" fontWeight="bold" gutterBottom href={item.link} target="_blank">
+        <Link variant="subtitle1" gutterBottom href={item.link} target="_blank" sx={{ fontWeight: "bold" }}>
           {item.title} 
         </Link>
         <Typography variant="body2" color="text.secondary" gutterBottom>
@@ -227,33 +224,37 @@ type FeedListProps = {
 
 function FeedList({name, status}: FeedListProps) {
   const query = useFeedQuery(status);
+  const {hasNextPage, isFetching, fetchNextPage} = query;
+  const scrollRootRef = useRef(null);
   const observerTarget = useRef(null);
 
   useEffect(() => {
     const target = observerTarget.current;
-    const observer = new IntersectionObserver(
-      entries => {
-        if (entries[0].isIntersecting && query.hasNextPage && !query.isFetching) {
-          query.fetchNextPage();
-        }
-      },
-      {threshold: 1},
-    );
-
-    if (target) {
-      observer.observe(target);
+    if (!target) {
+      return;
     }
 
-    return () => {
-      if (target) {
-        observer.unobserve(target);
-      }
-    };
-  }, [query, observerTarget]);
+    // Measure against the scrollable list container (not the viewport) so the
+    // sentinel triggers when the user reaches the bottom of the internally
+    // scrolled list, regardless of where the container sits on the page.
+    // Re-observing on state change re-fires if the sentinel is still visible
+    // after a page loads.
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetching) {
+          fetchNextPage();
+        }
+      },
+      {root: scrollRootRef.current},
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetching, fetchNextPage]);
 
   return (
-    <Grid item xs={12} md={4}>
-      <Paper sx={{p: 1, maxHeight: '100vh', overflowY: 'auto', backgroundColor: "#e2e3e5"}}>
+    <Grid size={{ xs: 12, md: 4 }}>
+      <Paper ref={scrollRootRef} sx={{p: 1, maxHeight: '100vh', overflowY: 'auto', backgroundColor: "#e2e3e5"}}>
         <Typography variant="h5" sx={{my: 2}}>
           {name} ({query.data?.pages[0]?.total})
         </Typography>
@@ -271,7 +272,11 @@ function FeedList({name, status}: FeedListProps) {
         {query.isFetchingNextPage && (
           <BlockLoader />
         )}
-        <Box ref={observerTarget} />
+        {/* Sentinel for infinite scroll. Needs real height (not 0): at the very
+            bottom of the scroll container the last sub-pixel can't be reached,
+            so a 0/1px target's intersection ratio rounds to 0 and the observer
+            never fires. */}
+        <Box ref={observerTarget} sx={{height: 10}} />
       </Paper>
     </Grid>
   );

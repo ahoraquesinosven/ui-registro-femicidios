@@ -6,7 +6,7 @@ import {
     allGenders,
     allNationalities,
     allCaseJudicialMeasures,
-} from "../formValues";
+} from "./formValues";
 
 // This list exposes which fields that actually belong to the case are being
 // displayed here, in order to be able to track errors for the component
@@ -69,79 +69,100 @@ const VictimJudicializedHelper = () => (
 );
 const VICTIM_LEGAL_COMPLAINTS_HELPER = "Se refiere a si la víctima había realizado denuncias previas al momento del hecho. Se elige la opción de acuerdo a la información brindada o inferida por los medios.";
 
+const VictimChildrenHelper = () => (
+    <>
+        <p>
+            Les hijes son también víctimas de los hechos de violencia de género y de los femicidios (a veces de manera indirecta y directamente), por lo tanto recabamos esta información para visibilizar el grado de impacto que estas situaciones extremas de violencia ocasionan en los vínculos afectivos y filiales de todas las víctimas.
+        </p>
+        <p>
+            En este espacio se completa la opción recabada: “Si” (si tiene hijes), “No” (si no tiene) y “Sin Datos” (cuando el medio no brinda detalles de esa información).
+        </p>
+        <p>
+            Posteriormente, siempre en caso de que hayamos puesto que sí tiene hijes, nos aparece la posibilidad de escribir la edad de les mismes, de manera manual, presionando Enter luego de cada edad.
+            Al no ser un espacio para completar obligatoriamente podremos pasar al siguiente paso, pero sí se tiene el dato hay que colocarlo.
+        </p>
+
+    </>
+);
+
+
+
+
+
+
 const VictimFields = withForm({
     defaultValues: defaultFormValues,
-    render: function Render({form}) {
+    render: function Render({ form }) {
         return (
             <>
                 <Grid container spacing={2}>
-                    <Grid item xs={12}>
+                    <Grid size={12}>
                         <Typography variant="h6" gutterBottom>Datos Personales</Typography>
                     </Grid>
 
-                    <Grid item xs={12}>
+                    <Grid size={12}>
                         <form.AppField
                             name="victim.fullName"
                             children={(field) => <field.Text label="Nombre y Apellido" helpText={VICTIM_NAME_HELPER} />}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                         <form.AppField
                             name="victim.age"
                             validators={{ onBlur: validateDecimalField }}
                             children={(field) => <field.Text label="Edad" type="text" inputMode="decimal" helpText={<VictimAgeHelper />} />}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                         <form.AppField
                             name="victim.gender"
                             children={(field) => <field.Combo label="Género" options={allGenders} helpText={VICTIM_GENDER_HELPER} />}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                         <form.AppField
                             name="victim.nationality"
                             children={(field) => <field.Combo label="Nacionalidad" options={allNationalities} helpText={<NationalityHelper />} />}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                         <form.AppField
                             name="victim.occupation"
                             children={(field) => <field.Text label="Ocupación" helpText={VICTIM_OCCUPATION_HELPER} />}
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                         <form.AppField
                             name="victim.isSexualWorker"
                             children={(field) => <field.Checkbox label="¿En situación de prostitución?" helpText={VICTIM_PROSTITUTION_HELPER} />}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                         <form.AppField
                             name="victim.isMissingPerson"
                             children={(field) => <field.Checkbox label="¿Estuvo desaparecida?" helpText={VICTIM_MISSING_PERSON_HELPER} />}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                         <form.AppField
                             name="victim.isNativePeople"
                             children={(field) => <field.Checkbox label="¿Pertenece a pueblos originarios?" helpText={VICTIM_NATIVE_PEOPLE_HELPER} />}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                         <form.AppField
                             name="victim.isPregnant"
                             children={(field) => <field.Checkbox label="¿Estaba embarazada?" helpText={VICTIM_PREGNANT_HELPER} />}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                         <form.AppField
                             name="victim.hasDisabillity"
                             children={(field) => <field.Checkbox label="¿Tenía algún tipo de discapacidad?" helpText={VICTIM_DISABILITY_HELPER} />}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                         <form.AppField
                             name="isRape"
                             children={(field) => <field.Checkbox label="¿Fue violada o abusada?" helpText={VICTIM_RAPE_HELPER} />}
@@ -151,7 +172,7 @@ const VictimFields = withForm({
                     <form.Subscribe
                         selector={(state) => state.values.wasJudicialized}
                         children={(wasJudicialized) => (
-                            <Grid item xs={12} sm={6}>
+                            <Grid size={{ xs: 12, sm: 6 }}>
                                 <form.AppField
                                     name="hadLegalComplaints"
                                     children={(field) => <field.Checkbox label="¿Había realizado denuncias?" disabled={wasJudicialized} helpText={VICTIM_LEGAL_COMPLAINTS_HELPER} />}
@@ -160,12 +181,12 @@ const VictimFields = withForm({
                         )}
                     />
 
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                         <form.AppField
                             name="wasJudicialized"
-                            children={(field) => <field.Checkbox label="¿Tenía medidas judiciales?" helpText={<VictimJudicializedHelper />}  /> }
+                            children={(field) => <field.Checkbox label="¿Tenía medidas judiciales?" helpText={<VictimJudicializedHelper />} />}
                             listeners={{
-                                onChange: ({value}) => {
+                                onChange: ({ value }) => {
                                     if (value)
                                         form.setFieldValue('hadLegalComplaints', true)
                                 },
@@ -173,21 +194,22 @@ const VictimFields = withForm({
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                         <form.Subscribe
                             selector={(state) => state.values.hadLegalComplaints}
                             children={(hadLegalComplaints) => hadLegalComplaints && (
 
                                 <form.AppField
                                     name="totalLegalComplaints"
-                                    children={(field) => <field.Text label="Indicar cantidad de denuncias" />}
+                                    validators={{ onBlur: validateIntegerField }}
+                                    children={(field) => <field.Text label="Indicar cantidad de denuncias" type="text" inputMode="numeric" />}
                                 />
 
                             )}
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
                         <form.Subscribe
                             selector={(state) => state.values.wasJudicialized}
                             children={(wasJudicialized) => wasJudicialized && (
@@ -201,10 +223,10 @@ const VictimFields = withForm({
                         />
                     </Grid>
 
-                    <Grid item xs={12}>
+                    <Grid size={12}>
                         <form.AppField
                             name="victim.hasChildren"
-                            children={(field) => <field.YesNoUnknown label="¿Tiene hijos?" />}
+                            children={(field) => <field.YesNoUnknown label="¿Tiene hijos?"  helpText={<VictimChildrenHelper />} />}
                         />
                     </Grid>
 
@@ -212,14 +234,14 @@ const VictimFields = withForm({
                         selector={(state) => state.values.victim.hasChildren === "yes"}
                         children={(hasChildren) => hasChildren && (
                             <>
-                                <Grid item xs={12} sm={6}>
+                                <Grid size={{ xs: 12, sm: 6 }}>
                                     <form.AppField
                                         name="victim.numberOfChildren"
                                         validators={{ onBlur: validateIntegerField }}
                                         children={(field) => <field.Text label="Número de hijos" type="text" inputMode="numeric" />}
                                     />
                                 </Grid>
-                                <Grid item xs={12} sm={6}>
+                                <Grid size={{ xs: 12, sm: 6 }}>
                                     <form.AppField
                                         name="victim.ageOfChildren"
                                         children={(field) => <field.Text label="Edad hijxs - Cargar cada edad y presionar Enter" multiline />}
