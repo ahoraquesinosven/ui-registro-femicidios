@@ -29,7 +29,7 @@ Lint runs with `--max-warnings 0`, so zero warnings are allowed.
 
 ## Architecture
 
-**Tech stack:** React 18, TypeScript, Vite, MUI v6, TanStack Form v1, React Query v3, TanStack Router v1, Dayjs.
+**Tech stack:** React 19, TypeScript, Vite, MUI v9, TanStack Form v1, TanStack Query v5, TanStack Router v1, Dayjs.
 
 **Path alias:** `@/` maps to `src/`.
 

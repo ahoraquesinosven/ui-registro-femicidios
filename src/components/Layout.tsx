@@ -1,5 +1,5 @@
 import { Outlet, Link as RouterLink } from '@tanstack/react-router';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import UserAvatar from '@/components/UserAvatar';
 import { fetchCurrentUser } from '@/api/aqsnv/profiles';
 import AppBar from '@mui/material/AppBar';

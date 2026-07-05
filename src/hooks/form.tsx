@@ -37,9 +37,11 @@ export function handleFormSubmit(form: AnyFormApi) {
 export function setErrorMapFromValidationResponse(errors: ValidationErrors, formApi: AnyFormApi) {
   errors.forEach((error) => {
     const path = error.path.split("/").slice(1).join(".");
-    const fieldInfo = formApi.fieldInfo[path];
 
-    fieldInfo?.instance?.setErrorMap({onSubmit: error.message});
+    formApi.setFieldMeta(path, (prev) => ({
+      ...prev,
+      errorMap: {...prev.errorMap, onSubmit: error.message},
+    }));
   });
 }
 
