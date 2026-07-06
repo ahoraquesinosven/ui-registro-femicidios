@@ -1,19 +1,19 @@
-import React, {ErrorInfo} from "react";
-import {Typography, Container} from "@mui/material";
+import { Container, Typography } from "@mui/material";
+import React, { type ErrorInfo } from "react";
 
 export type ErrorsProps = {
-  children: React.ReactNode,
+  children: React.ReactNode;
 };
 
 type ErrorsState = {
-  error?: Error,
-  stack?: ErrorInfo["componentStack"],
+  error?: Error;
+  stack?: ErrorInfo["componentStack"];
 };
 
 export default class Errors extends React.Component<ErrorsProps, ErrorsState> {
   constructor(props: ErrorsProps) {
     super(props);
-    this.state = {error: undefined};
+    this.state = { error: undefined };
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
@@ -32,12 +32,20 @@ export default class Errors extends React.Component<ErrorsProps, ErrorsState> {
       <Container maxWidth="md">
         <Typography variant="h1">¡Ups!</Typography>
 
-        <Typography variant="h3" component="h2">Ocurrió un error</Typography>
+        <Typography variant="h3" component="h2">
+          Ocurrió un error
+        </Typography>
 
-        <Typography component="pre" sx={{fontFamily: 'monospace', backgroundColor: '#f5f5f5', p: 2}}>
+        <Typography
+          component="pre"
+          sx={{ fontFamily: "monospace", backgroundColor: "#f5f5f5", p: 2 }}
+        >
           {this.state.error.toString()}
         </Typography>
-        <Typography component="pre" sx={{fontFamily: 'monospace', backgroundColor: '#f5f5f5', p: 2}}>
+        <Typography
+          component="pre"
+          sx={{ fontFamily: "monospace", backgroundColor: "#f5f5f5", p: 2 }}
+        >
           {this.state.stack ? this.state.stack.toString() : ""}
         </Typography>
       </Container>

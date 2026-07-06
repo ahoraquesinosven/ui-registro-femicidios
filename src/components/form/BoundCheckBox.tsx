@@ -1,16 +1,21 @@
-import { useFieldContext } from "@/hooks/form";
+import Checkbox, { type CheckboxProps } from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox, {CheckboxProps} from "@mui/material/Checkbox";
+import { useFieldContext } from "@/hooks/form";
 import FieldHelp from "./FieldHelp";
 
 export type BoundCheckboxProps = {
-  label: string,
-  disabled?: boolean,
-  checkbox?: CheckboxProps,
-  helpText?: React.ReactNode,
+  label: string;
+  disabled?: boolean;
+  checkbox?: CheckboxProps;
+  helpText?: React.ReactNode;
 };
 
-export default function BoundCheckbox({label, checkbox, disabled, helpText} : BoundCheckboxProps) {
+export default function BoundCheckbox({
+  label,
+  checkbox,
+  disabled,
+  helpText,
+}: BoundCheckboxProps) {
   const field = useFieldContext<boolean>();
 
   const labelNode = helpText ? (
@@ -18,7 +23,9 @@ export default function BoundCheckbox({label, checkbox, disabled, helpText} : Bo
       {label}
       <FieldHelp title={label} helpText={helpText} />
     </>
-  ) : label;
+  ) : (
+    label
+  );
 
   return (
     <FormControlLabel

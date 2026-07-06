@@ -2,13 +2,13 @@ import Avatar from "@mui/material/Avatar";
 
 export type UserAvatarProps = {
   user: {
-    pictureUrl: string,
-    name: string,
-  },
-  showName: boolean | null,
-}
+    pictureUrl: string;
+    name: string;
+  };
+  showName: boolean | null;
+};
 
-export default function UserAvatar({user, showName}: UserAvatarProps) {
+export default function UserAvatar({ user, showName }: UserAvatarProps) {
   return (
     <>
       <Avatar
@@ -19,9 +19,7 @@ export default function UserAvatar({user, showName}: UserAvatarProps) {
           height: "2em",
         }}
       />
-      {showName && (
-        <span style={{ margin: '0.5em' }}>{user.name}</span>
-      )}
+      {showName && <span style={{ margin: "0.5em" }}>{user.name}</span>}
     </>
   );
 }

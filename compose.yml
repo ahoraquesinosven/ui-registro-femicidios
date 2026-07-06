@@ -19,7 +19,7 @@ services:
       - ./src:/app/src/
       - ./public:/app/public/
       - ./index.html:/app/index.html
-      - ./.eslintrc.cjs:/app/.eslintrc.cjs
+      - ./biome.json:/app/biome.json
       - ./vite.config.ts:/app/vite.config.ts
       - ./package.json:/app/package.json
       - ./package-lock.json:/app/package-lock.json

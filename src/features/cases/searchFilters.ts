@@ -1,6 +1,17 @@
-import { ListCaseFilters, Province, CaseCategory, CaseMurderWeapon, CaseVictimBondAggressor } from '@/api/aqsnv/cases';
-import { stringToOptionalEnum, YesNoUnknown, yesNoUnknownToBoolean, booleanToYesNoUnknown } from '@/utils/cast';
-import dayjs, { type Dayjs } from '@/lib/dayjs';
+import type {
+  CaseCategory,
+  CaseMurderWeapon,
+  CaseVictimBondAggressor,
+  ListCaseFilters,
+  Province,
+} from "@/api/aqsnv/cases";
+import dayjs, { type Dayjs } from "@/lib/dayjs";
+import {
+  booleanToYesNoUnknown,
+  stringToOptionalEnum,
+  type YesNoUnknown,
+  yesNoUnknownToBoolean,
+} from "@/utils/cast";
 
 // Form-facing shape (Dayjs dates + tri-state) used to drive the MUI inputs.
 export const defaultSearchOptions = {
@@ -25,7 +36,9 @@ const blankToUndefined = (value: string): string | undefined => {
 
 // Form values -> serializable URL/API filters. Blanks and "unknown" collapse to
 // undefined so they stay out of the URL.
-export const searchOptionsToFilters = (options: SearchOptions): ListCaseFilters => ({
+export const searchOptionsToFilters = (
+  options: SearchOptions,
+): ListCaseFilters => ({
   // "" (not undefined) marks an explicitly cleared date so validateSearch won't
   // re-apply the this-year default; listCases ignores "" so the API sees no filter.
   fromDate: options.fromDate ? options.fromDate.format("YYYY-MM-DD") : "",
@@ -35,13 +48,17 @@ export const searchOptionsToFilters = (options: SearchOptions): ListCaseFilters 
   caseCategory: stringToOptionalEnum<CaseCategory>(options.caseCategory),
   wasItAnAttempt: yesNoUnknownToBoolean(options.wasItAnAttempt),
   murderWeapon: stringToOptionalEnum<CaseMurderWeapon>(options.murderWeapon),
-  victimBondAggressor: stringToOptionalEnum<CaseVictimBondAggressor>(options.victimBondAggressor),
+  victimBondAggressor: stringToOptionalEnum<CaseVictimBondAggressor>(
+    options.victimBondAggressor,
+  ),
   victimFullName: blankToUndefined(options.victimFullName),
   aggressorFullName: blankToUndefined(options.aggressorFullName),
 });
 
 // URL filters -> form values, for seeding the form from the current URL.
-export const filtersToSearchOptions = (search: ListCaseFilters): SearchOptions => {
+export const filtersToSearchOptions = (
+  search: ListCaseFilters,
+): SearchOptions => {
   const s: NonNullable<ListCaseFilters> = search ?? {};
   return {
     fromDate:
@@ -68,21 +85,29 @@ export function parseCaseSearch(raw: Record<string, unknown>): ListCaseFilters {
   const str = (value: unknown): string | undefined =>
     typeof value === "string" && value !== "" ? value : undefined;
   const bool = (value: unknown): boolean | undefined =>
-    typeof value === "boolean" ? value : value === "true" ? true : value === "false" ? false : undefined;
+    typeof value === "boolean"
+      ? value
+      : value === "true"
+        ? true
+        : value === "false"
+          ? false
+          : undefined;
 
   return {
     // Absent -> default this-year; present ("" for an explicit clear, or a date) is kept.
     fromDate:
       raw.fromDate === undefined
         ? dayjs().startOf("year").format("YYYY-MM-DD")
-        : str(raw.fromDate) ?? "",
+        : (str(raw.fromDate) ?? ""),
     toDate: str(raw.toDate),
     province: stringToOptionalEnum<Province>(str(raw.province)),
     location: str(raw.location),
     caseCategory: stringToOptionalEnum<CaseCategory>(str(raw.caseCategory)),
     wasItAnAttempt: bool(raw.wasItAnAttempt),
     murderWeapon: stringToOptionalEnum<CaseMurderWeapon>(str(raw.murderWeapon)),
-    victimBondAggressor: stringToOptionalEnum<CaseVictimBondAggressor>(str(raw.victimBondAggressor)),
+    victimBondAggressor: stringToOptionalEnum<CaseVictimBondAggressor>(
+      str(raw.victimBondAggressor),
+    ),
     victimFullName: str(raw.victimFullName),
     aggressorFullName: str(raw.aggressorFullName),
   };

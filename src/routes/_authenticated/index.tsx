@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router';
-import FeedIndex from '@/features/feed/Feed';
+import { createFileRoute } from "@tanstack/react-router";
+import FeedIndex from "@/features/feed/Feed";
 
-export const Route = createFileRoute('/_authenticated/')({
+export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
-    meta: [{ title: 'RF - Noticias' }],
+    meta: [{ title: "RF - Noticias" }],
   }),
   component: FeedIndex,
 });

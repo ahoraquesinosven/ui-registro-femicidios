@@ -6,6 +6,6 @@ export class AccessToken {
   }
 
   asAuthorizationHeader(): string {
-    return `Bearer ${this.accessToken}`
+    return `Bearer ${this.accessToken}`;
   }
 }

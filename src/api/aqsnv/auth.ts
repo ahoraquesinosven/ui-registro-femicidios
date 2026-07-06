@@ -1,16 +1,16 @@
 import config from "@/config/config";
-import {httpRequest} from "@/utils/http";
+import { httpRequest } from "@/utils/http";
 
 const endpoints = {
-  pkce: () => new URL('/auth/pkce', config.api.aqsnv.server),
-  authorize: () => new URL('/auth/authorize', config.api.aqsnv.server),
-  token: () => new URL('auth/token', config.api.aqsnv.server),
+  pkce: () => new URL("/auth/pkce", config.api.aqsnv.server),
+  authorize: () => new URL("/auth/authorize", config.api.aqsnv.server),
+  token: () => new URL("auth/token", config.api.aqsnv.server),
 };
 
 export type PKCEPair = {
-  verifier: string,
-  challenge: string,
-  method: string
+  verifier: string;
+  challenge: string;
+  method: string;
 };
 
 export async function generatePKCEPair(): Promise<PKCEPair> {
@@ -18,7 +18,10 @@ export async function generatePKCEPair(): Promise<PKCEPair> {
   return response.json();
 }
 
-export async function buildAuthorizationUrl(state: string, pkcePair: PKCEPair): Promise<URL> {
+export async function buildAuthorizationUrl(
+  state: string,
+  pkcePair: PKCEPair,
+): Promise<URL> {
   const result = endpoints.authorize();
   result.searchParams.append("client_id", config.api.aqsnv.clientId);
   result.searchParams.append("response_type", "code");
@@ -30,12 +33,15 @@ export async function buildAuthorizationUrl(state: string, pkcePair: PKCEPair): 
 }
 
 export type AccessTokenResponse = {
-  access_token: string,
-  token_type: string,
-  expires_in: number,
+  access_token: string;
+  token_type: string;
+  expires_in: number;
 };
 
-export async function exchangeAuthorizationCode(authorizationCode: string, verifier: string): Promise<AccessTokenResponse> {
+export async function exchangeAuthorizationCode(
+  authorizationCode: string,
+  verifier: string,
+): Promise<AccessTokenResponse> {
   const requestData = new URLSearchParams();
   requestData.append("code", authorizationCode);
   requestData.append("client_id", config.api.aqsnv.clientId);

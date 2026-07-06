@@ -28,7 +28,7 @@ The compose service is named `dev`, so one-off commands run as `docker compose r
 docker compose run --rm dev npm run test
 ```
 
-This runs `tsc` and ESLint. Lint runs with `--max-warnings 0`, so **zero warnings** are allowed. The same command runs in CI on every PR against `main` and `dev`, so run it before pushing.
+This runs `tsc` and Biome (`biome check`), which lints, checks formatting, and checks import ordering. Any lint error or unformatted file **fails** the command. Run `docker compose run --rm dev npm run format` (`biome check --write`) to auto-fix. The same test command runs in CI on every PR against `main` and `dev`, so run it before pushing.
 
 ### Build
 
@@ -50,18 +50,19 @@ We use [openapi-typescript](https://openapi-ts.dev/) to generate TypeScript type
 * **Routing is file-based (TanStack Router).** Routes live in `src/routes/`; `src/routeTree.gen.ts` is generated from that directory — **never edit it by hand**. Route files are thin adapters: they own routing config (`createFileRoute`, `beforeLoad`, `head`, `validateSearch`) and read router state (`useSearch`/`useParams`/`useNavigate`), then pass plain props down to the page components in `src/features/<domain>/`, which are router-agnostic.
 * **Per-route titles** use TanStack Router's native `head` option in each route file. `index.html` intentionally has no static `<title>`.
 * **Cases-list filters live in the URL** as validated search params (see `src/features/cases/searchFilters.ts`). Shareable/bookmarkable, and the source of truth for the query.
-* **Always import dayjs from `@/lib/dayjs`, never from `'dayjs'`** — this is enforced by ESLint so the `utc` plugin and `es` locale are registered before any module-level `dayjs()` call runs.
+* **Always import dayjs from `@/lib/dayjs`, never from `'dayjs'`** — this is enforced by Biome (`noRestrictedImports`) so the `utc` plugin and `es` locale are registered before any module-level `dayjs()` call runs.
 * **The auth token never appears in components or API signatures.** It's an in-memory singleton in `src/lib/auth.ts`, attached to requests by the fetch layer (`src/utils/http.ts`). It's lost on reload (OAuth PKCE handshake at `/oauth/cb` re-issues it).
 * **Internal navigation uses the typed link wrappers** in `src/components/links.tsx` (`ButtonLink`, `IconButtonLink`) so `to`/`params` stay type-checked. External URLs stay plain anchors.
 * **Library setup lives in `src/lib/`** (`dayjs`, `reactQuery`, `reactRouter`, `auth`) so it isn't tangled into `App.tsx`.
+* **Linting & formatting is [Biome](https://biomejs.dev/)** (`biome.json`), run via `npm run test` / `npm run format`. Field group components (`CaseFields`/`VictimFields`/`AggressorFields`) export **only** their component — field lists live in `controlledFields.ts` and help text in `help/` — because Biome's `useComponentExportOnlyModules` rule requires it. The only rule disabled globally is `noChildrenProp` (TanStack Form/Router use the `children` render-prop by design). Generated files (`routeTree.gen.ts`, `v1.ts`, `v1-openapi.json`) are excluded.
 
 ### Adding a new field to the case form
 
 1. Add the field to `defaultFormValues` in `src/features/cases/formValues.tsx`.
 2. Add the form → API conversion in `formValuesToCase()` and the API → form conversion in `caseToFormValues()`, both in `formValues.tsx`.
 3. If it's an enum, re-export it from `src/api/aqsnv/cases.ts`.
-4. Add a `form.AppField` in the relevant field group — `CaseFields.tsx`, `VictimFields.tsx`, or `AggressorFields.tsx` (all under `src/features/cases/`) — using a pre-defined component from `src/hooks/form.tsx`. If you need a new field component, check with Andres first.
-5. Add the field name to that component's `controlledFields` set for tab-level error tracking.
+4. Add a `form.AppField` in the relevant field group — `CaseFields.tsx`, `VictimFields.tsx`, or `AggressorFields.tsx` (all under `src/features/cases/`) — using a pre-defined component from `src/hooks/form.tsx`. Put any help text in the matching `help/*.tsx` module. If you need a new field component, check with Andres first.
+5. Add the field name to the matching set in `src/features/cases/controlledFields.ts` for tab-level error tracking.
 
 ## Reference links
 
@@ -75,6 +76,7 @@ Quick links to the docs for the libraries we use:
 * [React Query (v3)](https://tanstack.com/query/v3/docs/framework/react/overview) — server-state sync
 * [Day.js](https://day.js.org/docs/en/installation/installation) — date handling
 * [openapi-typescript](https://openapi-ts.dev/) — API type generation
+* [Biome](https://biomejs.dev/) — linter & formatter
 
 ## License
 
