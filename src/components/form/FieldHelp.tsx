@@ -1,11 +1,11 @@
-import { useState } from "react";
-import IconButton from "@mui/material/IconButton";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import { useState } from "react";
 
 type FieldHelpProps = {
   title: string;
@@ -27,11 +27,14 @@ export default function FieldHelp({ title, helpText }: FieldHelpProps) {
       >
         <InfoOutlinedIcon fontSize="small" />
       </IconButton>
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
         <DialogTitle>{title}</DialogTitle>
-        <DialogContent>
-          {helpText}
-        </DialogContent>
+        <DialogContent>{helpText}</DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}>Cerrar</Button>
         </DialogActions>

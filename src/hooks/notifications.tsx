@@ -1,15 +1,15 @@
-import {useState} from "react"
-import { AlertColor } from "@mui/material/Alert";
+import type { AlertColor } from "@mui/material/Alert";
+import { useState } from "react";
 
 export type Notification = {
-  message?: string,
-  severity?: AlertColor,
+  message?: string;
+  severity?: AlertColor;
 };
 
 export type NotificationState = {
-  notification?: Notification,
-  isOpen: boolean,
-}
+  notification?: Notification;
+  isOpen: boolean;
+};
 
 export function useNotifications() {
   const [current, setCurrentNotification] = useState<NotificationState>({
@@ -34,4 +34,3 @@ export function useNotifications() {
     current: current,
   };
 }
-

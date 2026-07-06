@@ -1,24 +1,31 @@
-import {useFieldContext} from "@/hooks/form";
 import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
+import TextField from "@mui/material/TextField";
+import { useFieldContext } from "@/hooks/form";
 import FieldHelp from "./FieldHelp";
 
 export type BoundComboProps = {
-  options: string[],
-  label: string,
-  required?: boolean,
-  helpText?: React.ReactNode,
-}
+  options: string[];
+  label: string;
+  required?: boolean;
+  helpText?: React.ReactNode;
+};
 
-export default function BoundCombo({options, label, required, helpText}: BoundComboProps) {
+export default function BoundCombo({
+  options,
+  label,
+  required,
+  helpText,
+}: BoundComboProps) {
   const field = useFieldContext<string | null>();
 
   return (
     <Autocomplete
       options={options}
       value={field.state.value}
-      onChange={(_e: unknown, newValue: string | null) => field.handleChange(newValue)}
+      onChange={(_e: unknown, newValue: string | null) =>
+        field.handleChange(newValue)
+      }
       onBlur={field.handleBlur}
       renderInput={(params) => (
         <TextField
@@ -40,8 +47,8 @@ export default function BoundCombo({options, label, required, helpText}: BoundCo
                     </InputAdornment>
                   )}
                 </>
-              )
-            }
+              ),
+            },
           }}
         />
       )}

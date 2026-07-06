@@ -1,19 +1,24 @@
-import {useFieldContext} from "@/hooks/form";
-import TextField, {TextFieldProps} from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
+import TextField, { type TextFieldProps } from "@mui/material/TextField";
+import { useFieldContext } from "@/hooks/form";
 import FieldHelp from "./FieldHelp";
 
-type BoundTextProps = TextFieldProps & {helpText?: React.ReactNode};
+type BoundTextProps = TextFieldProps & { helpText?: React.ReactNode };
 
-export default function BoundText({helpText, label, ...props}: BoundTextProps) {
+export default function BoundText({
+  helpText,
+  label,
+  ...props
+}: BoundTextProps) {
   const field = useFieldContext<string>();
 
   const endAdornment = helpText && (
-    <>
-      <InputAdornment position="end">
-        <FieldHelp title={typeof label === "string" ? label : "Ayuda"} helpText={helpText} />
-      </InputAdornment>
-    </>
+    <InputAdornment position="end">
+      <FieldHelp
+        title={typeof label === "string" ? label : "Ayuda"}
+        helpText={helpText}
+      />
+    </InputAdornment>
   );
 
   return (

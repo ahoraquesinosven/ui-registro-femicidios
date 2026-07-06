@@ -1,24 +1,22 @@
-import {useState} from "react";
-import Tabs from "@mui/material/Tabs";
-import { TabsProps } from "@mui/material/Tabs";
+import ErrorOutline from "@mui/icons-material/ErrorOutlineOutlined";
+import { Box, type BoxProps } from "@mui/material";
 import Tab from "@mui/material/Tab";
-import { Box } from "@mui/material";
-import { BoxProps } from "@mui/material";
-import ErrorOutline from '@mui/icons-material/ErrorOutlineOutlined';
+import Tabs, { type TabsProps } from "@mui/material/Tabs";
+import { useState } from "react";
 
 export type TabbedSectionsProps = {
-  initialTab?: number,
+  initialTab?: number;
 
   sections: {
-    key: string,
-    label: string,
-    hasError?: boolean,
-    component: React.ReactNode,
-  }[],
+    key: string;
+    label: string;
+    hasError?: boolean;
+    component: React.ReactNode;
+  }[];
 
-  tabProps?: TabsProps,
+  tabProps?: TabsProps;
 
-  boxProps?: BoxProps,
+  boxProps?: BoxProps;
 };
 
 export default function TabbedSections(props: TabbedSectionsProps) {
@@ -26,31 +24,36 @@ export default function TabbedSections(props: TabbedSectionsProps) {
 
   const handleChangeCurrentTab = (_event: unknown, newTab: number) => {
     setCurrentTab(newTab);
-  }
+  };
 
   return (
     <>
-      <Tabs {...props.tabProps} value={currentTab} onChange={handleChangeCurrentTab}>
+      <Tabs
+        {...props.tabProps}
+        value={currentTab}
+        onChange={handleChangeCurrentTab}
+      >
         {props.sections.map((section) => (
-          <Tab 
-            key={`${section.key}-tab`} 
-            icon={section.hasError ? <ErrorOutline color="error"/> : undefined}
+          <Tab
+            key={`${section.key}-tab`}
+            icon={section.hasError ? <ErrorOutline color="error" /> : undefined}
             iconPosition="start"
-            label={section.label} />
+            label={section.label}
+          />
         ))}
       </Tabs>
 
       {props.sections.map((section, index) => (
         <Box
           {...props.boxProps}
-          key={`${section.key}-box`} 
+          key={`${section.key}-box`}
           sx={{
             ...props.boxProps?.sx,
             display: index === currentTab ? "block" : "none",
           }}
-          children={section.component} />
+          children={section.component}
+        />
       ))}
     </>
-
   );
 }

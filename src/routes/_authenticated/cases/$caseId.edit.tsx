@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router';
-import CasesEdit from '@/features/cases/CaseEdit';
+import { createFileRoute } from "@tanstack/react-router";
+import CasesEdit from "@/features/cases/CaseEdit";
 
-export const Route = createFileRoute('/_authenticated/cases/$caseId/edit')({
+export const Route = createFileRoute("/_authenticated/cases/$caseId/edit")({
   head: () => ({
-    meta: [{ title: 'RF - Editar caso' }],
+    meta: [{ title: "RF - Editar caso" }],
   }),
   component: RouteComponent,
 });

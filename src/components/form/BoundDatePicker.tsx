@@ -1,22 +1,31 @@
-import {useFieldContext} from "@/hooks/form";
-import {DatePicker} from "@mui/x-date-pickers";
-import type {Dayjs} from "@/lib/dayjs";
-import InputAdornment, {InputAdornmentProps} from "@mui/material/InputAdornment";
-import {useMemo} from "react";
+import InputAdornment, {
+  type InputAdornmentProps,
+} from "@mui/material/InputAdornment";
+import { DatePicker } from "@mui/x-date-pickers";
+import { useMemo } from "react";
+import { useFieldContext } from "@/hooks/form";
+import type { Dayjs } from "@/lib/dayjs";
 import FieldHelp from "./FieldHelp";
 
 type BoundDatePickerProps = {
-  label: string,
-  clearable?: boolean,
-  helpText?: React.ReactNode,
+  label: string;
+  clearable?: boolean;
+  helpText?: React.ReactNode;
 };
 
-export default function BoundDatePicker({label, clearable, helpText}: BoundDatePickerProps) {
+export default function BoundDatePicker({
+  label,
+  clearable,
+  helpText,
+}: BoundDatePickerProps) {
   const field = useFieldContext<Dayjs | null>();
 
   const inputAdornmentSlot = useMemo(() => {
     if (!helpText) return undefined;
-    return function InputAdornmentWithHelp({children, ...props}: InputAdornmentProps) {
+    return function InputAdornmentWithHelp({
+      children,
+      ...props
+    }: InputAdornmentProps) {
       return (
         <InputAdornment {...props}>
           <FieldHelp title={label} helpText={helpText} />
@@ -29,7 +38,9 @@ export default function BoundDatePicker({label, clearable, helpText}: BoundDateP
   return (
     <DatePicker
       label={label}
-      slots={inputAdornmentSlot ? {inputAdornment: inputAdornmentSlot} : undefined}
+      slots={
+        inputAdornmentSlot ? { inputAdornment: inputAdornmentSlot } : undefined
+      }
       slotProps={{
         textField: {
           fullWidth: true,
@@ -37,7 +48,7 @@ export default function BoundDatePicker({label, clearable, helpText}: BoundDateP
           helperText: field.state.meta.errors.join(", "),
         },
         field: {
-          clearable: clearable
+          clearable: clearable,
         },
       }}
       value={field.state.value}

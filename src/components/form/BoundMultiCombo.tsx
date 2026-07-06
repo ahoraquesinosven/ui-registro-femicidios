@@ -1,16 +1,20 @@
-import {useFieldContext} from "@/hooks/form";
 import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
+import TextField from "@mui/material/TextField";
+import { useFieldContext } from "@/hooks/form";
 import FieldHelp from "./FieldHelp";
 
 export type BoundMultiComboProps = {
-  options: string[],
-  label: string,
-  helpText?: React.ReactNode,
-}
+  options: string[];
+  label: string;
+  helpText?: React.ReactNode;
+};
 
-export default function BoundMultiCombo({options, label, helpText}: BoundMultiComboProps) {
+export default function BoundMultiCombo({
+  options,
+  label,
+  helpText,
+}: BoundMultiComboProps) {
   const field = useFieldContext<string[] | undefined>();
 
   return (
@@ -20,7 +24,7 @@ export default function BoundMultiCombo({options, label, helpText}: BoundMultiCo
       options={options}
       value={field.state.value}
       onChange={(_e: unknown, newValue: string[] | null) => {
-        field.handleChange(newValue === null ? undefined : newValue)
+        field.handleChange(newValue === null ? undefined : newValue);
       }}
       onBlur={field.handleBlur}
       renderInput={(params) => (
@@ -43,7 +47,7 @@ export default function BoundMultiCombo({options, label, helpText}: BoundMultiCo
                   )}
                 </>
               ),
-            }
+            },
           }}
         />
       )}

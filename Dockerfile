@@ -14,7 +14,7 @@ RUN mkdir -p /app
 WORKDIR /app
 
 # Setup linter rules
-COPY .eslintrc.cjs ./
+COPY biome.json ./
 
 # Setup project dependencies
 COPY package*.json ./
