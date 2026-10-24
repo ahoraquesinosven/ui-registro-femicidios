@@ -25,7 +25,20 @@ export type ValidationErrors = components["responses"]["ValidationErrorResponse"
 const endpoints = {
   cases: () => new URL("/v1/cases", config.api.aqsnv.server),
   case: (id: string) => new URL(`/v1/cases/${id}`, config.api.aqsnv.server),
+  caseStats: () => new URL("/v1/cases/stats", config.api.aqsnv.server),
 };
+
+// Appends the non-empty filters as query params. "" counts as empty so an
+// explicitly cleared date reaches the API as no filter.
+function appendFilters(url: URL, filters?: Record<string, string | number | boolean | null | undefined>) {
+  if (filters) {
+    Object.entries(filters).forEach(([property, value]) => {
+      if (value !== null && value !== undefined && value !== "") {
+        url.searchParams.append(property, value.toString());
+      }
+    })
+  }
+}
 
 export type CaseValidationResult = { ok: true } | { ok: false, errors: ValidationErrors };
 
@@ -83,13 +96,7 @@ export type ListCaseFilters = paths["/v1/cases"]["get"]["parameters"]["query"];
 
 export async function listCases(filters: ListCaseFilters, limit?: number, start?: string): Promise<CaseListPage> {
   const url = new URL(endpoints.cases());
-  if (filters) {
-    Object.entries(filters).forEach(([property, value]) => {
-      if (value !== null && value !== undefined && value !== "") {
-        url.searchParams.append(property, value.toString());
-      }
-    })
-  }
+  appendFilters(url, filters);
   if (limit) {
     url.searchParams.append("limit", limit.toString());
   }
@@ -104,6 +111,22 @@ export async function listCases(filters: ListCaseFilters, limit?: number, start?
     },
   });
   return await response.json() as CaseListPage;
+}
+
+export type CaseStats = components["schemas"]["CaseStats"];
+export type CaseStatsFilters = paths["/v1/cases/stats"]["get"]["parameters"]["query"];
+
+export async function getCaseStats(filters: CaseStatsFilters): Promise<CaseStats> {
+  const url = new URL(endpoints.caseStats());
+  appendFilters(url, filters);
+
+  const response = await authorizedRequest(url, {
+    method: "get",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return await response.json() as CaseStats;
 }
 
 export async function getCase(caseId: string): Promise<Case> {

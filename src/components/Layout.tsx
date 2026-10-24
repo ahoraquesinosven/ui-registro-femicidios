@@ -54,6 +54,7 @@ function Nav() {
         <Box sx={{ flexGrow: 1, display: 'flex', gap: 1 }}>
           <AppBarLink to="/cases/new">Cargar caso</AppBarLink>
           <AppBarLink to="/cases">Consultar casos</AppBarLink>
+          <AppBarLink to="/dashboard">Estadísticas</AppBarLink>
           <AppBarLink to="/">Noticias</AppBarLink>
         </Box>
         <UserPic />

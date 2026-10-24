@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as OauthCbRouteImport } from './routes/oauth.cb'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCasesIndexRouteImport } from './routes/_authenticated/cases/index'
 import { Route as AuthenticatedCasesNewRouteImport } from './routes/_authenticated/cases/new'
 import { Route as AuthenticatedCasesCaseIdEditRouteImport } from './routes/_authenticated/cases/$caseId.edit'
@@ -29,6 +30,11 @@ const OauthCbRoute = OauthCbRouteImport.update({
   id: '/oauth/cb',
   path: '/oauth/cb',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedCasesIndexRoute = AuthenticatedCasesIndexRouteImport.update({
   id: '/cases/',
@@ -49,12 +55,14 @@ const AuthenticatedCasesCaseIdEditRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/oauth/cb': typeof OauthCbRoute
   '/cases/new': typeof AuthenticatedCasesNewRoute
   '/cases/': typeof AuthenticatedCasesIndexRoute
   '/cases/$caseId/edit': typeof AuthenticatedCasesCaseIdEditRoute
 }
 export interface FileRoutesByTo {
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/oauth/cb': typeof OauthCbRoute
   '/': typeof AuthenticatedIndexRoute
   '/cases/new': typeof AuthenticatedCasesNewRoute
@@ -64,6 +72,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/oauth/cb': typeof OauthCbRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/cases/new': typeof AuthenticatedCasesNewRoute
@@ -73,12 +82,24 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/oauth/cb' | '/cases/new' | '/cases/' | '/cases/$caseId/edit'
+    | '/'
+    | '/dashboard'
+    | '/oauth/cb'
+    | '/cases/new'
+    | '/cases/'
+    | '/cases/$caseId/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/oauth/cb' | '/' | '/cases/new' | '/cases' | '/cases/$caseId/edit'
+  to:
+    | '/dashboard'
+    | '/oauth/cb'
+    | '/'
+    | '/cases/new'
+    | '/cases'
+    | '/cases/$caseId/edit'
   id:
     | '__root__'
     | '/_authenticated'
+    | '/_authenticated/dashboard'
     | '/oauth/cb'
     | '/_authenticated/'
     | '/_authenticated/cases/new'
@@ -114,6 +135,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OauthCbRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/cases/': {
       id: '/_authenticated/cases/'
       path: '/cases'
@@ -139,6 +167,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedCasesNewRoute: typeof AuthenticatedCasesNewRoute
   AuthenticatedCasesIndexRoute: typeof AuthenticatedCasesIndexRoute
@@ -146,6 +175,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedCasesNewRoute: AuthenticatedCasesNewRoute,
   AuthenticatedCasesIndexRoute: AuthenticatedCasesIndexRoute,
