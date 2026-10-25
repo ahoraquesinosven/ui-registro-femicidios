@@ -41,7 +41,7 @@ function UserPic() {
 
 function Nav() {
   return (
-    <AppBar position="static" sx={{marginBottom: "1em"}} color='secondary'>
+    <AppBar position="static" sx={{marginBottom: "1em"}} color='primary'>
       <Toolbar>
         <Typography
           variant="h6"
