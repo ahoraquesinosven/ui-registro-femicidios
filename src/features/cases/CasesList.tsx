@@ -2,7 +2,6 @@ import { ListCaseFilters, listCases } from '@/api/aqsnv/cases';
 import { useAppForm } from '@/hooks/form';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -19,7 +18,7 @@ import { Fragment, useEffect, useRef } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { IconButtonLink } from '@/components/links';
 import { BlockLoader } from '@/components/Loading';
-import { allCaseCategories, allCaseMurderWeapons, allCaseVictimBondsAggressor, allProvinces } from './formValues';
+import CaseFilterFields from './CaseFilterFields';
 import { defaultSearchOptions, searchOptionsToFilters, filtersToSearchOptions } from './searchFilters';
 
 type CasesListProps = {
@@ -78,63 +77,7 @@ export default function CasesIndex({ search, onSearchChange }: CasesListProps) {
         event.stopPropagation();
         searchForm.handleSubmit();
       }}>
-        <Grid container spacing={2}>
-          <Grid size={{ xs: 12, sm: 3 }}>
-            <searchForm.AppField
-              name='fromDate'
-              children={(field) => <field.DatePicker label="Desde" clearable />} />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 3 }}>
-            <searchForm.AppField
-              name='toDate'
-              children={(field) => <field.DatePicker label="Hasta" clearable />} />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 3 }}>
-            <searchForm.AppField
-              name='province'
-              children={(field) => <field.Combo label="Provincia" options={allProvinces} />} />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 3 }}>
-            <searchForm.AppField
-              name='location'
-              children={(field) => <field.Text label="Localidad" />} />
-          </Grid>
-
-          <Grid size={{ xs: 12, sm: 3 }}>
-            <searchForm.AppField
-              name='caseCategory'
-              children={(field) => <field.Combo label="Categoría" options={allCaseCategories} />} />
-          </Grid>
-
-          <Grid size={{ xs: 12, sm: 3 }}>
-            <searchForm.AppField
-              name='wasItAnAttempt'
-              children={(field) => <field.YesNoUnknown label="¿Fue un intento?" />} />
-          </Grid>
-
-
-          <Grid size={{ xs: 12, sm: 3 }}>
-            <searchForm.AppField
-              name='murderWeapon'
-              children={(field) => <field.Combo label="Forma" options={allCaseMurderWeapons} />} />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 3 }}>
-            <searchForm.AppField
-              name='victimBondAggressor'
-              children={(field) => <field.Combo label="Vínculo con la víctima" options={allCaseVictimBondsAggressor} />} />
-          </Grid>
-
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <searchForm.AppField
-              name='victimFullName'
-              children={(field) => <field.Text label="Nombre de la víctima" />} />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <searchForm.AppField
-              name='aggressorFullName'
-              children={(field) => <field.Text label="Nombre del agresor" />} />
-          </Grid>
-        </Grid>
+        <CaseFilterFields form={searchForm} showNames />
 
         <Button type="submit" variant="contained" color="primary" sx={{ my: 2 }}>
           Buscar
