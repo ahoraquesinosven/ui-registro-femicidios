@@ -1,7 +1,7 @@
 ################################################################################
 # Development environment
 ################################################################################
-FROM node:20 AS development
+FROM node:24 AS development
 
 ARG API_AQSNV_SERVER
 ARG API_AQSNV_CLIENT_ID
