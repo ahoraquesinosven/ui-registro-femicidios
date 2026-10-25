@@ -4,16 +4,52 @@
  */
 
 export interface paths {
-    "/v1/profiles/me": {
+    "/v1/cases": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Retrieves the current user profile */
-        get: operations["getCurrentUserProfile"];
+        /** List all cases */
+        get: operations["listCases"];
         put?: never;
+        /** Create a new case */
+        post: operations["createCase"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/cases/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Aggregated case counts for the dashboard */
+        get: operations["getCaseStats"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/cases/{caseId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a case by id */
+        get: operations["getCase"];
+        /** Update a case */
+        put: operations["updateCase"];
         post?: never;
         delete?: never;
         options?: never;
@@ -109,35 +145,16 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/cases": {
+    "/v1/profiles/me": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** List all cases */
-        get: operations["listCases"];
+        /** Retrieves the current user profile */
+        get: operations["getCurrentUserProfile"];
         put?: never;
-        /** Create a new case */
-        post: operations["createCase"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/cases/{caseId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get a case by id */
-        get: operations["getCase"];
-        /** Update a case */
-        put: operations["updateCase"];
         post?: never;
         delete?: never;
         options?: never;
@@ -176,7 +193,7 @@ export interface components {
         Case: {
             readonly id?: number;
             caseCategory: components["schemas"]["CaseCategory"];
-            wasItAnAttempt?: boolean;
+            wasItAnAttempt: boolean;
             isInsufficientDataOrUnderInvestigation?: boolean;
             /** Format: date */
             occurredAt: string;
@@ -242,6 +259,40 @@ export interface components {
                 fullName?: components["schemas"]["Case"]["aggressor"]["fullName"];
                 age?: components["schemas"]["Case"]["aggressor"]["age"];
             };
+        };
+        CaseStats: {
+            total: number;
+            byCategoryAndAttempt: {
+                caseCategory: components["schemas"]["CaseCategory"];
+                wasItAnAttempt: boolean;
+                count: number;
+            }[];
+            byProvince: {
+                province: components["schemas"]["Province"];
+                count: number;
+            }[];
+            byMurderWeapon: {
+                murderWeapon: components["schemas"]["CaseMurderWeapon"] | null;
+                count: number;
+            }[];
+            byVictimBondAggressor: {
+                victimBondAggressor: components["schemas"]["CaseVictimBondAggressor"] | null;
+                count: number;
+            }[];
+            victimIsPregnant: {
+                yes: number;
+                no: number;
+                unknown: number;
+            };
+            aggressorBelongsSecurityForce: {
+                yes: number;
+                no: number;
+                unknown: number;
+            };
+            bySecurityForce: {
+                securityForce: components["schemas"]["CaseAggressorSecurityForce"] | null;
+                count: number;
+            }[];
         };
         FeedItem: {
             id: number;
@@ -338,25 +389,147 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    getCurrentUserProfile: {
+    listCases: {
         parameters: {
-            query?: never;
+            query?: {
+                fromDate?: string;
+                toDate?: string;
+                province?: components["schemas"]["Province"];
+                location?: string;
+                caseCategory?: components["schemas"]["CaseCategory"];
+                murderWeapon?: components["schemas"]["CaseMurderWeapon"];
+                victimBondAggressor?: components["schemas"]["CaseVictimBondAggressor"];
+                wasItAnAttempt?: boolean;
+                victimFullName?: string;
+                aggressorFullName?: string;
+                limit?: number;
+                start?: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Current user profile retrieved successfully */
+            /** @description Paginated list of cases */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UserProfile"];
+                    "application/json": components["schemas"]["CaseListPage"];
+                };
+            };
+            400: components["responses"]["InvalidCursorResponse"];
+            401: components["responses"]["UnauthorizedResponse"];
+        };
+    };
+    createCase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Case"];
+            };
+        };
+        responses: {
+            /** @description Case created successfully */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["UnauthorizedResponse"];
+            422: components["responses"]["ValidationErrorResponse"];
+        };
+    };
+    getCaseStats: {
+        parameters: {
+            query?: {
+                fromDate?: string;
+                toDate?: string;
+                province?: components["schemas"]["Province"];
+                location?: string;
+                caseCategory?: components["schemas"]["CaseCategory"];
+                murderWeapon?: components["schemas"]["CaseMurderWeapon"];
+                victimBondAggressor?: components["schemas"]["CaseVictimBondAggressor"];
+                wasItAnAttempt?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Case counts over the filtered set */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CaseStats"];
                 };
             };
             401: components["responses"]["UnauthorizedResponse"];
+            422: components["responses"]["ValidationErrorResponse"];
+        };
+    };
+    getCase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ID of the case */
+                caseId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Case, victim and agreesor retrieved successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Case"];
+                };
+            };
+            401: components["responses"]["UnauthorizedResponse"];
+            404: components["responses"]["ValidationErrorNotFound"];
+        };
+    };
+    updateCase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ID of the case */
+                caseId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Case"];
+            };
+        };
+        responses: {
+            /** @description Case updated successfully */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["UnauthorizedResponse"];
+            404: components["responses"]["ValidationErrorNotFound"];
+            422: components["responses"]["ValidationErrorResponse"];
         };
     };
     refreshFeeds: {
@@ -581,116 +754,25 @@ export interface operations {
             };
         };
     };
-    listCases: {
-        parameters: {
-            query?: {
-                fromDate?: string;
-                toDate?: string;
-                province?: components["schemas"]["Province"];
-                location?: string;
-                caseCategory?: components["schemas"]["CaseCategory"];
-                victimFullName?: string;
-                murderWeapon?: components["schemas"]["CaseMurderWeapon"];
-                aggressorFullName?: string;
-                victimBondAggressor?: components["schemas"]["CaseVictimBondAggressor"];
-                wasItAnAttempt?: boolean;
-                limit?: number;
-                start?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Paginated list of cases */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CaseListPage"];
-                };
-            };
-            400: components["responses"]["InvalidCursorResponse"];
-            401: components["responses"]["UnauthorizedResponse"];
-        };
-    };
-    createCase: {
+    getCurrentUserProfile: {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Case"];
-            };
-        };
-        responses: {
-            /** @description Case created successfully */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            401: components["responses"]["UnauthorizedResponse"];
-            422: components["responses"]["ValidationErrorResponse"];
-        };
-    };
-    getCase: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description ID of the case */
-                caseId: number;
-            };
-            cookie?: never;
-        };
         requestBody?: never;
         responses: {
-            /** @description Case, victim and agreesor retrieved successfully */
+            /** @description Current user profile retrieved successfully */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Case"];
+                    "application/json": components["schemas"]["UserProfile"];
                 };
             };
             401: components["responses"]["UnauthorizedResponse"];
-            404: components["responses"]["ValidationErrorNotFound"];
-        };
-    };
-    updateCase: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description ID of the case */
-                caseId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Case"];
-            };
-        };
-        responses: {
-            /** @description Case updated successfully */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            401: components["responses"]["UnauthorizedResponse"];
-            404: components["responses"]["ValidationErrorNotFound"];
-            422: components["responses"]["ValidationErrorResponse"];
         };
     };
 }

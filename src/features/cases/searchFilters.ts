@@ -1,4 +1,4 @@
-import { ListCaseFilters, Province, CaseCategory, CaseMurderWeapon, CaseVictimBondAggressor } from '@/api/aqsnv/cases';
+import { ListCaseFilters, CaseStatsFilters, Province, CaseCategory, CaseMurderWeapon, CaseVictimBondAggressor } from '@/api/aqsnv/cases';
 import { stringToOptionalEnum, YesNoUnknown, yesNoUnknownToBoolean, booleanToYesNoUnknown } from '@/utils/cast';
 import dayjs, { type Dayjs } from '@/lib/dayjs';
 
@@ -86,4 +86,25 @@ export function parseCaseSearch(raw: Record<string, unknown>): ListCaseFilters {
     victimFullName: str(raw.victimFullName),
     aggressorFullName: str(raw.aggressorFullName),
   };
+}
+
+// Narrows the case filters to the ones /cases/stats accepts (no name filters).
+export const toStatsFilters = (filters: ListCaseFilters): CaseStatsFilters => {
+  const f: NonNullable<ListCaseFilters> = filters ?? {};
+  return {
+    fromDate: f.fromDate,
+    toDate: f.toDate,
+    province: f.province,
+    location: f.location,
+    caseCategory: f.caseCategory,
+    wasItAnAttempt: f.wasItAnAttempt,
+    murderWeapon: f.murderWeapon,
+    victimBondAggressor: f.victimBondAggressor,
+  };
+};
+
+// validateSearch for the dashboard: same parsing and this-year default as the
+// cases list, minus the name filters.
+export function parseStatsSearch(raw: Record<string, unknown>): CaseStatsFilters {
+  return toStatsFilters(parseCaseSearch(raw));
 }
